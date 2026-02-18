@@ -1883,3 +1883,132 @@ img {
         grid-template-columns: 1fr;
     }
 }
+
+/* === JAVA PAGE === */
+.java-filter-section {
+    padding: 30px 0 0;
+    background: #f8f9fa;
+}
+
+.java-filter-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.java-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 2px solid #e0e0e0;
+    background: #fff;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.java-tab:hover {
+    border-color: #f89820;
+    color: #f89820;
+    background: rgba(248, 152, 32, 0.05);
+}
+
+.java-tab.active {
+    background: linear-gradient(135deg, #f89820, #e76f00);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(248, 152, 32, 0.4);
+}
+
+.java-tab .tab-count {
+    background: rgba(0,0,0,0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.java-tab.active .tab-count {
+    background: rgba(255,255,255,0.3);
+}
+
+.java-category-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 40px 0 20px;
+    padding: 20px 25px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.java-cat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.java-category-header h3 {
+    font-size: 20px;
+    color: #16213e;
+    margin-bottom: 4px;
+}
+
+.java-category-header p {
+    font-size: 13px;
+    color: #888;
+}
+
+.java-books-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 992px) {
+    .java-books-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    .java-filter-tabs {
+        gap: 8px;
+    }
+    .java-tab {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .java-books-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .java-category-header {
+        padding: 15px 18px;
+    }
+    .java-category-header h3 {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 480px) {
+    .java-books-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .java-filter-tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .java-tab {
+        justify-content: center;
+    }
+}
