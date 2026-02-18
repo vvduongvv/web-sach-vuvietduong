@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - BookVoyage</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <span><i class="fas fa-envelope"></i> contact@bookvoyage.com</span>
+                <span><i class="fas fa-phone"></i> +84 123 456 789</span>
+            </div>
+            <div class="top-bar-right">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                <div>
+                    <h1>Book<span>Voyage</span></h1>
+                    <p>Reading is a Journey</p>
+                </div>
+            </a>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li>
+                        <a href="catalog.html">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <ul class="dropdown">
+                            <li><a href="catalog.html">All Books</a></li>
+                            <li><a href="catalog.html?cat=fiction">Fiction</a></li>
+                            <li><a href="catalog.html?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="catalog.html?cat=science">Science</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="categories.html" class="active">Categories</a></li>
+                    <li><a href="book-detail.html">Book Detail</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-auth">
+                <a href="login.html" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
+                <a href="register.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+            </div>
+            <div class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE BANNER -->
+    <section class="page-banner">
+        <div class="container">
+            <h2>&#128218; Book Categories</h2>
+            <div class="breadcrumb">
+                <a href="index.html">Home</a> <span>/</span> <span>Categories</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="categories-page">
+        <div class="container">
+            <div class="section-header">
+                <h2>Explore All Categories</h2>
+                <p>Browse our complete collection of book genres and categories</p>
+                <div class="line"></div>
+            </div>
+
+            <div class="categories-full-grid">
+                <!-- Fiction -->
+                <a href="catalog.html?cat=fiction" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                        <div class="cat-icon">&#128214;</div>
+                        <h3>Fiction</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Immerse yourself in captivating stories, from literary fiction to genre-specific tales that transport you to different worlds.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 2,450 Books</span>
+                            <span>&#128101; 8.2K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Non-Fiction -->
+                <a href="catalog.html?cat=nonfiction" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                        <div class="cat-icon">&#128209;</div>
+                        <h3>Non-Fiction</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Explore real-world knowledge through memoirs, essays, journalism, and factual accounts that inform and inspire.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,980 Books</span>
+                            <span>&#128101; 6.5K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Science -->
+                <a href="catalog.html?cat=science" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                        <div class="cat-icon">&#128300;</div>
+                        <h3>Science</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Discover the wonders of the universe, from physics and biology to cutting-edge research and scientific discoveries.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,830 Books</span>
+                            <span>&#128101; 5.8K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Technology -->
+                <a href="catalog.html?cat=technology" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
+                        <div class="cat-icon">&#128187;</div>
+                        <h3>Technology</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Stay ahead with books on programming, AI, cybersecurity, software engineering, and the latest tech trends.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 980 Books</span>
+                            <span>&#128101; 4.2K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- History -->
+                <a href="catalog.html?cat=history" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);">
+                        <div class="cat-icon">&#127963;</div>
+                        <h3>History</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Journey through time with accounts of civilizations, wars, cultural movements, and pivotal moments in human history.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,220 Books</span>
+                            <span>&#128101; 3.9K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Romance -->
+                <a href="catalog.html?cat=romance" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
+                        <div class="cat-icon">&#128151;</div>
+                        <h3>Romance</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Experience love stories that range from sweet and tender to passionate and dramatic, set in every era and locale.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,650 Books</span>
+                            <span>&#128101; 7.1K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Children -->
+                <a href="catalog.html?cat=children" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
+                        <div class="cat-icon">&#127912;</div>
+                        <h3>Children</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Delightful stories and educational books for young readers, fostering imagination and a love for reading from an early age.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 2,100 Books</span>
+                            <span>&#128101; 9.5K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Self-Help -->
+                <a href="catalog.html?cat=selfhelp" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">
+                        <div class="cat-icon">&#127775;</div>
+                        <h3>Self-Help</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Transform your life with books on personal development, motivation, productivity, and mental wellness.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 890 Books</span>
+                            <span>&#128101; 5.3K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Biography -->
+                <a href="catalog.html?cat=biography" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #c471f5, #fa71cd);">
+                        <div class="cat-icon">&#128100;</div>
+                        <h3>Biography</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Read inspiring life stories of leaders, artists, scientists, and visionaries who shaped the world we live in.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 760 Books</span>
+                            <span>&#128101; 3.2K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Mystery & Thriller -->
+                <a href="catalog.html?cat=mystery" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+                        <div class="cat-icon">&#128373;</div>
+                        <h3>Mystery & Thriller</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Edge-of-your-seat suspense, crime fiction, detective stories, and psychological thrillers that keep you guessing.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,340 Books</span>
+                            <span>&#128101; 6.8K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Poetry -->
+                <a href="catalog.html?cat=poetry" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #e94560, #c0392b);">
+                        <div class="cat-icon">&#128220;</div>
+                        <h3>Poetry</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Beautiful verses and collections from classic poets to contemporary spoken word artists.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 520 Books</span>
+                            <span>&#128101; 2.1K Readers</span>
+                        </div>
+                    </div>
+                </a>
+                <!-- Business -->
+                <a href="catalog.html?cat=business" class="category-full-card">
+                    <div class="category-header" style="background: linear-gradient(135deg, #0f3460, #533483);">
+                        <div class="cat-icon">&#128188;</div>
+                        <h3>Business</h3>
+                    </div>
+                    <div class="category-body">
+                        <p>Leadership, management, entrepreneurship, finance, and marketing books for professional growth.</p>
+                        <div class="cat-stats">
+                            <span>&#128218; 1,100 Books</span>
+                            <span>&#128101; 4.7K Readers</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                        <h3>Book<span>Voyage</span></h3>
+                    </div>
+                    <p>BookVoyage is your gateway to a world of knowledge and imagination. Reading is a journey — start yours today.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">&#8250; Home</a></li>
+                        <li><a href="catalog.html">&#8250; Library</a></li>
+                        <li><a href="categories.html">&#8250; Categories</a></li>
+                        <li><a href="about.html">&#8250; About Us</a></li>
+                        <li><a href="contact.html">&#8250; Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">&#8250; Fiction</a></li>
+                        <li><a href="#">&#8250; Science</a></li>
+                        <li><a href="#">&#8250; History</a></li>
+                        <li><a href="#">&#8250; Technology</a></li>
+                        <li><a href="#">&#8250; Romance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">&#8250; FAQ</a></li>
+                        <li><a href="#">&#8250; Help Center</a></li>
+                        <li><a href="#">&#8250; Privacy Policy</a></li>
+                        <li><a href="#">&#8250; Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BookVoyage. All rights reserved. | Reading is a Journey &#128218;</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
