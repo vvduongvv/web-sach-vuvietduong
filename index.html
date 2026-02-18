@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookVoyage - Reading is a Journey</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -31,7 +31,7 @@
     <!-- HEADER -->
     <header class="header">
         <div class="container">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
                 <span class="logo-icon"><i class="fas fa-book-open"></i></span>
                 <div>
                     <h1>Book<span>Voyage</span></h1>
@@ -41,27 +41,27 @@
 
             <nav>
                 <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="/" class="active">Home</a></li>
                     <li>
-                        <a href="catalog.html">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <a href="/catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
                         <ul class="dropdown">
-                            <li><a href="catalog.html">All Books</a></li>
-                            <li><a href="catalog.html?cat=fiction">Fiction</a></li>
-                            <li><a href="catalog.html?cat=nonfiction">Non-Fiction</a></li>
-                            <li><a href="catalog.html?cat=science">Science</a></li>
-                            <li><a href="catalog.html?cat=children">Children</a></li>
+                            <li><a href="/catalog/">All Books</a></li>
+                            <li><a href="/catalog/?cat=fiction">Fiction</a></li>
+                            <li><a href="/catalog/?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="/catalog/?cat=science">Science</a></li>
+                            <li><a href="/catalog/?cat=children">Children</a></li>
                         </ul>
                     </li>
-                    <li><a href="categories.html">Categories</a></li>
-                    <li><a href="book-detail.html">Book Detail</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="/categories/">Categories</a></li>
+                    <li><a href="/book-detail/">Book Detail</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/contact/">Contact</a></li>
                 </ul>
             </nav>
 
             <div class="nav-auth">
-                <a href="login.html" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
-                <a href="register.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+                <a href="/login/" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
+                <a href="/register/" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
             </div>
 
             <div class="hamburger" id="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
@@ -81,10 +81,10 @@
                 <p>Explore thousands of books across multiple categories. From timeless classics to modern bestsellers, 
                    your next literary adventure starts here. Reading is a journey — let us be your guide.</p>
                 <div class="hero-buttons">
-                    <a href="catalog.html" class="btn btn-primary btn-large">
+                    <a href="/catalog/" class="btn btn-primary btn-large">
                         <i class="fas fa-book"></i>&nbsp; Browse Library
                     </a>
-                    <a href="register.html" class="btn btn-outline btn-large">
+                    <a href="/register/" class="btn btn-outline btn-large">
                         <i class="fas fa-user-plus"></i>&nbsp; Join Free
                     </a>
                 </div>
@@ -202,32 +202,32 @@
                 <div class="line"></div>
             </div>
             <div class="categories-grid">
-                <a href="catalog.html?cat=fiction" class="category-card">
+                <a href="/catalog/?cat=fiction" class="category-card">
                     <div class="cat-icon">&#128214;</div>
                     <h4>Fiction</h4>
                     <span>2,450 books</span>
                 </a>
-                <a href="catalog.html?cat=science" class="category-card">
+                <a href="/catalog/?cat=science" class="category-card">
                     <div class="cat-icon">&#128300;</div>
                     <h4>Science</h4>
                     <span>1,830 books</span>
                 </a>
-                <a href="catalog.html?cat=history" class="category-card">
+                <a href="/catalog/?cat=history" class="category-card">
                     <div class="cat-icon">&#127963;</div>
                     <h4>History</h4>
                     <span>1,220 books</span>
                 </a>
-                <a href="catalog.html?cat=technology" class="category-card">
+                <a href="/catalog/?cat=technology" class="category-card">
                     <div class="cat-icon">&#128187;</div>
                     <h4>Technology</h4>
                     <span>980 books</span>
                 </a>
-                <a href="catalog.html?cat=romance" class="category-card">
+                <a href="/catalog/?cat=romance" class="category-card">
                     <div class="cat-icon">&#128151;</div>
                     <h4>Romance</h4>
                     <span>1,650 books</span>
                 </a>
-                <a href="catalog.html?cat=children" class="category-card">
+                <a href="/catalog/?cat=children" class="category-card">
                     <div class="cat-icon">&#127912;</div>
                     <h4>Children</h4>
                     <span>2,100 books</span>
@@ -262,7 +262,7 @@
                         </div>
                     </div>
                     <div class="book-actions">
-                        <a href="book-detail.html" class="btn btn-primary">Read Now</a>
+                        <a href="/book-detail/" class="btn btn-primary">Read Now</a>
                         <a href="#" class="btn btn-outline">&#128278; Save</a>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
                         </div>
                     </div>
                     <div class="book-actions">
-                        <a href="book-detail.html" class="btn btn-primary">Read Now</a>
+                        <a href="/book-detail/" class="btn btn-primary">Read Now</a>
                         <a href="#" class="btn btn-outline">&#128278; Save</a>
                     </div>
                 </div>
@@ -304,7 +304,7 @@
                         </div>
                     </div>
                     <div class="book-actions">
-                        <a href="book-detail.html" class="btn btn-primary">Read Now</a>
+                        <a href="/book-detail/" class="btn btn-primary">Read Now</a>
                         <a href="#" class="btn btn-outline">&#128278; Save</a>
                     </div>
                 </div>
@@ -325,7 +325,7 @@
                         </div>
                     </div>
                     <div class="book-actions">
-                        <a href="book-detail.html" class="btn btn-primary">Read Now</a>
+                        <a href="/book-detail/" class="btn btn-primary">Read Now</a>
                         <a href="#" class="btn btn-outline">&#128278; Save</a>
                     </div>
                 </div>
@@ -500,21 +500,21 @@
                 <div class="footer-links">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="index.html">&#8250; Home</a></li>
-                        <li><a href="catalog.html">&#8250; Library</a></li>
-                        <li><a href="categories.html">&#8250; Categories</a></li>
-                        <li><a href="about.html">&#8250; About Us</a></li>
-                        <li><a href="contact.html">&#8250; Contact</a></li>
+                        <li><a href="/">&#8250; Home</a></li>
+                        <li><a href="/catalog/">&#8250; Library</a></li>
+                        <li><a href="/categories/">&#8250; Categories</a></li>
+                        <li><a href="/about/">&#8250; About Us</a></li>
+                        <li><a href="/contact/">&#8250; Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h4>Categories</h4>
                     <ul>
-                        <li><a href="catalog.html?cat=fiction">&#8250; Fiction</a></li>
-                        <li><a href="catalog.html?cat=science">&#8250; Science</a></li>
-                        <li><a href="catalog.html?cat=history">&#8250; History</a></li>
-                        <li><a href="catalog.html?cat=technology">&#8250; Technology</a></li>
-                        <li><a href="catalog.html?cat=romance">&#8250; Romance</a></li>
+                        <li><a href="/catalog/?cat=fiction">&#8250; Fiction</a></li>
+                        <li><a href="/catalog/?cat=science">&#8250; Science</a></li>
+                        <li><a href="/catalog/?cat=history">&#8250; History</a></li>
+                        <li><a href="/catalog/?cat=technology">&#8250; Technology</a></li>
+                        <li><a href="/catalog/?cat=romance">&#8250; Romance</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
@@ -524,7 +524,7 @@
                         <li><a href="#">&#8250; Help Center</a></li>
                         <li><a href="#">&#8250; Privacy Policy</a></li>
                         <li><a href="#">&#8250; Terms of Service</a></li>
-                        <li><a href="contact.html">&#8250; Contact Us</a></li>
+                        <li><a href="/contact/">&#8250; Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -534,6 +534,7 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
+

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories - BookVoyage</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -29,7 +29,7 @@
     <!-- HEADER -->
     <header class="header">
         <div class="container">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
                 <span class="logo-icon"><i class="fas fa-book-open"></i></span>
                 <div>
                     <h1>Book<span>Voyage</span></h1>
@@ -38,25 +38,25 @@
             </a>
             <nav>
                 <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <li>
-                        <a href="catalog.html">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <a href="/catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
                         <ul class="dropdown">
-                            <li><a href="catalog.html">All Books</a></li>
-                            <li><a href="catalog.html?cat=fiction">Fiction</a></li>
-                            <li><a href="catalog.html?cat=nonfiction">Non-Fiction</a></li>
-                            <li><a href="catalog.html?cat=science">Science</a></li>
+                            <li><a href="/catalog/">All Books</a></li>
+                            <li><a href="/catalog/?cat=fiction">Fiction</a></li>
+                            <li><a href="/catalog/?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="/catalog/?cat=science">Science</a></li>
                         </ul>
                     </li>
-                    <li><a href="categories.html" class="active">Categories</a></li>
-                    <li><a href="book-detail.html">Book Detail</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="/categories/" class="active">Categories</a></li>
+                    <li><a href="/book-detail/">Book Detail</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/contact/">Contact</a></li>
                 </ul>
             </nav>
             <div class="nav-auth">
-                <a href="login.html" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
-                <a href="register.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+                <a href="/login/" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
+                <a href="/register/" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
             </div>
             <div class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
                 <span></span><span></span><span></span>
@@ -69,7 +69,7 @@
         <div class="container">
             <h2>&#128218; Book Categories</h2>
             <div class="breadcrumb">
-                <a href="index.html">Home</a> <span>/</span> <span>Categories</span>
+                <a href="/">Home</a> <span>/</span> <span>Categories</span>
             </div>
         </div>
     </section>
@@ -85,7 +85,7 @@
 
             <div class="categories-full-grid">
                 <!-- Fiction -->
-                <a href="catalog.html?cat=fiction" class="category-full-card">
+                <a href="/catalog/?cat=fiction" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                         <div class="cat-icon">&#128214;</div>
                         <h3>Fiction</h3>
@@ -99,7 +99,7 @@
                     </div>
                 </a>
                 <!-- Non-Fiction -->
-                <a href="catalog.html?cat=nonfiction" class="category-full-card">
+                <a href="/catalog/?cat=nonfiction" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
                         <div class="cat-icon">&#128209;</div>
                         <h3>Non-Fiction</h3>
@@ -113,7 +113,7 @@
                     </div>
                 </a>
                 <!-- Science -->
-                <a href="catalog.html?cat=science" class="category-full-card">
+                <a href="/catalog/?cat=science" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
                         <div class="cat-icon">&#128300;</div>
                         <h3>Science</h3>
@@ -127,7 +127,7 @@
                     </div>
                 </a>
                 <!-- Technology -->
-                <a href="catalog.html?cat=technology" class="category-full-card">
+                <a href="/catalog/?cat=technology" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
                         <div class="cat-icon">&#128187;</div>
                         <h3>Technology</h3>
@@ -141,7 +141,7 @@
                     </div>
                 </a>
                 <!-- History -->
-                <a href="catalog.html?cat=history" class="category-full-card">
+                <a href="/catalog/?cat=history" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);">
                         <div class="cat-icon">&#127963;</div>
                         <h3>History</h3>
@@ -155,7 +155,7 @@
                     </div>
                 </a>
                 <!-- Romance -->
-                <a href="catalog.html?cat=romance" class="category-full-card">
+                <a href="/catalog/?cat=romance" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
                         <div class="cat-icon">&#128151;</div>
                         <h3>Romance</h3>
@@ -169,7 +169,7 @@
                     </div>
                 </a>
                 <!-- Children -->
-                <a href="catalog.html?cat=children" class="category-full-card">
+                <a href="/catalog/?cat=children" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
                         <div class="cat-icon">&#127912;</div>
                         <h3>Children</h3>
@@ -183,7 +183,7 @@
                     </div>
                 </a>
                 <!-- Self-Help -->
-                <a href="catalog.html?cat=selfhelp" class="category-full-card">
+                <a href="/catalog/?cat=selfhelp" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">
                         <div class="cat-icon">&#127775;</div>
                         <h3>Self-Help</h3>
@@ -197,7 +197,7 @@
                     </div>
                 </a>
                 <!-- Biography -->
-                <a href="catalog.html?cat=biography" class="category-full-card">
+                <a href="/catalog/?cat=biography" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #c471f5, #fa71cd);">
                         <div class="cat-icon">&#128100;</div>
                         <h3>Biography</h3>
@@ -211,7 +211,7 @@
                     </div>
                 </a>
                 <!-- Mystery & Thriller -->
-                <a href="catalog.html?cat=mystery" class="category-full-card">
+                <a href="/catalog/?cat=mystery" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
                         <div class="cat-icon">&#128373;</div>
                         <h3>Mystery & Thriller</h3>
@@ -225,7 +225,7 @@
                     </div>
                 </a>
                 <!-- Poetry -->
-                <a href="catalog.html?cat=poetry" class="category-full-card">
+                <a href="/catalog/?cat=poetry" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #e94560, #c0392b);">
                         <div class="cat-icon">&#128220;</div>
                         <h3>Poetry</h3>
@@ -239,7 +239,7 @@
                     </div>
                 </a>
                 <!-- Business -->
-                <a href="catalog.html?cat=business" class="category-full-card">
+                <a href="/catalog/?cat=business" class="category-full-card">
                     <div class="category-header" style="background: linear-gradient(135deg, #0f3460, #533483);">
                         <div class="cat-icon">&#128188;</div>
                         <h3>Business</h3>
@@ -276,11 +276,11 @@
                 <div class="footer-links">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="index.html">&#8250; Home</a></li>
-                        <li><a href="catalog.html">&#8250; Library</a></li>
-                        <li><a href="categories.html">&#8250; Categories</a></li>
-                        <li><a href="about.html">&#8250; About Us</a></li>
-                        <li><a href="contact.html">&#8250; Contact</a></li>
+                        <li><a href="/">&#8250; Home</a></li>
+                        <li><a href="/catalog/">&#8250; Library</a></li>
+                        <li><a href="/categories/">&#8250; Categories</a></li>
+                        <li><a href="/about/">&#8250; About Us</a></li>
+                        <li><a href="/contact/">&#8250; Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
@@ -309,6 +309,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
