@@ -9,20 +9,96 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
     
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
+    // Create overlay element for sidebar backdrop
+    const overlay = document.createElement('div');
+    overlay.classList.add('nav-overlay');
+    document.body.appendChild(overlay);
+
+    // Helper: close mobile menu
+    function closeMobileMenu() {
+        if (navMenu) navMenu.classList.remove('active');
+        if (hamburger) hamburger.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        dropdownParents.forEach(function(li) { li.classList.remove('dropdown-open'); });
+    }
+
+    // Helper: open mobile menu
+    function openMobileMenu() {
+        navMenu.classList.add('active');
+        hamburger.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    if (hamburger && navMenu) {
+        // Move nav-auth into nav-menu on mobile for visibility
+        const navAuth = document.querySelector('.nav-auth');
+        if (navAuth) {
+            const navAuthClone = navAuth.cloneNode(true);
+            navAuthClone.classList.add('nav-auth-mobile');
+            navMenu.appendChild(navAuthClone);
+        }
+
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (navMenu.classList.contains('active')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+
+        // Close when clicking overlay
+        overlay.addEventListener('click', function() {
+            closeMobileMenu();
         });
     }
 
-    // Close mobile menu when clicking a link
+    // Mobile dropdown toggle (touch-friendly)
+    const dropdownParents = document.querySelectorAll('.nav-menu > li');
+    dropdownParents.forEach(function(li) {
+        const dropdown = li.querySelector('.dropdown');
+        const link = li.querySelector('a');
+        if (dropdown && link) {
+            link.addEventListener('click', function(e) {
+                // Only intercept on mobile (when hamburger is visible)
+                if (hamburger && window.getComputedStyle(hamburger).display !== 'none') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdownParents.forEach(function(otherLi) {
+                        if (otherLi !== li) {
+                            otherLi.classList.remove('dropdown-open');
+                        }
+                    });
+                    li.classList.toggle('dropdown-open');
+                }
+            });
+        }
+    });
+
+    // Close mobile menu when clicking a nav link (not dropdown parent)
     const navLinks = document.querySelectorAll('.nav-menu li a');
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
-            if (navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
+            const parentLi = this.closest('li');
+            const hasDropdown = parentLi && parentLi.querySelector('.dropdown');
+            if (hamburger && window.getComputedStyle(hamburger).display !== 'none' && hasDropdown) {
+                return;
+            }
+            if (navMenu && navMenu.classList.contains('active')) {
+                closeMobileMenu();
             }
         });
+    });
+
+    // Close mobile menu when clicking outside (fallback)
+    document.addEventListener('click', function(e) {
+        if (navMenu && navMenu.classList.contains('active')) {
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                closeMobileMenu();
+            }
+        }
     });
 
     // Smooth scroll for anchor links
@@ -52,19 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 header.style.background = '#16213e';
                 header.style.boxShadow = '0 2px 15px rgba(0,0,0,0.3)';
-            }
-        });
-    }
-
-    // Search form
-    const searchForm = document.querySelector('.search-bar');
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const query = this.querySelector('input').value;
-            const category = this.querySelector('select').value;
-            if (query.trim()) {
-                alert('Searching for: "' + query + '"' + (category ? ' in category: ' + category : ''));
             }
         });
     }
@@ -192,56 +255,455 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Category sidebar filter
-    const sidebarLinks = document.querySelectorAll('.sidebar-section ul li a');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
+    // ======================================================
+    // CATALOG PAGE - Dynamic book rendering with search/filter
+    // ======================================================
+    const booksGrid = document.getElementById('booksGrid');
+    const catalogSearch = document.getElementById('catalogSearch');
+    const catalogSort = document.getElementById('catalogSort');
+    const categorySidebar = document.getElementById('categorySidebar');
+    const resultsCount = document.getElementById('resultsCount');
+    const catalogPagination = document.getElementById('catalogPagination');
+
+    if (booksGrid && typeof BOOKS_DATA !== 'undefined') {
+        const BOOKS_PER_PAGE = 12;
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let currentSearch = '';
+        let currentSort = 'popular';
+        let currentMinRating = 0;
+
+        // Populate category counts
+        const counts = getCategoryCounts();
+        const countAllEl = document.getElementById('countAll');
+        if (countAllEl) countAllEl.textContent = BOOKS_DATA.length;
+        Object.keys(counts).forEach(function(cat) {
+            const el = document.getElementById('count' + cat);
+            if (el) el.textContent = counts[cat];
         });
-    });
+
+        // Read URL params for initial category
+        const urlParams = new URLSearchParams(window.location.search);
+        const catParam = urlParams.get('cat');
+        if (catParam) {
+            // Map URL slug to category name
+            const catMap = {
+                'fiction': 'Fiction', 'nonfiction': 'Non-Fiction', 'science': 'Science',
+                'technology': 'Technology', 'history': 'History', 'romance': 'Romance',
+                'children': 'Children', 'selfhelp': 'Self-Help', 'biography': 'Biography',
+                'mystery': 'Mystery', 'poetry': 'Poetry', 'business': 'Business'
+            };
+            if (catMap[catParam]) {
+                currentCategory = catMap[catParam];
+                // Update active sidebar link
+                document.querySelectorAll('#categorySidebar a').forEach(function(a) {
+                    a.classList.remove('active');
+                    if (a.dataset.category === currentCategory) a.classList.add('active');
+                });
+            }
+        }
+
+        // Read URL params for search query
+        const searchParam = urlParams.get('q');
+        if (searchParam) {
+            currentSearch = searchParam;
+            catalogSearch.value = searchParam;
+        }
+
+        function getFilteredBooks() {
+            let books = [...BOOKS_DATA];
+            books = filterByCategory(currentCategory, books);
+            books = searchBooks(currentSearch, books);
+            // Rating filter
+            if (currentMinRating > 0) {
+                books = books.filter(function(b) { return b.rating >= currentMinRating; });
+            }
+            books = sortBooks(books, currentSort);
+            return books;
+        }
+
+        function renderCatalog() {
+            const filtered = getFilteredBooks();
+            const totalBooks = filtered.length;
+            const totalPages = Math.ceil(totalBooks / BOOKS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = 1;
+
+            const start = (currentPage - 1) * BOOKS_PER_PAGE;
+            const end = Math.min(start + BOOKS_PER_PAGE, totalBooks);
+            const pageBooks = filtered.slice(start, end);
+
+            // Render books
+            if (pageBooks.length === 0) {
+                booksGrid.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><h3>No books found</h3><p>Try adjusting your search or filters</p></div>';
+            } else {
+                booksGrid.innerHTML = pageBooks.map(function(book) { return renderBookCard(book); }).join('');
+            }
+
+            // Update results count
+            if (resultsCount) {
+                if (totalBooks === 0) {
+                    resultsCount.innerHTML = 'No books found';
+                } else {
+                    resultsCount.innerHTML = 'Showing <strong>' + (start + 1) + '-' + end + '</strong> of <strong>' + totalBooks + '</strong> books';
+                }
+            }
+
+            // Render pagination
+            renderPagination(totalPages);
+
+            // Re-apply scroll animation to new cards
+            const newCards = booksGrid.querySelectorAll('.book-card');
+            newCards.forEach(function(el, index) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.4s ease ' + (index % 4) * 0.08 + 's, transform 0.4s ease ' + (index % 4) * 0.08 + 's';
+                requestAnimationFrame(function() {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        function renderPagination(totalPages) {
+            if (!catalogPagination) return;
+            if (totalPages <= 1) { catalogPagination.innerHTML = ''; return; }
+            let html = '';
+            // Prev
+            html += '<a href="#" data-page="' + Math.max(1, currentPage - 1) + '"' + (currentPage === 1 ? ' class="disabled"' : '') + '><i class="fas fa-chevron-left"></i></a>';
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (totalPages <= 7 || i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+                    html += '<a href="#" data-page="' + i + '"' + (i === currentPage ? ' class="active"' : '') + '>' + i + '</a>';
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += '<span class="ellipsis">...</span>';
+                }
+            }
+            // Next
+            html += '<a href="#" data-page="' + Math.min(totalPages, currentPage + 1) + '"' + (currentPage === totalPages ? ' class="disabled"' : '') + '><i class="fas fa-chevron-right"></i></a>';
+            catalogPagination.innerHTML = html;
+
+            // Add event listeners
+            catalogPagination.querySelectorAll('a[data-page]').forEach(function(a) {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentPage = parseInt(this.dataset.page);
+                    renderCatalog();
+                    window.scrollTo({ top: booksGrid.offsetTop - 120, behavior: 'smooth' });
+                });
+            });
+        }
+
+        // Category sidebar click
+        if (categorySidebar) {
+            categorySidebar.addEventListener('click', function(e) {
+                const link = e.target.closest('a[data-category]');
+                if (!link) return;
+                e.preventDefault();
+                categorySidebar.querySelectorAll('a').forEach(function(a) { a.classList.remove('active'); });
+                link.classList.add('active');
+                currentCategory = link.dataset.category;
+                currentPage = 1;
+                renderCatalog();
+            });
+        }
+
+        // Search input
+        let searchTimeout;
+        if (catalogSearch) {
+            catalogSearch.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    currentSearch = catalogSearch.value;
+                    currentPage = 1;
+                    renderCatalog();
+                }, 300);
+            });
+        }
+
+        // Sort change
+        if (catalogSort) {
+            catalogSort.addEventListener('change', function() {
+                currentSort = this.value;
+                currentPage = 1;
+                renderCatalog();
+            });
+        }
+
+        // Rating filter
+        const ratingFilter = document.getElementById('ratingFilter');
+        if (ratingFilter) {
+            ratingFilter.addEventListener('change', function(e) {
+                if (e.target.name === 'rating') {
+                    currentMinRating = parseFloat(e.target.value);
+                    currentPage = 1;
+                    renderCatalog();
+                }
+            });
+        }
+
+        // Initial render
+        renderCatalog();
+    }
+
+    // ======================================================
+    // BOOK DETAIL PAGE - Dynamic rendering from data
+    // ======================================================
+    const bookDetailLayout = document.querySelector('.book-detail-layout');
+    if (bookDetailLayout && typeof BOOKS_DATA !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = parseInt(urlParams.get('id'));
+        
+        if (bookId) {
+            const book = BOOKS_DATA.find(function(b) { return b.id === bookId; });
+            if (book) {
+                // Update page title
+                document.title = book.title + ' - BookVoyage';
+                
+                // Update breadcrumb
+                const breadcrumb = document.querySelector('.breadcrumb');
+                if (breadcrumb) {
+                    breadcrumb.innerHTML = '<a href="/">Home</a> <span>/</span> <a href="/catalog/">Library</a> <span>/</span> <span>' + book.title + '</span>';
+                }
+
+                // Generate stars
+                const fullStars = Math.floor(book.rating);
+                const hasHalf = book.rating - fullStars >= 0.3;
+                let starsHtml = '';
+                for (let i = 0; i < fullStars; i++) starsHtml += '&#11088;';
+                if (hasHalf) starsHtml += '&#11088;';
+
+                // Render book detail
+                bookDetailLayout.innerHTML = `
+                    <div class="book-detail-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
+                        <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
+                    </div>
+                    <div class="book-detail-info">
+                        <span class="book-category-badge">${book.category}</span>
+                        <h1>${book.title}</h1>
+                        <p class="detail-author"><i class="fas fa-user"></i> by <strong>${book.author}</strong></p>
+                        
+                        <div class="detail-rating">
+                            <span class="stars">${starsHtml}</span>
+                            <span>${book.rating} / 5.0</span>
+                            <span>(${book.reviews.toLocaleString()} reviews)</span>
+                        </div>
+
+                        <div class="book-detail-meta">
+                            <div class="meta-item"><span>Pages</span><strong>${book.pages}</strong></div>
+                            <div class="meta-item"><span>Published</span><strong>${book.year > 0 ? book.year : Math.abs(book.year) + ' BC'}</strong></div>
+                            <div class="meta-item"><span>Language</span><strong>${book.language}</strong></div>
+                            <div class="meta-item"><span>Format</span><strong>${book.format}</strong></div>
+                            <div class="meta-item"><span>ISBN</span><strong>${book.isbn}</strong></div>
+                            <div class="meta-item"><span>Publisher</span><strong>${book.publisher}</strong></div>
+                        </div>
+
+                        <div class="book-description">
+                            <h3>&#128196; Description</h3>
+                            <p>${book.description}</p>
+                        </div>
+
+                        <div class="book-description">
+                            <h3>&#127991; Tags</h3>
+                            <div class="book-tags">
+                                <span class="book-tag">${book.category}</span>
+                                ${book.badge ? '<span class="book-tag">' + book.badge + '</span>' : ''}
+                                <span class="book-tag">${book.language}</span>
+                                <span class="book-tag">${book.year > 0 ? book.year : 'Classic'}</span>
+                            </div>
+                        </div>
+
+                        <div class="book-detail-actions">
+                            <a href="/read.html?id=${book.id}" class="btn btn-primary btn-large"><i class="fas fa-book-reader"></i> Read Now</a>
+                            <a href="#" class="btn btn-outline btn-large"><i class="fas fa-heart"></i> Wishlist</a>
+                        </div>
+                    </div>`;
+
+                // Render related books (same category, exclude current)
+                const relatedSection = document.querySelector('.popular-books .books-grid');
+                if (relatedSection) {
+                    const related = BOOKS_DATA
+                        .filter(function(b) { return b.category === book.category && b.id !== book.id; })
+                        .sort(function(a, b) { return b.rating - a.rating; })
+                        .slice(0, 4);
+                    
+                    if (related.length > 0) {
+                        relatedSection.innerHTML = related.map(function(b) { return renderBookCard(b); }).join('');
+                        // Update header
+                        const relatedHeader = document.querySelector('.popular-books .section-header');
+                        if (relatedHeader) {
+                            relatedHeader.querySelector('h2').textContent = 'You May Also Like';
+                            relatedHeader.querySelector('p').textContent = 'More books in ' + book.category;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ======================================================
+    // HOMEPAGE - Dynamic popular books & new arrivals
+    // ======================================================
+    const popularBooksGrid = document.querySelector('.popular-books .books-grid');
+    const isHomepage = document.querySelector('.hero') !== null;
+    if (isHomepage && popularBooksGrid && typeof BOOKS_DATA !== 'undefined') {
+        // Popular books = highest rated
+        const popular = [...BOOKS_DATA]
+            .sort(function(a, b) { return b.rating - a.rating || parseInt(b.reads) - parseInt(a.reads); })
+            .slice(0, 4);
+        popularBooksGrid.innerHTML = popular.map(function(b) { return renderBookCard(b); }).join('');
+
+        // New arrivals = most recent year
+        const arrivalsList = document.querySelector('.arrivals-list');
+        if (arrivalsList) {
+            const newest = [...BOOKS_DATA]
+                .sort(function(a, b) { return b.year - a.year; })
+                .slice(0, 4);
+            arrivalsList.innerHTML = newest.map(function(book) {
+                return `<div class="arrival-item">
+                    <div class="arrival-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
+                        <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
+                    </div>
+                    <div class="arrival-info">
+                        <span class="date">Published: ${book.year}</span>
+                        <h3><a href="/book-detail/?id=${book.id}">${book.title}</a></h3>
+                        <p class="author">by ${book.author}</p>
+                        <p>${book.description}</p>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+    }
+
+    // ======================================================
+    // HOMEPAGE SEARCH - redirect to catalog with query
+    // ======================================================
+    if (isHomepage) {
+        const heroSearchForm = document.querySelector('.search-bar');
+        if (heroSearchForm) {
+            heroSearchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const input = this.querySelector('input');
+                const select = this.querySelector('select');
+                const query = input ? input.value.trim() : '';
+                const category = select ? select.value : '';
+                let url = '/catalog/';
+                const params = [];
+                if (query) params.push('q=' + encodeURIComponent(query));
+                if (category) params.push('cat=' + encodeURIComponent(category));
+                if (params.length) url += '?' + params.join('&');
+                window.location.href = url;
+            });
+        }
+    }
+
+    // ======================================================
+    // SYNC STATS - Real numbers from BOOKS_DATA across all pages
+    // ======================================================
+    if (typeof BOOKS_DATA !== 'undefined') {
+        const totalBooks = BOOKS_DATA.length;
+        const uniqueAuthors = new Set(BOOKS_DATA.map(function(b) { return b.author; })).size;
+        const uniqueCategories = new Set(BOOKS_DATA.map(function(b) { return b.category; })).size;
+        const totalReads = BOOKS_DATA.reduce(function(sum, b) {
+            return sum + Math.round(parseFloat(b.reads.replace('K', '')) * 1000);
+        }, 0);
+        const totalReadsFormatted = Math.round(totalReads / 1000) + 'K+';
+        const counts = getCategoryCounts();
+
+        // Map stat label -> real value
+        var statsMap = {
+            'Total Books': totalBooks + '+',
+            'Books Available': totalBooks + '+',
+            'Books': totalBooks + '+',
+            'Authors': uniqueAuthors + '+',
+            'Categories': uniqueCategories,
+            'Active Readers': totalReadsFormatted,
+            'Happy Readers': totalReadsFormatted
+        };
+
+        // Update all stat elements (hero stats + stats banner + about page)
+        document.querySelectorAll('.stat-item, .hero-stats .stat').forEach(function(el) {
+            var label = el.querySelector('p');
+            var value = el.querySelector('h3');
+            if (!label || !value) return;
+            var key = label.textContent.trim();
+            if (statsMap[key]) value.textContent = statsMap[key];
+        });
+
+        // Update homepage category cards
+        document.querySelectorAll('.categories-grid .category-card').forEach(function(card) {
+            var h4 = card.querySelector('h4');
+            var span = card.querySelector('span:not(.cat-icon)');
+            if (!h4 || !span) return;
+            var name = h4.textContent.trim();
+            var count = counts[name] || 0;
+            if (span.textContent.includes('books')) {
+                span.textContent = count + ' books';
+            }
+        });
+
+        // Update feature card text
+        document.querySelectorAll('.feature-card li').forEach(function(li) {
+            if (li.textContent.includes('titles')) {
+                li.textContent = totalBooks + '+ titles';
+            }
+        });
+
+        // Update about page description text
+        document.querySelectorAll('.about-text p').forEach(function(p) {
+            if (p.textContent.includes('15,000')) {
+                p.textContent = p.textContent
+                    .replace(/15,000/g, totalBooks.toLocaleString())
+                    .replace(/20\+/g, uniqueCategories)
+                    .replace(/50,000\+/g, totalReadsFormatted);
+            }
+        });
+
+        // Update register page subtitle
+        var authSubtitle = document.querySelector('.auth-subtitle');
+        if (authSubtitle && authSubtitle.textContent.includes('15,000')) {
+            authSubtitle.textContent = authSubtitle.textContent.replace('15,000', totalBooks.toLocaleString());
+        }
+    }
+
+    // ======================================================
+    // CATEGORIES PAGE - Dynamic book counts & readers
+    // ======================================================
+    const categoriesGrid = document.querySelector('.categories-full-grid');
+    if (categoriesGrid && typeof BOOKS_DATA !== 'undefined') {
+        const counts = getCategoryCounts();
+        const catStatsElements = categoriesGrid.querySelectorAll('.cat-stats');
+        catStatsElements.forEach(function(statsEl) {
+            const card = statsEl.closest('.category-full-card');
+            if (!card) return;
+            const catName = card.querySelector('h3');
+            if (!catName) return;
+            // Map category name from card to data category
+            let name = catName.textContent.trim();
+            if (name === 'Mystery & Thriller') name = 'Mystery';
+            const count = counts[name] || 0;
+            // Compute total reads for this category
+            const catReads = BOOKS_DATA.filter(function(b) { return b.category === name; })
+                .reduce(function(sum, b) { return sum + Math.round(parseFloat(b.reads.replace('K', '')) * 1000); }, 0);
+            const catReadsFormatted = (catReads / 1000).toFixed(1) + 'K';
+            const booksSpan = statsEl.querySelector('span:first-child');
+            if (booksSpan) booksSpan.innerHTML = '&#128218; ' + count + ' Books';
+            const readersSpan = statsEl.querySelector('span:last-child');
+            if (readersSpan && readersSpan !== booksSpan) readersSpan.innerHTML = '&#128101; ' + catReadsFormatted + ' Reads';
+        });
+    }
 
     // Back to top button (create dynamically)
     const backToTop = document.createElement('button');
     backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    backToTop.setAttribute('id', 'backToTop');
-    backToTop.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #e94560;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    `;
+    backToTop.className = 'back-to-top';
     document.body.appendChild(backToTop);
 
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 500) {
-            backToTop.style.opacity = '1';
-            backToTop.style.visibility = 'visible';
-        } else {
-            backToTop.style.opacity = '0';
-            backToTop.style.visibility = 'hidden';
-        }
+        backToTop.classList.toggle('visible', window.scrollY > 500);
     });
 
     backToTop.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    console.log('📚 BookVoyage - Reading is a Journey | Website loaded successfully!');
 });

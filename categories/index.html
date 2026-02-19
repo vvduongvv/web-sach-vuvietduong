@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories - BookVoyage</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -55,10 +56,10 @@
                 </ul>
             </nav>
             <div class="nav-auth">
-                <a href="/login/" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
-                <a href="/register/" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+                <a href="/login/" class="btn btn-outline">Login</a>
+                <a href="/register/" class="btn btn-primary">Register</a>
             </div>
-            <div class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
+            <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
             </div>
         </div>
@@ -309,6 +310,7 @@
         </div>
     </footer>
 
+    <script src="/js/books-data.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>

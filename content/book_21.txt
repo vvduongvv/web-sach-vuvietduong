@@ -1,0 +1,72 @@
+Introduction to Algorithms
+by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein
+
+═══════════════════════════════════════════
+
+ABOUT THIS BOOK
+
+"Introduction to Algorithms," commonly known as CLRS after its four authors, is the most widely used textbook for university-level algorithms courses. First published in 1990, the third edition (2009) has become the definitive reference for anyone studying computer science, software engineering, or preparing for technical interviews. The book covers a broad range of algorithms in depth while making their design and analysis accessible to readers at all levels.
+
+The text uniquely combines rigor with clarity. Each algorithm is described in a pseudocode designed to be readable by anyone with basic programming experience, regardless of their preferred language. Mathematical analysis accompanies each algorithm, providing formal proofs of correctness and detailed complexity analysis using asymptotic notation. This makes CLRS both a textbook for students and a reference manual for practicing engineers.
+
+With over 1,000 pages of content spanning everything from basic sorting to advanced graph algorithms, linear programming, and computational geometry, CLRS is truly encyclopedic. It has been translated into numerous languages and has sold millions of copies worldwide, cementing its place as one of the most important computer science books ever written.
+
+═══════════════════════════════════════════
+
+KEY THEMES
+
+1. Algorithm Design Paradigms — The book systematically introduces major approaches to algorithm design including divide-and-conquer, dynamic programming, greedy algorithms, and amortized analysis. Each paradigm is illustrated with multiple practical examples.
+
+2. Correctness and Proof — Every algorithm is accompanied by formal proofs of correctness using loop invariants, induction, and other mathematical techniques. This emphasis teaches readers not just how algorithms work, but why they work.
+
+3. Efficiency and Complexity — Asymptotic analysis using Big-O, Big-Theta, and Big-Omega notation is a central theme. The book teaches readers to reason about time and space complexity and to compare algorithmic solutions rigorously.
+
+4. Data Structures as Foundations — Fundamental data structures such as heaps, hash tables, binary search trees, red-black trees, and B-trees are presented as essential building blocks for efficient algorithms.
+
+5. Breadth of Coverage — From basic sorting and searching to NP-completeness, number theory, string matching, and computational geometry, the book provides a comprehensive survey of algorithmic knowledge.
+
+═══════════════════════════════════════════
+
+NOTABLE QUOTES
+
+"An algorithm is thus a sequence of computational steps that transform the input into the output."
+
+"We shall typically describe algorithms as programs written in a pseudocode that is similar in many respects to C, C++, Java, Python, or Pascal."
+
+"The analysis of an algorithm has come to mean the prediction of the resources that the algorithm requires."
+
+"If you had to buy just one text on algorithms, Introduction to Algorithms is a magnificent choice."
+
+═══════════════════════════════════════════
+
+CHAPTER OVERVIEW
+
+Chapter 1-3: Foundations — Introduces algorithmic thinking, asymptotic notation, and recurrences. Establishes the mathematical framework for analyzing algorithms throughout the book.
+
+Chapter 4: Divide-and-Conquer — Explores the divide-and-conquer paradigm with examples including merge sort and Strassen's matrix multiplication. Introduces the master theorem for solving recurrences.
+
+Chapter 6-9: Sorting and Order Statistics — Covers heapsort, quicksort, counting sort, radix sort, and bucket sort. Proves the lower bound for comparison-based sorting and introduces linear-time selection algorithms.
+
+Chapter 10-14: Data Structures — Presents elementary data structures, hash tables, binary search trees, red-black trees, and augmenting data structures. Shows how proper data structure choice impacts algorithm efficiency.
+
+Chapter 15-16: Dynamic Programming and Greedy Algorithms — Teaches two powerful algorithm design paradigms through classic problems like rod cutting, matrix chain multiplication, longest common subsequence, and Huffman coding.
+
+Chapter 22-26: Graph Algorithms — Covers breadth-first search, depth-first search, topological sort, minimum spanning trees, single-source shortest paths, all-pairs shortest paths, and maximum flow.
+
+Chapter 34: NP-Completeness — Introduces the theory of NP-completeness, polynomial-time reductions, and proves several important problems to be NP-complete.
+
+Chapter 35: Approximation Algorithms — Presents algorithms that find near-optimal solutions to NP-hard problems, including vertex cover, traveling salesman, and set cover approximations.
+
+═══════════════════════════════════════════
+
+WHY READ THIS BOOK?
+
+Whether you are a computer science student, a software engineer preparing for interviews, or a researcher looking for algorithmic solutions to complex problems, CLRS is an indispensable resource. Its thorough treatment of each topic ensures that readers develop deep understanding rather than superficial familiarity. The exercises and problems at the end of each chapter range from straightforward to research-level, providing challenges for readers of all abilities.
+
+Beyond its practical utility, the book cultivates algorithmic thinking — the ability to break down complex problems, identify patterns, and design efficient solutions. This skill transcends any particular programming language or technology and represents the core of computer science education.
+
+═══════════════════════════════════════════
+
+ABOUT THE AUTHOR
+
+Thomas H. Cormen is a Professor of Computer Science at Dartmouth College. Along with co-authors Charles E. Leiserson (MIT), Ronald L. Rivest (MIT, also co-inventor of RSA encryption), and Clifford Stein (Columbia University), the four authors bring decades of teaching and research experience to this landmark textbook. Cormen has also authored "Algorithms Unlocked," a more accessible introduction to the field for general audiences.

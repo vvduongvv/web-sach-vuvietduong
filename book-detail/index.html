@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Midnight Library - BookVoyage</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -49,16 +50,16 @@
                         </ul>
                     </li>
                     <li><a href="/categories/">Categories</a></li>
-                    <li><a href="/java/" class="active">Tài liệu Java</a></li>
+                    <li><a href="/java/">Tài liệu Java</a></li>
                     <li><a href="/about/">About</a></li>
                     <li><a href="/contact/">Contact</a></li>
                 </ul>
             </nav>
             <div class="nav-auth">
-                <a href="/login/" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
-                <a href="/register/" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+                <a href="/login/" class="btn btn-outline">Login</a>
+                <a href="/register/" class="btn btn-primary">Register</a>
             </div>
-            <div class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
+            <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
             </div>
         </div>
@@ -78,78 +79,7 @@
     <section class="book-detail">
         <div class="container">
             <div class="book-detail-layout">
-                <div class="book-detail-cover" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                    &#128214;
-                </div>
-                <div class="book-detail-info">
-                    <span class="book-category" style="display:inline-block;background:rgba(233,69,96,0.1);color:#e94560;padding:5px 15px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:15px;">Fiction</span>
-                    <h1>The Midnight Library</h1>
-                    <p class="detail-author"><i class="fas fa-user"></i> by <strong>Matt Haig</strong></p>
-                    
-                    <div class="detail-rating">
-                        <span class="stars">&#11088;&#11088;&#11088;&#11088;&#11088;</span>
-                        <span>4.8 / 5.0</span>
-                        <span>(2,348 reviews)</span>
-                    </div>
-
-                    <div class="book-detail-meta">
-                        <div class="meta-item">
-                            <span>Pages</span>
-                            <strong>304</strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>Published</span>
-                            <strong>Aug 2020</strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>Language</span>
-                            <strong>English</strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>Format</span>
-                            <strong>eBook, Audio</strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>ISBN</span>
-                            <strong>978-0525559474</strong>
-                        </div>
-                        <div class="meta-item">
-                            <span>Publisher</span>
-                            <strong>Viking</strong>
-                        </div>
-                    </div>
-
-                    <div class="book-description">
-                        <h3>&#128196; Description</h3>
-                        <p>Between life and death there is a library, and within that library, the shelves go on forever. 
-                        Every book provides a chance to try another life you could have lived. To see how things would be 
-                        if you had made other choices... Would you have done anything different, if you had the chance to undo your regrets?</p>
-                        <br>
-                        <p>Somewhere out beyond the edge of the universe there is a library that contains an infinite number 
-                        of books, each one the story of another reality. One tells the story of your life as it is, along 
-                        with another book for the other life you could have lived if you had made a different choice at any 
-                        point in your life. While we all wonder how our lives might have been, what if you had the chance 
-                        to go to the library and see for yourself? Would any of these other lives truly be better?</p>
-                    </div>
-
-                    <div class="book-description">
-                        <h3>&#127991; Tags</h3>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-                            <span style="background:#f0f0f0;padding:5px 14px;border-radius:20px;font-size:13px;color:#555;">Fiction</span>
-                            <span style="background:#f0f0f0;padding:5px 14px;border-radius:20px;font-size:13px;color:#555;">Fantasy</span>
-                            <span style="background:#f0f0f0;padding:5px 14px;border-radius:20px;font-size:13px;color:#555;">Philosophy</span>
-                            <span style="background:#f0f0f0;padding:5px 14px;border-radius:20px;font-size:13px;color:#555;">Contemporary</span>
-                            <span style="background:#f0f0f0;padding:5px 14px;border-radius:20px;font-size:13px;color:#555;">Bestseller</span>
-                        </div>
-                    </div>
-
-                    <div class="book-detail-actions">
-                        <a href="#" class="btn btn-primary btn-large"><i class="fas fa-book-reader"></i> Read Now</a>
-                        <a href="#" class="btn btn-outline btn-large"><i class="fas fa-headphones"></i> Listen</a>
-                        <a href="#" class="btn btn-secondary btn-large"><i class="fas fa-download"></i> Download</a>
-                        <a href="#" class="btn btn-outline btn-large"><i class="fas fa-heart"></i> Wishlist</a>
-                    </div>
-                </div>
+                <!-- Rendered dynamically by main.js -->
             </div>
         </div>
     </section>
@@ -159,86 +89,11 @@
         <div class="container">
             <div class="section-header">
                 <h2>You May Also Like</h2>
-                <p>Books similar to The Midnight Library</p>
+                <p>Related books</p>
                 <div class="line"></div>
             </div>
             <div class="books-grid">
-                <div class="book-card">
-                    <div class="book-cover" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
-                        <span class="rating">&#11088; 4.5</span>
-                        &#128218;
-                    </div>
-                    <div class="book-info">
-                        <span class="book-category">Fiction</span>
-                        <h3>The Invisible Life of Addie LaRue</h3>
-                        <p class="author">by V.E. Schwab</p>
-                        <div class="book-meta">
-                            <span><i class="fas fa-file-alt"></i> 448 pages</span>
-                            <span><i class="fas fa-eye"></i> 7.3K reads</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <a href="#" class="btn btn-primary">Read Now</a>
-                        <a href="#" class="btn btn-outline">&#128278;</a>
-                    </div>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
-                        <span class="rating">&#11088; 4.6</span>
-                        &#128213;
-                    </div>
-                    <div class="book-info">
-                        <span class="book-category">Fiction</span>
-                        <h3>Piranesi</h3>
-                        <p class="author">by Susanna Clarke</p>
-                        <div class="book-meta">
-                            <span><i class="fas fa-file-alt"></i> 272 pages</span>
-                            <span><i class="fas fa-eye"></i> 5.1K reads</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <a href="#" class="btn btn-primary">Read Now</a>
-                        <a href="#" class="btn btn-outline">&#128278;</a>
-                    </div>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
-                        <span class="rating">&#11088; 4.7</span>
-                        &#128214;
-                    </div>
-                    <div class="book-info">
-                        <span class="book-category">Fiction</span>
-                        <h3>The House in the Cerulean Sea</h3>
-                        <p class="author">by TJ Klune</p>
-                        <div class="book-meta">
-                            <span><i class="fas fa-file-alt"></i> 396 pages</span>
-                            <span><i class="fas fa-eye"></i> 8.9K reads</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <a href="#" class="btn btn-primary">Read Now</a>
-                        <a href="#" class="btn btn-outline">&#128278;</a>
-                    </div>
-                </div>
-                <div class="book-card">
-                    <div class="book-cover" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">
-                        <span class="rating">&#11088; 4.4</span>
-                        &#128217;
-                    </div>
-                    <div class="book-info">
-                        <span class="book-category">Fiction</span>
-                        <h3>Klara and the Sun</h3>
-                        <p class="author">by Kazuo Ishiguro</p>
-                        <div class="book-meta">
-                            <span><i class="fas fa-file-alt"></i> 320 pages</span>
-                            <span><i class="fas fa-eye"></i> 6.2K reads</span>
-                        </div>
-                    </div>
-                    <div class="book-actions">
-                        <a href="#" class="btn btn-primary">Read Now</a>
-                        <a href="#" class="btn btn-outline">&#128278;</a>
-                    </div>
-                </div>
+                <!-- Rendered dynamically by main.js -->
             </div>
         </div>
     </section>
@@ -296,6 +151,7 @@
         </div>
     </footer>
 
+    <script src="/js/books-data.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>

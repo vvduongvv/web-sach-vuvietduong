@@ -1,0 +1,72 @@
+You Don't Know JS: Scope & Closures
+by Kyle Simpson
+
+═══════════════════════════════════════════
+
+ABOUT THIS BOOK
+
+"You Don't Know JS: Scope & Closures" is the second book in Kyle Simpson's acclaimed "You Don't Know JS" series, which aims to give JavaScript developers a deep, thorough understanding of the language's core mechanisms. Published in 2014, this concise but powerful book tackles two of the most fundamental and frequently misunderstood concepts in JavaScript: how scope works and what closures really are.
+
+Most JavaScript developers use scope and closures every day without truly understanding how they function under the hood. Simpson argues that this surface-level understanding leads to bugs, confusion, and suboptimal code. By diving deep into the engine's compilation and execution phases, lexical scope, function versus block scope, hoisting, and the closure mechanism, the book transforms these abstract concepts into clearly understood tools that developers can wield with confidence.
+
+Despite being relatively short compared to many programming books, "Scope & Closures" packs an extraordinary amount of insight into its pages. Simpson's conversational writing style makes complex topics accessible, while his refusal to oversimplify ensures that readers walk away with genuine understanding rather than memorized rules. The book includes numerous code examples that illustrate each concept in action.
+
+═══════════════════════════════════════════
+
+KEY THEMES
+
+1. Lexical Scope — JavaScript uses lexical scoping, meaning scope is determined at author-time (when code is written) rather than at runtime. Understanding this is the foundation for understanding closures, modules, and many other patterns.
+
+2. The Compiler's Perspective — JavaScript is a compiled language, not purely interpreted. Understanding how the engine compiles code and resolves variable references illuminates why hoisting occurs and how scope chains work.
+
+3. Closures Demystified — A closure is when a function retains access to its lexical scope even when executed outside that scope. This is the mechanism behind modules, callbacks, event handlers, and many other essential patterns.
+
+4. Function vs. Block Scope — The book explores the differences between function-level scope (var) and block-level scope (let, const), including the practical implications of each and when to use them.
+
+5. The Module Pattern — Closures enable the module pattern, one of the most important code organization patterns in JavaScript. The book shows how modules encapsulate private state and expose public APIs.
+
+═══════════════════════════════════════════
+
+NOTABLE QUOTES
+
+"Closure is all around you in JavaScript, you just have to recognize and embrace it."
+
+"Scope is the set of rules that determines where and how a variable (identifier) can be looked up."
+
+"The key to understanding closure is realizing that a function's scope is determined when the function is defined, not when the function is executed."
+
+"JavaScript has function-based scope. That is, each function you declare creates a bubble for itself."
+
+"The module pattern requires two key characteristics: an outer wrapping function being invoked, and a return value with reference to at least one inner function that has closure over the private scope."
+
+═══════════════════════════════════════════
+
+CHAPTER OVERVIEW
+
+Chapter 1: What is Scope? — Introduces the concept of scope by examining how the JavaScript engine processes code. Explains the roles of the Engine, Compiler, and Scope in variable lookup, and distinguishes between LHS and RHS references.
+
+Chapter 2: Lexical Scope — Defines lexical scope and contrasts it with dynamic scope. Examines scope bubbles, nested scope chains, and how the engine traverses the scope chain to resolve variables. Discusses eval and with as mechanisms that cheat lexical scope.
+
+Chapter 3: Function vs. Block Scope — Explores function scope as the primary unit of scope in JavaScript. Introduces IIFEs (Immediately Invoked Function Expressions), block scope with let and const, and the practical differences between var, let, and const.
+
+Chapter 4: Hoisting — Explains the often-confusing behavior of hoisting by examining how the compiler processes declarations and assignments in separate passes. Clarifies that function declarations are hoisted before variable declarations.
+
+Chapter 5: Scope Closures — The culminating chapter that defines closures, demonstrates them with clear examples, and shows their application in loops, callbacks, timers, event handlers, and the module pattern. This chapter transforms closures from a mysterious concept into a practical tool.
+
+Appendix A: Dynamic Scope — Contrasts JavaScript's lexical scope with dynamic scope found in some other languages, helping cement understanding of how JavaScript actually works.
+
+Appendix B: Polyfilling Block Scope — Discusses how to achieve block-scoping behavior in pre-ES6 environments using try/catch blocks and other techniques.
+
+═══════════════════════════════════════════
+
+WHY READ THIS BOOK?
+
+If you write JavaScript professionally or aspire to, understanding scope and closures at a fundamental level will transform your code quality and your ability to debug complex issues. These aren't advanced topics reserved for experts — they are everyday mechanisms that every JavaScript developer relies on, whether they know it or not. Simpson's book gives you the knowledge to use them intentionally rather than accidentally.
+
+The book is also remarkably efficient. In just over 100 pages, it covers concepts that many developers spend years gradually piecing together from blog posts and Stack Overflow answers. Reading it front to back provides a coherent mental model that serves as a foundation for understanding virtually every JavaScript framework and library.
+
+═══════════════════════════════════════════
+
+ABOUT THE AUTHOR
+
+Kyle Simpson is an open-source enthusiast, a prolific author, and a JavaScript evangelist. He is known for his deep knowledge of JavaScript's core mechanisms and his ability to explain complex concepts in accessible terms. Beyond the "You Don't Know JS" book series (which includes six titles covering the full breadth of the language), Simpson is a frequent conference speaker, a workshop instructor, and the creator of several popular open-source projects. He advocates for truly understanding the tools we use rather than relying on abstractions that hide complexity.

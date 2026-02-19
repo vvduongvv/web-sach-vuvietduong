@@ -1,0 +1,70 @@
+Design Patterns: Elements of Reusable Object-Oriented Software
+by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides
+
+═══════════════════════════════════════════
+
+ABOUT THIS BOOK
+
+"Design Patterns: Elements of Reusable Object-Oriented Software," published in 1994 by the so-called "Gang of Four" (GoF), is one of the most influential books in software engineering history. It catalogues 23 classic design patterns that provide proven solutions to recurring software design problems. The book fundamentally changed how developers think about object-oriented design and introduced a shared vocabulary that is now standard across the industry.
+
+Each pattern is presented in a consistent format: the pattern name, the problem it addresses, the solution structure, and the consequences of applying it. The authors draw on their extensive experience with Smalltalk and C++ to provide practical examples that illustrate how each pattern works in real code. While the implementation examples use C++ and Smalltalk, the patterns themselves are language-agnostic and have been applied in virtually every object-oriented language since.
+
+The book organizes its 23 patterns into three categories: creational patterns (dealing with object creation), structural patterns (dealing with composition of classes and objects), and behavioral patterns (dealing with communication between objects). This classification helps developers quickly identify which patterns might be relevant to their specific design challenges.
+
+═══════════════════════════════════════════
+
+KEY THEMES
+
+1. Programming to an Interface — One of the book's central principles is to program to an interface rather than an implementation. This promotes flexibility, allowing objects to be swapped without changing the code that uses them.
+
+2. Composition Over Inheritance — The authors advocate favoring object composition over class inheritance as a mechanism for code reuse. Composition provides greater flexibility and avoids the fragile base class problem.
+
+3. Encapsulating Change — Many patterns focus on encapsulating the parts of a system that are likely to change, isolating them so that changes don't ripple through the entire codebase.
+
+4. Reusable Solutions — The patterns represent distilled experience from real-world software projects. They capture solutions that have been refined over time and can be reliably applied to new problems.
+
+5. Shared Vocabulary — By naming and cataloguing these patterns, the book created a shared language for developers to communicate complex design ideas efficiently.
+
+═══════════════════════════════════════════
+
+NOTABLE QUOTES
+
+"Program to an interface, not an implementation."
+
+"Favor object composition over class inheritance."
+
+"Design patterns capture solutions that have developed and evolved over time."
+
+"The design patterns in this book are descriptions of communicating objects and classes that are customized to solve a general design problem in a particular context."
+
+"One thing expert designers know not to do is solve every problem from first principles."
+
+═══════════════════════════════════════════
+
+CHAPTER OVERVIEW
+
+Chapter 1: Introduction — Establishes the concept of design patterns, explains MVC as a motivating example, and discusses the principles of good object-oriented design including interface programming and composition.
+
+Chapter 2: A Case Study — Walks through the design of a document editor (Lexi), applying multiple patterns to solve real problems like formatting, embellishment, user operations, and spelling checking.
+
+Chapter 3: Creational Patterns — Covers Abstract Factory, Builder, Factory Method, Prototype, and Singleton. These patterns abstract the instantiation process, making systems independent of how objects are created.
+
+Chapter 4: Structural Patterns — Presents Adapter, Bridge, Composite, Decorator, Facade, Flyweight, and Proxy. These patterns deal with composing classes and objects to form larger structures.
+
+Chapter 5: Behavioral Patterns — Describes Chain of Responsibility, Command, Interpreter, Iterator, Mediator, Memento, Observer, State, Strategy, Template Method, and Visitor. These patterns characterize complex control flow and communication between objects.
+
+Chapter 6: Conclusion — Reflects on what design patterns are and aren't, discusses how to select and use patterns, and speculates on the future evolution of design patterns.
+
+═══════════════════════════════════════════
+
+WHY READ THIS BOOK?
+
+Despite being published in 1994, "Design Patterns" remains required reading for any serious software developer. The 23 patterns it describes appear constantly in modern frameworks and libraries — from the Observer pattern in event-driven systems, to the Strategy pattern in dependency injection, to the Factory patterns in object creation. Understanding these patterns gives developers the ability to recognize proven solutions and apply them confidently.
+
+The book also trains developers to think at a higher level of abstraction about software design. Rather than focusing solely on making code work, readers learn to consider flexibility, maintainability, and reuse from the outset. This shift in thinking marks the transition from writing code to engineering software.
+
+═══════════════════════════════════════════
+
+ABOUT THE AUTHOR
+
+The "Gang of Four" — Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides — were researchers and practitioners in object-oriented software development. Erich Gamma went on to co-create JUnit and lead the development of Eclipse and Visual Studio Code. Ralph Johnson is a professor at the University of Illinois and a pioneer in software architecture. Richard Helm worked at IBM's T.J. Watson Research Center. John Vlissides, also at IBM Research, passed away in 2005 but left a lasting legacy through this foundational work.

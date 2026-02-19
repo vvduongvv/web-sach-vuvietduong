@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library - BookVoyage</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -55,10 +56,10 @@
                 </ul>
             </nav>
             <div class="nav-auth">
-                <a href="/login/" class="btn btn-outline" style="padding:8px 18px;font-size:13px;">Login</a>
-                <a href="/register/" class="btn btn-primary" style="padding:8px 18px;font-size:13px;">Register</a>
+                <a href="/login/" class="btn btn-outline">Login</a>
+                <a href="/register/" class="btn btn-primary">Register</a>
             </div>
-            <div class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('active')">
+            <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
             </div>
         </div>
@@ -82,59 +83,61 @@
                 <aside class="catalog-sidebar">
                     <div class="sidebar-section">
                         <h3><i class="fas fa-layer-group"></i> Categories</h3>
-                        <ul>
-                            <li><a href="#" class="active"><span>All Books</span> <span class="count">15,000</span></a></li>
-                            <li><a href="#"><span>Fiction</span> <span class="count">2,450</span></a></li>
-                            <li><a href="#"><span>Non-Fiction</span> <span class="count">1,980</span></a></li>
-                            <li><a href="#"><span>Science</span> <span class="count">1,830</span></a></li>
-                            <li><a href="#"><span>Technology</span> <span class="count">980</span></a></li>
-                            <li><a href="#"><span>History</span> <span class="count">1,220</span></a></li>
-                            <li><a href="#"><span>Romance</span> <span class="count">1,650</span></a></li>
-                            <li><a href="#"><span>Children</span> <span class="count">2,100</span></a></li>
-                            <li><a href="#"><span>Self-Help</span> <span class="count">890</span></a></li>
-                            <li><a href="#"><span>Biography</span> <span class="count">760</span></a></li>
+                        <ul id="categorySidebar">
+                            <li><a href="#" data-category="all" class="active"><span>All Books</span> <span class="count" id="countAll">0</span></a></li>
+                            <li><a href="#" data-category="Fiction"><span>Fiction</span> <span class="count" id="countFiction">0</span></a></li>
+                            <li><a href="#" data-category="Non-Fiction"><span>Non-Fiction</span> <span class="count" id="countNon-Fiction">0</span></a></li>
+                            <li><a href="#" data-category="Science"><span>Science</span> <span class="count" id="countScience">0</span></a></li>
+                            <li><a href="#" data-category="Technology"><span>Technology</span> <span class="count" id="countTechnology">0</span></a></li>
+                            <li><a href="#" data-category="History"><span>History</span> <span class="count" id="countHistory">0</span></a></li>
+                            <li><a href="#" data-category="Romance"><span>Romance</span> <span class="count" id="countRomance">0</span></a></li>
+                            <li><a href="#" data-category="Children"><span>Children</span> <span class="count" id="countChildren">0</span></a></li>
+                            <li><a href="#" data-category="Self-Help"><span>Self-Help</span> <span class="count" id="countSelf-Help">0</span></a></li>
+                            <li><a href="#" data-category="Biography"><span>Biography</span> <span class="count" id="countBiography">0</span></a></li>
+                            <li><a href="#" data-category="Mystery"><span>Mystery & Thriller</span> <span class="count" id="countMystery">0</span></a></li>
+                            <li><a href="#" data-category="Poetry"><span>Poetry</span> <span class="count" id="countPoetry">0</span></a></li>
+                            <li><a href="#" data-category="Business"><span>Business</span> <span class="count" id="countBusiness">0</span></a></li>
                         </ul>
                     </div>
                     <div class="sidebar-section">
                         <h3><i class="fas fa-filter"></i> Format</h3>
-                        <div class="filter-group">
-                            <label><input type="checkbox" checked> eBook</label>
-                            <label><input type="checkbox" checked> Audiobook</label>
-                            <label><input type="checkbox"> Paperback</label>
-                            <label><input type="checkbox"> Hardcover</label>
+                        <div class="filter-group" id="formatFilters">
+                            <label><input type="checkbox" value="eBook" checked> eBook</label>
+                            <label><input type="checkbox" value="Audio" checked> Audiobook</label>
+                            <label><input type="checkbox" value="PDF"> PDF</label>
                         </div>
                     </div>
                     <div class="sidebar-section">
                         <h3><i class="fas fa-star"></i> Rating</h3>
-                        <div class="filter-group">
-                            <label><input type="checkbox"> &#11088;&#11088;&#11088;&#11088;&#11088; 5 Stars</label>
-                            <label><input type="checkbox" checked> &#11088;&#11088;&#11088;&#11088; 4+ Stars</label>
-                            <label><input type="checkbox"> &#11088;&#11088;&#11088; 3+ Stars</label>
-                        </div>
-                    </div>
-                    <div class="sidebar-section">
-                        <h3><i class="fas fa-globe"></i> Language</h3>
-                        <div class="filter-group">
-                            <label><input type="checkbox" checked> English</label>
-                            <label><input type="checkbox"> Vietnamese</label>
-                            <label><input type="checkbox"> French</label>
-                            <label><input type="checkbox"> Japanese</label>
+                        <div class="filter-group" id="ratingFilter">
+                            <label><input type="radio" name="rating" value="0" checked> All Ratings</label>
+                            <label><input type="radio" name="rating" value="4.5"> &#11088; 4.5+ Stars</label>
+                            <label><input type="radio" name="rating" value="4"> &#11088; 4.0+ Stars</label>
+                            <label><input type="radio" name="rating" value="3"> &#11088; 3.0+ Stars</label>
                         </div>
                     </div>
                 </aside>
 
                 <!-- Main Content -->
                 <div class="catalog-main">
+                    <!-- Search Bar -->
+                    <div class="catalog-search">
+                        <div class="catalog-search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="catalogSearch" placeholder="Search by title, author, ISBN, publisher...">
+                        </div>
+                    </div>
+
                     <div class="catalog-toolbar">
-                        <span class="results-count">Showing <strong>1-12</strong> of <strong>15,000</strong> books</span>
+                        <span class="results-count" id="resultsCount">Showing <strong>0</strong> of <strong>0</strong> books</span>
                         <div class="sort-options">
                             <span>Sort by:</span>
-                            <select>
-                                <option>Most Popular</option>
-                                <option>Newest First</option>
-                                <option>Title A-Z</option>
-                                <option>Title Z-A</option>
-                                <option>Highest Rated</option>
+                            <select id="catalogSort">
+                                <option value="popular">Most Popular</option>
+                                <option value="newest">Newest First</option>
+                                <option value="az">Title A-Z</option>
+                                <option value="za">Title Z-A</option>
+                                <option value="rating">Highest Rated</option>
                             </select>
                             <div class="view-toggle">
                                 <button class="active" title="Grid View"><i class="fas fa-th"></i></button>
@@ -143,185 +146,12 @@
                         </div>
                     </div>
 
-                    <div class="books-grid">
-                        <!-- Book 1 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                                <span class="badge">Bestseller</span>
-                                <span class="rating">&#11088; 4.8</span>
-                                &#128214;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Fiction</span>
-                                <h3>The Midnight Library</h3>
-                                <p class="author">by Matt Haig</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 304 pages</span>
-                                    <span><i class="fas fa-eye"></i> 12.5K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 2 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
-                                <span class="badge">New</span>
-                                <span class="rating">&#11088; 4.6</span>
-                                &#128218;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Romance</span>
-                                <h3>It Ends with Us</h3>
-                                <p class="author">by Colleen Hoover</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 385 pages</span>
-                                    <span><i class="fas fa-eye"></i> 18.2K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 3 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-                                <span class="badge">Popular</span>
-                                <span class="rating">&#11088; 4.9</span>
-                                &#128213;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Science</span>
-                                <h3>A Brief History of Time</h3>
-                                <p class="author">by Stephen Hawking</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 256 pages</span>
-                                    <span><i class="fas fa-eye"></i> 25.1K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 4 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
-                                <span class="badge">Trending</span>
-                                <span class="rating">&#11088; 4.7</span>
-                                &#128217;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Self-Help</span>
-                                <h3>Atomic Habits</h3>
-                                <p class="author">by James Clear</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 320 pages</span>
-                                    <span><i class="fas fa-eye"></i> 30.8K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 5 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">
-                                <span class="rating">&#11088; 4.5</span>
-                                &#128214;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Fiction</span>
-                                <h3>Where the Crawdads Sing</h3>
-                                <p class="author">by Delia Owens</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 370 pages</span>
-                                    <span><i class="fas fa-eye"></i> 9.8K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 6 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);">
-                                <span class="rating">&#11088; 4.4</span>
-                                &#128218;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">History</span>
-                                <h3>Sapiens: A Brief History</h3>
-                                <p class="author">by Yuval Noah Harari</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 512 pages</span>
-                                    <span><i class="fas fa-eye"></i> 15.3K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 7 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
-                                <span class="badge">New</span>
-                                <span class="rating">&#11088; 4.8</span>
-                                &#128213;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Sci-Fi</span>
-                                <h3>Project Hail Mary</h3>
-                                <p class="author">by Andy Weir</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 496 pages</span>
-                                    <span><i class="fas fa-eye"></i> 11.7K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
-                        <!-- Book 8 -->
-                        <div class="book-card">
-                            <div class="book-cover" style="background: linear-gradient(135deg, #89f7fe, #66a6ff);">
-                                <span class="rating">&#11088; 4.3</span>
-                                &#128217;
-                            </div>
-                            <div class="book-info">
-                                <span class="book-category">Technology</span>
-                                <h3>Clean Code</h3>
-                                <p class="author">by Robert C. Martin</p>
-                                <div class="book-meta">
-                                    <span><i class="fas fa-file-alt"></i> 464 pages</span>
-                                    <span><i class="fas fa-eye"></i> 8.4K reads</span>
-                                </div>
-                            </div>
-                            <div class="book-actions">
-                                <a href="/book-detail/" class="btn btn-primary">Read Now</a>
-                                <a href="#" class="btn btn-outline">&#128278;</a>
-                            </div>
-                        </div>
+                    <div class="books-grid" id="booksGrid">
+                        <!-- Books rendered dynamically -->
                     </div>
 
                     <!-- Pagination -->
-                    <div class="pagination">
-                        <a href="#"><i class="fas fa-chevron-left"></i></a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">...</a>
-                        <a href="#">50</a>
-                        <a href="#"><i class="fas fa-chevron-right"></i></a>
+                    <div class="pagination" id="catalogPagination">
                     </div>
                 </div>
             </div>
@@ -381,6 +211,7 @@
         </div>
     </footer>
 
+    <script src="/js/books-data.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading - BookVoyage</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <span><i class="fas fa-envelope"></i> contact@bookvoyage.com</span>
+                <span><i class="fas fa-phone"></i> +84 123 456 789</span>
+            </div>
+            <div class="top-bar-right">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo">
+                <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                <div>
+                    <h1>Book<span>Voyage</span></h1>
+                    <p>Reading is a Journey</p>
+                </div>
+            </a>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="/">Home</a></li>
+                    <li>
+                        <a href="/catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <ul class="dropdown">
+                            <li><a href="/catalog/">All Books</a></li>
+                            <li><a href="/catalog/?cat=fiction">Fiction</a></li>
+                            <li><a href="/catalog/?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="/catalog/?cat=science">Science</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/categories/">Categories</a></li>
+                    <li><a href="/java/">Tài liệu Java</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/contact/">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-auth">
+                <a href="/login/" class="btn btn-outline">Login</a>
+                <a href="/register/" class="btn btn-primary">Register</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- READING HEADER (dynamic) -->
+    <section class="reading-header" id="readingHeader">
+        <div class="container">
+            <div class="reading-book-cover" id="bookCover">
+                <i class="fas fa-book-open" style="font-size:40px;color:rgba(255,255,255,0.5);"></i>
+            </div>
+            <div class="reading-book-info">
+                <h1 id="bookTitle">Loading...</h1>
+                <p class="author" id="bookAuthor"></p>
+                <div class="reading-meta">
+                    <span><i class="fas fa-book-reader"></i> Reading Mode</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- READING CONTENT -->
+    <section class="reading-content" style="padding: 30px 0;">
+        <div class="container">
+
+            <!-- Controls -->
+            <div class="reading-controls">
+                <a href="/" class="btn-back" onclick="history.back(); return false;">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div class="font-controls">
+                    <button onclick="changeFontSize(-2)" title="Giảm cỡ chữ"><i class="fas fa-minus"></i></button>
+                    <span id="fontSizeDisplay">18px</span>
+                    <button onclick="changeFontSize(2)" title="Tăng cỡ chữ"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <!-- Reading Area -->
+            <div id="reading-area">
+                <div class="reading-loading">
+                    <i class="fas fa-spinner"></i>
+                    <h3>Loading book content...</h3>
+                    <p>Please wait while we prepare your reading experience.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                        <h3>Book<span>Voyage</span></h3>
+                    </div>
+                    <p>BookVoyage is your gateway to a world of knowledge and imagination.
+                       Reading is a journey — start yours today.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">&#8250; Home</a></li>
+                        <li><a href="/catalog/">&#8250; Library</a></li>
+                        <li><a href="/categories/">&#8250; Categories</a></li>
+                        <li><a href="/about/">&#8250; About Us</a></li>
+                        <li><a href="/contact/">&#8250; Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="/catalog/?cat=fiction">&#8250; Fiction</a></li>
+                        <li><a href="/catalog/?cat=science">&#8250; Science</a></li>
+                        <li><a href="/catalog/?cat=history">&#8250; History</a></li>
+                        <li><a href="/catalog/?cat=technology">&#8250; Technology</a></li>
+                        <li><a href="/catalog/?cat=romance">&#8250; Romance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">&#8250; FAQ</a></li>
+                        <li><a href="#">&#8250; Help Center</a></li>
+                        <li><a href="#">&#8250; Privacy Policy</a></li>
+                        <li><a href="#">&#8250; Terms of Service</a></li>
+                        <li><a href="/contact/">&#8250; Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BookVoyage. All rights reserved. | Reading is a Journey &#128218;</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/books-data.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+    // ============================================
+    // READ PAGE — Fetch book content and display
+    // ============================================
+    (function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var bookId = parseInt(urlParams.get('id'));
+
+        if (!bookId) {
+            showError('No book selected', 'Please go back to the homepage and click "Read" on a book.');
+            return;
+        }
+
+        // Find book info from BOOKS_DATA for title/author display
+        var bookInfo = (typeof BOOKS_DATA !== 'undefined') ? BOOKS_DATA.find(function(b) { return b.id === bookId; }) : null;
+
+        if (bookInfo) {
+            document.getElementById('bookTitle').textContent = bookInfo.title;
+            document.getElementById('bookAuthor').innerHTML = '<i class="fas fa-user"></i> by ' + bookInfo.author;
+            document.title = bookInfo.title + ' - Read | BookVoyage';
+            // Set cover image from BOOKS_DATA
+            if (bookInfo.cover) {
+                var coverEl = document.getElementById('bookCover');
+                coverEl.style.background = bookInfo.gradient;
+                coverEl.innerHTML = '<img src="' + bookInfo.cover + '" alt="' + bookInfo.title + '" onerror="this.remove();">';
+            }
+        }
+
+        // Fetch reading content index, match by ID
+        fetch('/data/books.json')
+            .then(function(res) {
+                if (!res.ok) throw new Error('Cannot load books.json');
+                return res.json();
+            })
+            .then(function(readingBooks) {
+                var readingBook = readingBooks.find(function(rb) { return rb.id === bookId; });
+
+                if (!readingBook) {
+                    showError(
+                        'Content not available',
+                        'Reading content for "' + (bookInfo ? bookInfo.title : 'this book') + '" could not be found. Please try again later.'
+                    );
+                    return;
+                }
+
+                if (!bookInfo) {
+                    document.getElementById('bookTitle').textContent = readingBook.title;
+                    document.title = readingBook.title + ' - Read | BookVoyage';
+                }
+
+                return fetch(readingBook.content_file);
+            })
+            .then(function(res) {
+                if (!res) return;
+                if (!res.ok) {
+                    showError('Content file not found', 'The reading content file could not be loaded.');
+                    return;
+                }
+                return res.text();
+            })
+            .then(function(text) {
+                if (!text) return;
+                var readingArea = document.getElementById('reading-area');
+                var html = '';
+                text.split(/\n\s*\n/).forEach(function(para) {
+                    var trimmed = para.trim();
+                    if (trimmed) html += '<p>' + trimmed.replace(/\n/g, '<br>') + '</p>';
+                });
+                readingArea.innerHTML = html;
+            })
+            .catch(function(err) {
+                console.error('Error loading book:', err);
+                showError('Error loading content', 'Something went wrong while loading the book. Please try again later.');
+            });
+
+        function showError(title, message) {
+            document.getElementById('reading-area').innerHTML =
+                '<div class="reading-error">' +
+                '<i class="fas fa-book"></i>' +
+                '<h3>' + title + '</h3>' +
+                '<p>' + message + '</p>' +
+                '<a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Back to Homepage</a>' +
+                '</div>';
+        }
+    })();
+
+    // Font size control
+    var currentFontSize = 18;
+    function changeFontSize(delta) {
+        currentFontSize = Math.min(32, Math.max(12, currentFontSize + delta));
+        document.getElementById('reading-area').style.fontSize = currentFontSize + 'px';
+        document.getElementById('fontSizeDisplay').textContent = currentFontSize + 'px';
+    }
+    </script>
+</body>
+</html>
