@@ -112,6 +112,12 @@ img {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    contain: layout style;
+}
+.header.header-scrolled {
+    background: rgba(22, 33, 62, 0.98);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 .header .container {
@@ -233,13 +239,14 @@ img {
 .btn {
     display: inline-block;
     padding: 10px 24px;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     text-align: center;
+    letter-spacing: 0.3px;
 }
 
 .btn-outline {
@@ -251,6 +258,8 @@ img {
 .btn-outline:hover {
     background: #e94560;
     color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.3);
 }
 
 .btn-primary {
@@ -262,6 +271,8 @@ img {
 .btn-primary:hover {
     background: #c0392b;
     border-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
 }
 
 .btn-secondary {
@@ -466,10 +477,10 @@ img {
 
 .search-bar {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 8px;
     display: flex;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 50px rgba(0,0,0,0.12);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -495,18 +506,19 @@ img {
 
 .search-bar button {
     padding: 14px 30px;
-    background: #e94560;
+    background: linear-gradient(135deg, #e94560, #c0392b);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 15px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
     font-weight: 600;
 }
 
 .search-bar button:hover {
-    background: #c0392b;
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
 }
 
 /* === FEATURES SECTION === */
@@ -537,7 +549,7 @@ img {
 .section-header .line {
     width: 60px;
     height: 4px;
-    background: #e94560;
+    background: linear-gradient(90deg, #e94560, #f89820);
     margin: 15px auto 0;
     border-radius: 2px;
 }
@@ -550,16 +562,18 @@ img {
 
 .feature-card {
     background: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 35px 25px;
     text-align: center;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid transparent;
+    contain: content;
+    will-change: transform;
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
     border-color: #e94560;
     background: #fff;
 }
@@ -632,10 +646,10 @@ img {
 
 .category-card {
     background: rgba(255,255,255,0.05);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 30px 15px;
     text-align: center;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(255,255,255,0.1);
     cursor: pointer;
 }
@@ -676,18 +690,32 @@ img {
 
 .book-card {
     background: #fff;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    transition: all 0.3s;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
     border: 1px solid #eee;
     display: flex;
     flex-direction: column;
+    contain: content;
+    will-change: transform;
 }
 
 .book-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.14);
+    border-color: transparent;
+}
+
+.book-cover-link { cursor: pointer; }
+.book-cover-link:hover .book-cover img {
+    transform: scale(1.05);
+    transition: transform 0.35s ease;
+}
+
+.book-info h3 a:hover {
+    color: #e94560 !important;
+    transition: color 0.2s;
 }
 
 .book-cover {
@@ -814,15 +842,17 @@ img {
     display: flex;
     gap: 20px;
     background: #fff;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 20px;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
 }
 
 .arrival-item:hover {
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     transform: translateX(5px);
+    border-color: rgba(233, 69, 96, 0.1);
 }
 
 .arrival-cover {
@@ -921,14 +951,16 @@ img {
 
 .testimonial-card {
     background: #f8f9fa;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 30px;
     position: relative;
-    transition: all 0.3s;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
 }
 
 .testimonial-card:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    border-color: rgba(233, 69, 96, 0.15);
 }
 
 .testimonial-card .quote-icon {
@@ -2953,6 +2985,7 @@ img, video, iframe, embed, object {
     display: flex;
     align-items: center;
     justify-content: center;
+    will-change: transform, opacity;
 }
 .back-to-top.visible {
     opacity: 1;
@@ -3000,4 +3033,377 @@ img, video, iframe, embed, object {
     border-radius: 20px;
     font-size: 13px;
     color: #555;
+}
+
+/* ============================================
+   SKELETON LOADING EFFECTS
+   ============================================ */
+
+/* Shimmer animation */
+@keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+@keyframes shimmerPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* Base skeleton styles */
+.skeleton {
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+/* Skeleton book card */
+.skeleton-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+.skeleton-card .skeleton-cover {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(90deg, #e0e0e0 25%, #efefef 50%, #e0e0e0 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 16px 16px 0 0;
+}
+.skeleton-card .skeleton-body {
+    padding: 16px;
+}
+.skeleton-line {
+    height: 14px;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.skeleton-line.w40 { width: 40%; }
+.skeleton-line.w60 { width: 60%; }
+.skeleton-line.w80 { width: 80%; }
+.skeleton-line.w100 { width: 100%; }
+.skeleton-line.h10 { height: 10px; }
+.skeleton-line.h18 { height: 18px; }
+.skeleton-line.h24 { height: 24px; }
+.skeleton-card .skeleton-btn {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+/* Skeleton arrival item */
+.skeleton-arrival {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 16px;
+}
+.skeleton-arrival .skeleton-arrival-cover {
+    width: 100px;
+    height: 140px;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 10px;
+}
+.skeleton-arrival .skeleton-arrival-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+.skeleton-arrival .skeleton-line-dark {
+    height: 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 6px;
+}
+.skeleton-arrival .skeleton-line-dark.w40 { width: 40%; }
+.skeleton-arrival .skeleton-line-dark.w60 { width: 60%; }
+.skeleton-arrival .skeleton-line-dark.w80 { width: 80%; }
+.skeleton-arrival .skeleton-line-dark.w100 { width: 100%; }
+.skeleton-arrival .skeleton-line-dark.h10 { height: 10px; }
+.skeleton-arrival .skeleton-line-dark.h20 { height: 20px; }
+
+/* Skeleton reading content */
+.skeleton-reading {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.skeleton-reading .skeleton-reading-line {
+    height: 16px;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    border-radius: 6px;
+    margin-bottom: 14px;
+}
+.skeleton-reading .skeleton-reading-line:nth-child(odd) { width: 100%; }
+.skeleton-reading .skeleton-reading-line:nth-child(even) { width: 85%; }
+.skeleton-reading .skeleton-reading-line:nth-child(3n) { width: 70%; }
+.skeleton-reading .skeleton-reading-line.heading {
+    height: 24px;
+    width: 50%;
+    margin: 30px 0 20px;
+}
+body.dark-mode .skeleton-reading .skeleton-reading-line {
+    background: linear-gradient(90deg, #2a2a3e 25%, #333350 50%, #2a2a3e 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+body.dark-mode .skeleton-card .skeleton-cover,
+body.dark-mode .skeleton-card .skeleton-body .skeleton-line,
+body.dark-mode .skeleton-card .skeleton-btn {
+    background: linear-gradient(90deg, #2a2a3e 25%, #333350 50%, #2a2a3e 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* Skeleton fade out when content loads  */
+.skeleton-fade-out {
+    animation: skeletonFadeOut 0.4s ease forwards;
+}
+@keyframes skeletonFadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Image skeleton loading */
+.img-skeleton-wrap {
+    position: relative;
+    overflow: hidden;
+}
+.img-skeleton-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #e0e0e0 25%, #efefef 50%, #e0e0e0 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+.img-skeleton-wrap.loaded::before {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   LANDSCAPE MOBILE OPTIMIZATION
+   ============================================ */
+
+/* Landscape phones (short height, wide) */
+@media (orientation: landscape) and (max-height: 500px) {
+    /* General: reduce excessive padding */
+    .hero { padding: 20px 0; min-height: auto; }
+    .hero-content h2 { font-size: 22px; }
+    .hero-content p { font-size: 13px; margin-bottom: 10px; }
+    .hero-stats { gap: 15px; }
+    .hero-stats .stat h3 { font-size: 18px; }
+    .hero-stats .stat p { font-size: 10px; }
+    .hero-buttons .btn { padding: 10px 20px; font-size: 13px; }
+    .hero-image { display: none; }
+    .subtitle { font-size: 13px; margin-bottom: 8px; }
+
+    /* Sections: tighter */
+    .features, .categories, .popular-books, .new-arrivals,
+    .stats-banner, .testimonials, .newsletter { padding: 30px 0; }
+    .section-header h2 { font-size: 20px; }
+    .section-header p { font-size: 13px; }
+
+    /* Search bar compact */
+    .search-section { padding: 15px 0; }
+    .search-bar { flex-direction: row; }
+    .search-bar input { height: 40px; }
+    .search-bar button { height: 40px; padding: 0 16px; }
+
+    /* Book cards in landscape: more columns */
+    .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .book-card .book-info h3 { font-size: 13px; }
+    .book-card .book-info .author { font-size: 11px; }
+
+    /* Arrivals: horizontal & compact */
+    .arrivals-list { gap: 12px; }
+    .arrival-item { padding: 12px; gap: 12px; }
+    .arrival-cover { width: 70px; height: 95px; }
+    .arrival-info h3 { font-size: 15px; }
+    .arrival-info p { font-size: 12px; -webkit-line-clamp: 2; }
+
+    /* Stats banner compact */
+    .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 0; }
+    .stat-item h3 { font-size: 20px; }
+    .stat-item p { font-size: 11px; }
+
+    /* Testimonials: single row scroll */
+    .testimonials-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .testimonial-card { padding: 16px; }
+    .testimonial-card p { font-size: 13px; }
+
+    /* Features compact */
+    .features-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .feature-card { padding: 16px; }
+    .feature-card h3 { font-size: 14px; }
+
+    /* Categories */
+    .categories-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; }
+    .category-card h4 { font-size: 13px; }
+
+    /* Footer compact */
+    .footer { padding: 30px 0 15px; }
+    .footer-grid { grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+    /* Top bar: hide */
+    .top-bar { display: none; }
+
+    /* Header compact */
+    .header { padding: 6px 0; }
+    .header .logo h1 { font-size: 18px; }
+
+    /* Newsletter */
+    .newsletter-content h2 { font-size: 20px; }
+    .newsletter { padding: 25px 0; }
+}
+
+/* Landscape optimization for reading page */
+@media (orientation: landscape) and (max-height: 500px) {
+    .reading-hero { padding: 15px 0 12px; }
+    .reading-hero .container { gap: 16px; flex-direction: row; text-align: left; }
+    .reading-hero .hero-cover { width: 70px; height: 100px; }
+    .reading-hero .hero-info h1 { font-size: 18px; margin-bottom: 4px; }
+    .reading-hero .hero-info .author { font-size: 13px; margin-bottom: 6px; }
+    .reading-hero .hero-meta span { padding: 3px 10px; font-size: 11px; }
+
+    .reading-toolbar .container { padding-top: 6px; padding-bottom: 6px; }
+    .toolbar-btn { width: 34px; height: 34px; font-size: 13px; }
+    .font-size-display { font-size: 11px; }
+    .font-select { height: 34px; font-size: 12px; }
+
+    .reading-body { padding: 16px 0 30px; }
+    #reading-area { font-size: 15px; line-height: 1.7; padding: 0 16px; }
+
+    .reading-sticky-header { height: 44px; }
+    .reading-sticky-header .sticky-title { font-size: 13px; }
+
+    .read-scroll-top { width: 36px; height: 36px; bottom: 16px; right: 16px; font-size: 14px; }
+}
+
+/* Landscape for catalog page */
+@media (orientation: landscape) and (max-height: 500px) {
+    .catalog-banner { padding: 20px 0; min-height: auto; }
+    .catalog-banner h1 { font-size: 22px; }
+    .catalog-container { gap: 15px; }
+    .catalog-sidebar { padding: 12px; }
+    .catalog-sidebar h3 { font-size: 14px; }
+}
+
+/* ============================================
+   UI POLISH — Animations & Scroll bar
+   ============================================ */
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #e94560, #c0392b);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { background: #c0392b; }
+
+/* Fade-in on load */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content { animation: fadeInUp 0.8s ease-out; }
+.hero-image { animation: fadeInUp 0.8s 0.2s ease-out both; }
+.search-section { animation: fadeInUp 0.6s 0.4s ease-out both; }
+
+/* Section reveal animation (triggered via JS IntersectionObserver) */
+.reveal-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-section.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hover glow for category cards */
+.category-card {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    contain: content;
+}
+.category-card:hover {
+    box-shadow: 0 8px 30px rgba(233, 69, 96, 0.2);
+}
+
+/* Testimonial card hover lift */
+.testimonial-card {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    contain: content;
+    will-change: transform;
+}
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+}
+
+/* Back-to-top hover */
+.back-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(233, 69, 96, 0.5);
+}
+
+/* Better search bar focus */
+.search-bar input:focus {
+    box-shadow: inset 0 0 0 2px rgba(233, 69, 96, 0.15);
+    border-radius: 8px;
+}
+
+/* Arrival items hover */
+.arrival-item {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stats banner number pulse animation */
+.stats-banner .stat-item h3 {
+    transition: transform 0.3s;
+}
+.stats-banner .stat-item:hover h3 {
+    transform: scale(1.1);
+}
+
+/* Smooth image loading */
+.book-cover img, .arrival-cover img, .hero-cover img {
+    transition: opacity 0.4s ease;
+}
+
+/* Selection color */
+::selection {
+    background: rgba(233, 69, 96, 0.2);
+    color: inherit;
+}
+
+/* Active nav link subtle glow */
+.nav-menu li a.active {
+    text-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
 }

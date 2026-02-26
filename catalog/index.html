@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library - BookVoyage</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://covers.openlibrary.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://covers.openlibrary.org">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 </head>
 <body>
 
@@ -147,7 +152,13 @@
                     </div>
 
                     <div class="books-grid" id="booksGrid">
-                        <!-- Books rendered dynamically -->
+                        <!-- Skeleton loading placeholders -->
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                        <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
                     </div>
 
                     <!-- Pagination -->

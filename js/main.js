@@ -1,6 +1,27 @@
 // ============================================
-// BookVoyage - Main JavaScript
+// BookVoyage - Main JavaScript (Performance Optimized)
 // ============================================
+
+// --- Scroll throttle utility (RAF-based) ---
+var _scrollCallbacks = [];
+var _scrollTicking = false;
+function onScrollThrottled(fn) {
+    _scrollCallbacks.push(fn);
+}
+(function() {
+    window.addEventListener('scroll', function() {
+        if (!_scrollTicking) {
+            _scrollTicking = true;
+            requestAnimationFrame(function() {
+                var scrollTop = window.scrollY || document.documentElement.scrollTop;
+                for (var i = 0; i < _scrollCallbacks.length; i++) {
+                    _scrollCallbacks[i](scrollTop);
+                }
+                _scrollTicking = false;
+            });
+        }
+    }, { passive: true });
+})();
 
 // Mobile Navigation Toggle
 document.addEventListener('DOMContentLoaded', function() {
@@ -118,17 +139,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Header scroll effect
+    // Header scroll effect (throttled via RAF, uses classList)
     const header = document.querySelector('.header');
     if (header) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(22, 33, 62, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)';
-            } else {
-                header.style.background = '#16213e';
-                header.style.boxShadow = '0 2px 15px rgba(0,0,0,0.3)';
-            }
+        onScrollThrottled(function(scrollTop) {
+            header.classList.toggle('header-scrolled', scrollTop > 100);
         });
     }
 
@@ -207,19 +222,19 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
 
-    // Counter animation for stats
-    const statNumbers = document.querySelectorAll('.stat-item h3, .hero-stats .stat h3');
-    
-    const counterObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                counterObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    statNumbers.forEach(el => counterObserver.observe(el));
+    // Counter animation for stats (reuse single observer)
+    var statNumbers = document.querySelectorAll('.stat-item h3, .hero-stats .stat h3');
+    if (statNumbers.length > 0) {
+        var counterObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        statNumbers.forEach(function(el) { counterObserver.observe(el); });
+    }
 
     function animateCounter(element) {
         const text = element.textContent;
@@ -441,8 +456,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Initial render
-        renderCatalog();
+        // Initial render with skeleton delay
+        setTimeout(function() { renderCatalog(); }, 400);
     }
 
     // ======================================================
@@ -543,35 +558,62 @@ document.addEventListener('DOMContentLoaded', function() {
     // ======================================================
     // HOMEPAGE - Dynamic popular books & new arrivals
     // ======================================================
-    const popularBooksGrid = document.querySelector('.popular-books .books-grid');
+    var popularBooksGrid = document.getElementById('popularBooksGrid') || document.querySelector('.popular-books .books-grid');
     const isHomepage = document.querySelector('.hero') !== null;
     if (isHomepage && popularBooksGrid && typeof BOOKS_DATA !== 'undefined') {
-        // Popular books = highest rated
-        const popular = [...BOOKS_DATA]
-            .sort(function(a, b) { return b.rating - a.rating || parseInt(b.reads) - parseInt(a.reads); })
-            .slice(0, 4);
-        popularBooksGrid.innerHTML = popular.map(function(b) { return renderBookCard(b); }).join('');
-
-        // New arrivals = most recent year
-        const arrivalsList = document.querySelector('.arrivals-list');
-        if (arrivalsList) {
-            const newest = [...BOOKS_DATA]
-                .sort(function(a, b) { return b.year - a.year; })
+        // Simulate a brief loading delay so skeleton is visible, then render
+        setTimeout(function() {
+            // Popular books = highest rated
+            const popular = [...BOOKS_DATA]
+                .sort(function(a, b) { return b.rating - a.rating || parseInt(b.reads) - parseInt(a.reads); })
                 .slice(0, 4);
-            arrivalsList.innerHTML = newest.map(function(book) {
-                return `<div class="arrival-item">
-                    <div class="arrival-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
-                        <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
-                    </div>
-                    <div class="arrival-info">
-                        <span class="date">Published: ${book.year}</span>
-                        <h3><a href="/book-detail/?id=${book.id}">${book.title}</a></h3>
-                        <p class="author">by ${book.author}</p>
-                        <p>${book.description}</p>
-                    </div>
-                </div>`;
-            }).join('');
-        }
+            popularBooksGrid.innerHTML = popular.map(function(b) { return renderBookCard(b); }).join('');
+
+            // Animate cards in
+            popularBooksGrid.querySelectorAll('.book-card').forEach(function(card, i) {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease ' + (i * 0.1) + 's, transform 0.5s ease ' + (i * 0.1) + 's';
+                requestAnimationFrame(function() {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+
+            // New arrivals
+            var arrivalsList = document.getElementById('arrivalsListGrid') || document.querySelector('.arrivals-list');
+            if (arrivalsList) {
+                const newest = [...BOOKS_DATA]
+                    .sort(function(a, b) { return b.year - a.year; })
+                    .slice(0, 4);
+                arrivalsList.innerHTML = newest.map(function(book) {
+                    return `<div class="arrival-item">
+                        <a href="/book-detail/?id=${book.id}" style="display:block;text-decoration:none;">
+                            <div class="arrival-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
+                                <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
+                            </div>
+                        </a>
+                        <div class="arrival-info">
+                            <span class="date">Published: ${book.year}</span>
+                            <h3><a href="/book-detail/?id=${book.id}">${book.title}</a></h3>
+                            <p class="author">by ${book.author}</p>
+                            <p>${book.description}</p>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                // Animate arrivals in
+                arrivalsList.querySelectorAll('.arrival-item').forEach(function(item, i) {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    item.style.transition = 'opacity 0.5s ease ' + (i * 0.12) + 's, transform 0.5s ease ' + (i * 0.12) + 's';
+                    requestAnimationFrame(function() {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    });
+                });
+            }
+        }, 600);
     }
 
     // ======================================================
@@ -598,16 +640,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ======================================================
     // SYNC STATS - Real numbers from BOOKS_DATA across all pages
+    // (cached computations to avoid repeated iterations)
     // ======================================================
     if (typeof BOOKS_DATA !== 'undefined') {
-        const totalBooks = BOOKS_DATA.length;
-        const uniqueAuthors = new Set(BOOKS_DATA.map(function(b) { return b.author; })).size;
-        const uniqueCategories = new Set(BOOKS_DATA.map(function(b) { return b.category; })).size;
-        const totalReads = BOOKS_DATA.reduce(function(sum, b) {
-            return sum + Math.round(parseFloat(b.reads.replace('K', '')) * 1000);
-        }, 0);
-        const totalReadsFormatted = Math.round(totalReads / 1000) + 'K+';
-        const counts = getCategoryCounts();
+        var totalBooks = BOOKS_DATA.length;
+        var _authorSet = {};
+        var _catSet = {};
+        var totalReads = 0;
+        for (var si = 0; si < BOOKS_DATA.length; si++) {
+            _authorSet[BOOKS_DATA[si].author] = 1;
+            _catSet[BOOKS_DATA[si].category] = 1;
+            totalReads += Math.round(parseFloat(BOOKS_DATA[si].reads.replace('K', '')) * 1000);
+        }
+        var uniqueAuthors = Object.keys(_authorSet).length;
+        var uniqueCategories = Object.keys(_catSet).length;
+        var totalReadsFormatted = Math.round(totalReads / 1000) + 'K+';
+        var counts = getCategoryCounts();
 
         // Map stat label -> real value
         var statsMap = {
@@ -692,18 +740,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Back to top button (create dynamically)
-    const backToTop = document.createElement('button');
+    // Back to top button (create dynamically, use throttled scroll)
+    var backToTop = document.createElement('button');
     backToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
     backToTop.className = 'back-to-top';
     document.body.appendChild(backToTop);
 
-    window.addEventListener('scroll', function() {
-        backToTop.classList.toggle('visible', window.scrollY > 500);
+    onScrollThrottled(function(scrollTop) {
+        backToTop.classList.toggle('visible', scrollTop > 500);
     });
 
     backToTop.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // ======================================================
+    // SECTION REVEAL ANIMATION (IntersectionObserver)
+    // ======================================================
+    var revealSections = document.querySelectorAll('.features, .categories, .popular-books, .new-arrivals, .stats-banner, .testimonials, .newsletter, .java-featured');
+    revealSections.forEach(function(sec) { sec.classList.add('reveal-section'); });
+
+    if ('IntersectionObserver' in window) {
+        var sectionObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal-section').forEach(function(sec) {
+            sectionObserver.observe(sec);
+        });
+    } else {
+        // Fallback: show all immediately
+        document.querySelectorAll('.reveal-section').forEach(function(sec) {
+            sec.classList.add('revealed');
+        });
+    }
+
+    // (Duplicate search handler removed — already handled in HOMEPAGE SEARCH section above)
 
 });

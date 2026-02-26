@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BookVoyage - Reading is a Journey</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://covers.openlibrary.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://covers.openlibrary.org">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 </head>
 <body>
 
@@ -245,8 +250,12 @@
                 <p>Most loved and most read books by our community</p>
                 <div class="line"></div>
             </div>
-            <div class="books-grid">
-                <!-- Rendered dynamically by main.js from BOOKS_DATA -->
+            <div class="books-grid" id="popularBooksGrid">
+                <!-- Skeleton placeholders -->
+                <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+                <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
             </div>
         </div>
     </section>
@@ -259,8 +268,12 @@
                 <p>Recently added books to our library collection</p>
                 <div class="line"></div>
             </div>
-            <div class="arrivals-list">
-                <!-- Rendered dynamically by main.js from BOOKS_DATA -->
+            <div class="arrivals-list" id="arrivalsListGrid">
+                <!-- Skeleton placeholders -->
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
             </div>
         </div>
     </section>

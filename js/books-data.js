@@ -180,14 +180,16 @@ function sortBooks(books, sortBy) {
 function renderBookCard(book) {
   return `
     <div class="book-card">
-      <div class="book-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
-        ${book.badge ? '<span class="badge">' + book.badge + '</span>' : ''}
-        <span class="rating">&#11088; ${book.rating}</span>
-        <img src="${book.cover}" alt="${book.title}" loading="lazy" onerror="this.remove();">
-      </div>
+      <a href="/book-detail/?id=${book.id}" class="book-cover-link" style="display:block;text-decoration:none;">
+        <div class="book-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
+          ${book.badge ? '<span class="badge">' + book.badge + '</span>' : ''}
+          <span class="rating">&#11088; ${book.rating}</span>
+          <img src="${book.cover}" alt="${book.title}" loading="lazy" onerror="this.remove();">
+        </div>
+      </a>
       <div class="book-info">
         <span class="book-category">${book.category}</span>
-        <h3>${book.title}</h3>
+        <h3><a href="/book-detail/?id=${book.id}" style="color:inherit;text-decoration:none;">${book.title}</a></h3>
         <p class="author">by ${book.author}</p>
         <div class="book-meta">
           <span><i class="fas fa-file-alt"></i> ${book.pages} pages</span>

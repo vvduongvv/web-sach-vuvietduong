@@ -5,111 +5,924 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reading - BookVoyage</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://covers.openlibrary.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://covers.openlibrary.org">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+    /* ===== PROFESSIONAL READER — Inspired by Wattpad, Kindle, Medium ===== */
+    * { box-sizing: border-box; }
+
+    /* Override site header for reader */
+    .top-bar { display: none !important; }
+    .header { display: none !important; }
+
+    /* Progress bar */
+    .reading-progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #e94560, #f89820);
+        z-index: 10001;
+        transition: width 0.08s linear;
+    }
+
+    /* Reader top bar */
+    .reader-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        padding: 0 24px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: box-shadow 0.3s;
+    }
+    .reader-topbar.shadow { box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+    .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+        flex: 1;
+    }
+    .topbar-left .back-btn {
+        display: flex; align-items: center; gap: 6px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        color: #666;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+        white-space: nowrap;
+        font-family: inherit;
+    }
+    .topbar-left .back-btn:hover { background: #f0f0f0; color: #e94560; }
+    .topbar-left .back-btn i { font-size: 14px; }
+    .topbar-left .mini-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        opacity: 0;
+        transform: translateY(4px);
+        transition: all 0.3s;
+    }
+    .topbar-left .mini-title.visible { opacity: 1; transform: translateY(0); }
+
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        flex-shrink: 0;
+    }
+    .topbar-btn {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        border: none;
+        background: transparent;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: all 0.2s;
+    }
+    .topbar-btn:hover { background: #f0f0f0; color: #e94560; }
+    .topbar-btn.active { color: #e94560; background: rgba(233,69,96,0.08); }
+    .topbar-progress {
+        font-size: 12px;
+        color: #bbb;
+        font-weight: 600;
+        min-width: 38px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Book header — clean, centered */
+    .reader-book-header {
+        padding: 56px 24px 44px;
+        text-align: center;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    }
+    .reader-book-header .book-cover {
+        width: 160px;
+        height: 230px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0 auto 24px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    .reader-book-header .book-cover img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+    }
+    .reader-book-header .book-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+        line-height: 1.3;
+        letter-spacing: -0.3px;
+    }
+    .reader-book-header .book-author {
+        font-size: 16px;
+        color: #888;
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+    .reader-book-header .book-author a {
+        color: #e94560;
+        text-decoration: none;
+    }
+    .reader-book-header .book-meta-badges {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 13px;
+        color: #999;
+    }
+    .reader-book-header .book-meta-badges span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .reader-book-header .book-meta-badges i {
+        font-size: 12px;
+        color: #ccc;
+    }
+    .reader-book-header .reading-time {
+        color: #e94560;
+        font-weight: 600;
+    }
+    .reader-book-header .reading-time i { color: #e94560; }
+
+    /* Main content wrapper */
+    .reader-content-wrapper {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+        min-height: 60vh;
+    }
+    .reader-content-wrapper.wide { max-width: 960px; }
+
+    /* Reading area — the core */
+    #reading-area {
+        font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+        font-size: 18px;
+        line-height: 1.9;
+        color: #2c2c2c;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    #reading-area p {
+        margin-bottom: 1.5em;
+        text-align: justify;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
+    #reading-area .section-heading {
+        font-size: 1.4em;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 2.5em 0 1em;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e94560;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: -0.3px;
+        line-height: 1.3;
+    }
+    #reading-area .section-heading:first-child {
+        margin-top: 0;
+    }
+    #reading-area .sub-heading {
+        font-size: 1.15em;
+        font-weight: 600;
+        color: #0f3460;
+        margin: 2em 0 0.6em;
+        font-family: inherit;
+        line-height: 1.4;
+    }
+    #reading-area blockquote {
+        border-left: 3px solid #e94560;
+        padding: 16px 24px;
+        margin: 2em 0;
+        background: rgba(233,69,96,0.03);
+        border-radius: 0 12px 12px 0;
+        font-style: italic;
+        color: #555;
+        line-height: 1.8;
+    }
+    #reading-area .list-item {
+        padding-left: 1.8em;
+        text-indent: -1.8em;
+        margin-bottom: 0.8em;
+    }
+    #reading-area .separator {
+        text-align: center;
+        margin: 3em 0;
+        color: #ddd;
+        font-size: 20px;
+        letter-spacing: 12px;
+    }
+
+    /* Skeleton loading */
+    .skeleton-reading { padding: 10px 0; }
+    .sk-line {
+        height: 16px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+        background-size: 400% 100%;
+        animation: skPulse 1.5s ease infinite;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+    .sk-line:nth-child(odd) { width: 100%; }
+    .sk-line:nth-child(even) { width: 85%; }
+    .sk-line.sk-heading { height: 24px; width: 60%; margin: 32px 0 20px; }
+    @keyframes skPulse {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    /* Loading & Error states */
+    .reading-loading, .reading-error {
+        text-align: center;
+        padding: 100px 20px;
+        color: #888;
+    }
+    .reading-loading i, .reading-error i {
+        font-size: 48px;
+        margin-bottom: 20px;
+        display: block;
+        color: #e94560;
+    }
+    .reading-loading i { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .reading-loading h3, .reading-error h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    .reading-error p { margin-bottom: 24px; color: #888; }
+
+    /* ===== TOC SIDEBAR ===== */
+    .toc-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+    .toc-overlay.open { opacity: 1; visibility: visible; }
+    .toc-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 340px;
+        max-width: 85vw;
+        height: 100vh;
+        background: #fff;
+        z-index: 2001;
+        transform: translateX(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -8px 0 40px rgba(0,0,0,0.1);
+    }
+    .toc-sidebar.open { transform: translateX(0); }
+    .toc-header {
+        padding: 20px 24px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+    }
+    .toc-header h3 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .toc-close {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+        border: none;
+        background: #f5f5f5;
+        color: #888;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    .toc-close:hover { background: #eee; color: #e94560; }
+    .toc-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 0;
+    }
+    .toc-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 24px;
+        cursor: pointer;
+        transition: all 0.15s;
+        border-left: 3px solid transparent;
+        font-size: 14px;
+        color: #555;
+    }
+    .toc-item:hover { background: #fafafa; color: #e94560; }
+    .toc-item.active {
+        background: rgba(233,69,96,0.04);
+        color: #e94560;
+        font-weight: 600;
+        border-left-color: #e94560;
+    }
+    .toc-item .toc-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: #ccc;
+        min-width: 24px;
+        text-align: center;
+    }
+    .toc-item.active .toc-num { color: #e94560; }
+    .toc-item .toc-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ===== SETTINGS PANEL ===== */
+    .settings-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+    .settings-overlay.open { opacity: 1; visibility: visible; }
+    .settings-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        z-index: 2001;
+        border-radius: 20px 20px 0 0;
+        max-height: 85vh;
+        overflow-y: auto;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
+    }
+    .settings-panel.open { transform: translateY(0); }
+    .settings-handle {
+        width: 40px; height: 4px;
+        background: #ddd;
+        border-radius: 2px;
+        margin: 12px auto 0;
+    }
+    .settings-header {
+        padding: 16px 24px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .settings-header h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #333;
+    }
+    .settings-close {
+        width: 32px; height: 32px;
+        border-radius: 8px;
+        border: none;
+        background: #f5f5f5;
+        color: #888;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    .settings-close:hover { background: #eee; color: #e94560; }
+    .settings-body { padding: 0 24px 32px; }
+    .setting-group {
+        margin-bottom: 24px;
+    }
+    .setting-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #999;
+        margin-bottom: 10px;
+    }
+    .setting-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .setting-row .size-btn {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        border: 1.5px solid #e0e0e0;
+        background: #fff;
+        color: #555;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+    .setting-row .size-btn:hover { border-color: #e94560; color: #e94560; }
+    .setting-row .size-display {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        min-width: 44px;
+        text-align: center;
+    }
+    .font-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .font-option {
+        padding: 8px 16px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        font-size: 13px;
+        color: #555;
+        transition: all 0.2s;
+    }
+    .font-option:hover { border-color: #e94560; color: #e94560; }
+    .font-option.active {
+        border-color: #e94560;
+        background: rgba(233,69,96,0.06);
+        color: #e94560;
+        font-weight: 600;
+    }
+    .theme-options {
+        display: flex;
+        gap: 10px;
+    }
+    .theme-option {
+        flex: 1;
+        padding: 14px 10px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+    }
+    .theme-option:hover { border-color: #ccc; }
+    .theme-option.active { border-color: #e94560; }
+    .theme-option .theme-preview {
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        margin: 0 auto 8px;
+        border: 2px solid #e0e0e0;
+    }
+    .theme-option.active .theme-preview { border-color: #e94560; }
+    .theme-option .theme-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+    }
+    .theme-option.active .theme-label { color: #e94560; }
+    .theme-light .theme-preview { background: #fff; }
+    .theme-sepia .theme-preview { background: #f4ecd8; }
+    .theme-dark .theme-preview { background: #1a1a2e; }
+    .line-height-options {
+        display: flex;
+        gap: 8px;
+    }
+    .lh-option {
+        flex: 1;
+        padding: 10px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        transition: all 0.2s;
+    }
+    .lh-option:hover { border-color: #e94560; color: #e94560; }
+    .lh-option.active {
+        border-color: #e94560;
+        background: rgba(233,69,96,0.06);
+        color: #e94560;
+    }
+    .width-toggle {
+        display: flex;
+        gap: 8px;
+    }
+    .width-option {
+        flex: 1;
+        padding: 10px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        transition: all 0.2s;
+    }
+    .width-option:hover { border-color: #e94560; color: #e94560; }
+    .width-option.active {
+        border-color: #e94560;
+        background: rgba(233,69,96,0.06);
+        color: #e94560;
+    }
+
+    /* Scroll to top */
+    .read-scroll-top {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #e94560;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 4px 20px rgba(233,69,96,0.3);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .read-scroll-top.visible { opacity: 1; visibility: visible; }
+    .read-scroll-top:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(233,69,96,0.4); }
+
+    /* End of book */
+    .reader-end {
+        text-align: center;
+        padding: 60px 20px;
+        border-top: 1px solid #f0f0f0;
+        margin-top: 48px;
+    }
+    .reader-end .end-icon {
+        font-size: 40px;
+        color: #e94560;
+        margin-bottom: 16px;
+    }
+    .reader-end h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    .reader-end p {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 24px;
+    }
+    .reader-end .end-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .reader-end .end-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    .reader-end .end-btn-primary {
+        background: #e94560;
+        color: #fff;
+    }
+    .reader-end .end-btn-primary:hover { background: #d63851; }
+    .reader-end .end-btn-outline {
+        background: transparent;
+        color: #e94560;
+        border: 1.5px solid #e94560;
+    }
+    .reader-end .end-btn-outline:hover { background: rgba(233,69,96,0.06); }
+
+    /* ===== DARK MODE ===== */
+    body.dark-mode { background: #1a1a2e; }
+    body.dark-mode .reader-topbar {
+        background: rgba(26,26,46,0.98);
+        border-bottom-color: rgba(255,255,255,0.06);
+    }
+    body.dark-mode .topbar-left .back-btn { color: #aaa; }
+    body.dark-mode .topbar-left .back-btn:hover { background: rgba(255,255,255,0.08); color: #e94560; }
+    body.dark-mode .topbar-left .mini-title { color: #ddd; }
+    body.dark-mode .topbar-btn { color: #aaa; }
+    body.dark-mode .topbar-btn:hover { background: rgba(255,255,255,0.08); color: #e94560; }
+    body.dark-mode .reader-book-header {
+        background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
+        border-bottom-color: rgba(255,255,255,0.06);
+    }
+    body.dark-mode .reader-book-header .book-title { color: #eee; }
+    body.dark-mode .reader-book-header .book-author { color: #888; }
+    body.dark-mode .reader-book-header .book-meta-badges { color: #777; }
+    body.dark-mode .reader-book-header .book-meta-badges i { color: #555; }
+    body.dark-mode #reading-area { color: #d0d0d0; }
+    body.dark-mode #reading-area .section-heading { color: #eee; border-bottom-color: #e94560; }
+    body.dark-mode #reading-area .sub-heading { color: #90b4e0; }
+    body.dark-mode #reading-area blockquote { background: rgba(255,255,255,0.02); color: #aaa; }
+    body.dark-mode .toc-sidebar { background: #1e1e3a; }
+    body.dark-mode .toc-header { border-bottom-color: rgba(255,255,255,0.06); }
+    body.dark-mode .toc-header h3 { color: #ddd; }
+    body.dark-mode .toc-close { background: rgba(255,255,255,0.06); color: #aaa; }
+    body.dark-mode .toc-item { color: #aaa; }
+    body.dark-mode .toc-item:hover { background: rgba(255,255,255,0.03); color: #e94560; }
+    body.dark-mode .toc-item.active { background: rgba(233,69,96,0.08); color: #e94560; }
+    body.dark-mode .toc-item .toc-num { color: #555; }
+    body.dark-mode .toc-item.active .toc-num { color: #e94560; }
+    body.dark-mode .settings-panel { background: #1e1e3a; }
+    body.dark-mode .settings-handle { background: rgba(255,255,255,0.15); }
+    body.dark-mode .settings-header h3 { color: #ddd; }
+    body.dark-mode .settings-close { background: rgba(255,255,255,0.06); color: #aaa; }
+    body.dark-mode .setting-group label { color: #777; }
+    body.dark-mode .setting-row .size-btn { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #ccc; }
+    body.dark-mode .setting-row .size-display { color: #ddd; }
+    body.dark-mode .font-option { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #ccc; }
+    body.dark-mode .font-option.active { border-color: #e94560; background: rgba(233,69,96,0.1); color: #e94560; }
+    body.dark-mode .theme-option { border-color: rgba(255,255,255,0.1); background: transparent; }
+    body.dark-mode .theme-option .theme-label { color: #aaa; }
+    body.dark-mode .lh-option { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #ccc; }
+    body.dark-mode .lh-option.active { border-color: #e94560; background: rgba(233,69,96,0.1); color: #e94560; }
+    body.dark-mode .width-option { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #ccc; }
+    body.dark-mode .width-option.active { border-color: #e94560; background: rgba(233,69,96,0.1); color: #e94560; }
+    body.dark-mode .reader-end { border-top-color: rgba(255,255,255,0.06); }
+    body.dark-mode .reader-end h3 { color: #eee; }
+    body.dark-mode .reader-end p { color: #777; }
+    body.dark-mode .reading-error h3 { color: #eee; }
+    body.dark-mode .footer { border-top-color: rgba(255,255,255,0.06); }
+
+    /* ===== SEPIA MODE ===== */
+    body.sepia-mode { background: #f4ecd8; }
+    body.sepia-mode .reader-topbar {
+        background: rgba(244,236,216,0.98);
+        border-bottom-color: #d4c5a9;
+    }
+    body.sepia-mode .topbar-left .mini-title { color: #5b4636; }
+    body.sepia-mode .topbar-btn { color: #8b7355; }
+    body.sepia-mode .reader-book-header {
+        background: linear-gradient(180deg, #ede0c8 0%, #f4ecd8 100%);
+        border-bottom-color: #d4c5a9;
+    }
+    body.sepia-mode .reader-book-header .book-title { color: #3e2f1c; }
+    body.sepia-mode .reader-book-header .book-author { color: #8b7355; }
+    body.sepia-mode #reading-area { color: #5b4636; }
+    body.sepia-mode #reading-area .section-heading { color: #3e2f1c; }
+    body.sepia-mode #reading-area .sub-heading { color: #6b4f2e; }
+    body.sepia-mode #reading-area blockquote { background: rgba(139,115,85,0.06); color: #7a6349; }
+    body.sepia-mode .toc-sidebar { background: #f4ecd8; }
+    body.sepia-mode .toc-header { border-bottom-color: #d4c5a9; }
+    body.sepia-mode .toc-header h3 { color: #5b4636; }
+    body.sepia-mode .toc-item { color: #7a6349; }
+    body.sepia-mode .settings-panel { background: #f4ecd8; }
+    body.sepia-mode .settings-header h3 { color: #5b4636; }
+    body.sepia-mode .setting-group label { color: #8b7355; }
+    body.sepia-mode .reader-end { border-top-color: #d4c5a9; }
+    body.sepia-mode .reader-end h3 { color: #3e2f1c; }
+
+    /* Content fade-in */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    #reading-area.loaded > * {
+        animation: fadeInUp 0.5s ease both;
+    }
+    #reading-area.loaded > *:nth-child(1) { animation-delay: 0s; }
+    #reading-area.loaded > *:nth-child(2) { animation-delay: 0.04s; }
+    #reading-area.loaded > *:nth-child(3) { animation-delay: 0.08s; }
+    #reading-area.loaded > *:nth-child(n+4) { animation-delay: 0.12s; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .reader-topbar { padding: 0 16px; height: 48px; }
+        .topbar-left .back-btn span { display: none; }
+        .topbar-left .back-btn { padding: 6px 10px; }
+        .reader-book-header { padding: 36px 16px 32px; }
+        .reader-book-header .book-cover { width: 120px; height: 172px; }
+        .reader-book-header .book-title { font-size: 22px; }
+        .reader-book-header .book-author { font-size: 14px; }
+        .reader-content-wrapper { padding: 32px 18px 60px; }
+        #reading-area { font-size: 16px; line-height: 1.8; }
+        #reading-area .section-heading { font-size: 1.2em; }
+        .toc-sidebar { width: 300px; }
+        .settings-panel { border-radius: 16px 16px 0 0; }
+        .reader-end { padding: 40px 16px; }
+    }
+    @media (max-width: 480px) {
+        .reader-book-header .book-meta-badges { gap: 10px; font-size: 12px; }
+        .reader-content-wrapper { padding: 24px 16px 50px; }
+        #reading-area { font-size: 15px; }
+    }
+    @media (min-width: 1200px) {
+        .reader-content-wrapper { max-width: 740px; }
+        .reader-content-wrapper.wide { max-width: 980px; }
+    }
+    </style>
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-bar-left">
-                <span><i class="fas fa-envelope"></i> contact@bookvoyage.com</span>
-                <span><i class="fas fa-phone"></i> +84 123 456 789</span>
+    <!-- Progress bar -->
+    <div class="reading-progress-bar" id="progressBar"></div>
+
+    <!-- Reader top bar -->
+    <div class="reader-topbar" id="readerTopbar">
+        <div class="topbar-left">
+            <button class="back-btn" onclick="history.back();" title="Go back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </button>
+            <div class="mini-title" id="miniTitle">Loading...</div>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-progress" id="progressText">0%</span>
+            <button class="topbar-btn" id="btnToc" title="Table of Contents">
+                <i class="fas fa-list"></i>
+            </button>
+            <button class="topbar-btn" id="btnSettings" title="Reading settings">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Book header -->
+    <div class="reader-book-header" id="bookHeader">
+        <div class="book-cover" id="bookCover">
+            <i class="fas fa-book-open" style="font-size:36px;color:rgba(255,255,255,0.5);"></i>
+        </div>
+        <h1 class="book-title" id="bookTitle">Loading...</h1>
+        <p class="book-author" id="bookAuthor"></p>
+        <div class="book-meta-badges" id="bookMeta">
+            <span><i class="fas fa-spinner fa-spin"></i> Loading book info...</span>
+        </div>
+    </div>
+
+    <!-- Main reading wrapper -->
+    <div class="reader-content-wrapper" id="contentWrapper">
+        <div id="reading-area">
+            <!-- Skeleton -->
+            <div class="skeleton-reading" id="readingSkeleton">
+                <div class="sk-line sk-heading"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line sk-heading"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line sk-heading"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
             </div>
-            <div class="top-bar-right">
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <!-- TOC Sidebar -->
+    <div class="toc-overlay" id="tocOverlay"></div>
+    <div class="toc-sidebar" id="tocSidebar">
+        <div class="toc-header">
+            <h3><i class="fas fa-list-ol" style="margin-right:8px;"></i> Contents</h3>
+            <button class="toc-close" id="tocClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="toc-list" id="tocList"></div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-handle"></div>
+        <div class="settings-header">
+            <h3><i class="fas fa-cog" style="margin-right:8px;"></i> Reading Settings</h3>
+            <button class="settings-close" id="settingsClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="settings-body">
+            <!-- Font Size -->
+            <div class="setting-group">
+                <label>Font Size</label>
+                <div class="setting-row">
+                    <button class="size-btn" id="fontDown"><i class="fas fa-minus"></i></button>
+                    <span class="size-display" id="fontSizeDisplay">18px</span>
+                    <button class="size-btn" id="fontUp"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <!-- Font Family -->
+            <div class="setting-group">
+                <label>Font Family</label>
+                <div class="font-options" id="fontOptions">
+                    <button class="font-option active" data-font="'Merriweather', Georgia, serif" style="font-family: Merriweather, Georgia, serif;">Merriweather</button>
+                    <button class="font-option" data-font="'Lora', Georgia, serif" style="font-family: Lora, Georgia, serif;">Lora</button>
+                    <button class="font-option" data-font="'Source Serif 4', Georgia, serif" style="font-family: 'Source Serif 4', Georgia, serif;">Source Serif</button>
+                    <button class="font-option" data-font="Georgia, serif" style="font-family: Georgia, serif;">Georgia</button>
+                    <button class="font-option" data-font="'Segoe UI', system-ui, sans-serif" style="font-family: Segoe UI, system-ui, sans-serif;">Segoe UI</button>
+                    <button class="font-option" data-font="system-ui, sans-serif" style="font-family: system-ui, sans-serif;">System</button>
+                </div>
+            </div>
+            <!-- Theme -->
+            <div class="setting-group">
+                <label>Theme</label>
+                <div class="theme-options" id="themeOptions">
+                    <div class="theme-option theme-light active" data-theme="light">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Light</div>
+                    </div>
+                    <div class="theme-option theme-sepia" data-theme="sepia">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Sepia</div>
+                    </div>
+                    <div class="theme-option theme-dark" data-theme="dark">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Dark</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Line Height -->
+            <div class="setting-group">
+                <label>Line Spacing</label>
+                <div class="line-height-options" id="lhOptions">
+                    <button class="lh-option" data-lh="1.6">Compact</button>
+                    <button class="lh-option" data-lh="1.8">Normal</button>
+                    <button class="lh-option active" data-lh="1.9">Relaxed</button>
+                    <button class="lh-option" data-lh="2.2">Spacious</button>
+                </div>
+            </div>
+            <!-- Width -->
+            <div class="setting-group">
+                <label>Reading Width</label>
+                <div class="width-toggle" id="widthOptions">
+                    <button class="width-option active" data-width="720">Normal</button>
+                    <button class="width-option" data-width="960">Wide</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="container">
-            <a href="/" class="logo">
-                <span class="logo-icon"><i class="fas fa-book-open"></i></span>
-                <div>
-                    <h1>Book<span>Voyage</span></h1>
-                    <p>Reading is a Journey</p>
-                </div>
-            </a>
-            <nav>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="/">Home</a></li>
-                    <li>
-                        <a href="/catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
-                        <ul class="dropdown">
-                            <li><a href="/catalog/">All Books</a></li>
-                            <li><a href="/catalog/?cat=fiction">Fiction</a></li>
-                            <li><a href="/catalog/?cat=nonfiction">Non-Fiction</a></li>
-                            <li><a href="/catalog/?cat=science">Science</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="/categories/">Categories</a></li>
-                    <li><a href="/java/">Tài liệu Java</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/contact/">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="nav-auth">
-                <a href="/login/" class="btn btn-outline">Login</a>
-                <a href="/register/" class="btn btn-primary">Register</a>
-            </div>
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    </header>
+    <!-- Scroll to top -->
+    <button class="read-scroll-top" id="scrollTopBtn" title="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-    <!-- READING HEADER (dynamic) -->
-    <section class="reading-header" id="readingHeader">
-        <div class="container">
-            <div class="reading-book-cover" id="bookCover">
-                <i class="fas fa-book-open" style="font-size:40px;color:rgba(255,255,255,0.5);"></i>
-            </div>
-            <div class="reading-book-info">
-                <h1 id="bookTitle">Loading...</h1>
-                <p class="author" id="bookAuthor"></p>
-                <div class="reading-meta">
-                    <span><i class="fas fa-book-reader"></i> Reading Mode</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- READING CONTENT -->
-    <section class="reading-content" style="padding: 30px 0;">
-        <div class="container">
-
-            <!-- Controls -->
-            <div class="reading-controls">
-                <a href="/" class="btn-back" onclick="history.back(); return false;">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-                <div class="font-controls">
-                    <button onclick="changeFontSize(-2)" title="Giảm cỡ chữ"><i class="fas fa-minus"></i></button>
-                    <span id="fontSizeDisplay">18px</span>
-                    <button onclick="changeFontSize(2)" title="Tăng cỡ chữ"><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
-
-            <!-- Reading Area -->
-            <div id="reading-area">
-                <div class="reading-loading">
-                    <i class="fas fa-spinner"></i>
-                    <h3>Loading book content...</h3>
-                    <p>Please wait while we prepare your reading experience.</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -118,8 +931,7 @@
                         <span class="logo-icon"><i class="fas fa-book-open"></i></span>
                         <h3>Book<span>Voyage</span></h3>
                     </div>
-                    <p>BookVoyage is your gateway to a world of knowledge and imagination.
-                       Reading is a journey — start yours today.</p>
+                    <p>BookVoyage is your gateway to a world of knowledge and imagination. Reading is a journey — start yours today.</p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -165,100 +977,525 @@
     </footer>
 
     <script src="/js/books-data.js"></script>
-    <script src="/js/main.js"></script>
     <script>
     // ============================================
-    // READ PAGE — Fetch book content and display
+    // PROFESSIONAL READER ENGINE
+    // Continuous scroll, TOC sidebar, Settings panel
+    // Keyboard shortcuts, Reading position memory
     // ============================================
-    (function () {
-        var urlParams = new URLSearchParams(window.location.search);
-        var bookId = parseInt(urlParams.get('id'));
 
-        if (!bookId) {
-            showError('No book selected', 'Please go back to the homepage and click "Read" on a book.');
-            return;
+    (function() {
+        'use strict';
+
+        // === READING PREFERENCES (persisted) ===
+        var prefs = {
+            fontSize: parseInt(localStorage.getItem('bv_fontSize')) || 18,
+            lineHeight: parseFloat(localStorage.getItem('bv_lineHeight')) || 1.9,
+            font: localStorage.getItem('bv_font') || "'Merriweather', Georgia, serif",
+            theme: localStorage.getItem('bv_theme') || 'light',
+            width: parseInt(localStorage.getItem('bv_width')) || 720
+        };
+
+        // Apply theme immediately to avoid flash
+        if (prefs.theme === 'dark') document.body.classList.add('dark-mode');
+        if (prefs.theme === 'sepia') document.body.classList.add('sepia-mode');
+
+        // === ELEMENTS ===
+        var els = {};
+        var sectionHeadings = []; // [{id, title, el}]
+        var bookInfo = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            els = {
+                progressBar: document.getElementById('progressBar'),
+                topbar: document.getElementById('readerTopbar'),
+                miniTitle: document.getElementById('miniTitle'),
+                progressText: document.getElementById('progressText'),
+                btnToc: document.getElementById('btnToc'),
+                btnSettings: document.getElementById('btnSettings'),
+                bookHeader: document.getElementById('bookHeader'),
+                bookCover: document.getElementById('bookCover'),
+                bookTitle: document.getElementById('bookTitle'),
+                bookAuthor: document.getElementById('bookAuthor'),
+                bookMeta: document.getElementById('bookMeta'),
+                contentWrapper: document.getElementById('contentWrapper'),
+                readingArea: document.getElementById('reading-area'),
+                skeleton: document.getElementById('readingSkeleton'),
+                tocOverlay: document.getElementById('tocOverlay'),
+                tocSidebar: document.getElementById('tocSidebar'),
+                tocClose: document.getElementById('tocClose'),
+                tocList: document.getElementById('tocList'),
+                settingsOverlay: document.getElementById('settingsOverlay'),
+                settingsPanel: document.getElementById('settingsPanel'),
+                settingsClose: document.getElementById('settingsClose'),
+                fontDown: document.getElementById('fontDown'),
+                fontUp: document.getElementById('fontUp'),
+                fontSizeDisplay: document.getElementById('fontSizeDisplay'),
+                fontOptions: document.getElementById('fontOptions'),
+                themeOptions: document.getElementById('themeOptions'),
+                lhOptions: document.getElementById('lhOptions'),
+                widthOptions: document.getElementById('widthOptions'),
+                scrollTopBtn: document.getElementById('scrollTopBtn')
+            };
+
+            applyPreferences();
+            loadBookContent();
+            setupEventListeners();
+            setupScrollTracking();
+            setupKeyboardShortcuts();
+        });
+
+        // === APPLY PREFERENCES ===
+        function applyPreferences() {
+            var area = els.readingArea;
+            area.style.fontSize = prefs.fontSize + 'px';
+            area.style.lineHeight = prefs.lineHeight;
+            area.style.fontFamily = prefs.font;
+            els.fontSizeDisplay.textContent = prefs.fontSize + 'px';
+
+            if (prefs.width > 720) {
+                els.contentWrapper.classList.add('wide');
+            }
+
+            // Sync settings UI
+            syncSettingsUI();
         }
 
-        // Find book info from BOOKS_DATA for title/author display
-        var bookInfo = (typeof BOOKS_DATA !== 'undefined') ? BOOKS_DATA.find(function(b) { return b.id === bookId; }) : null;
+        function syncSettingsUI() {
+            // Font options
+            els.fontOptions.querySelectorAll('.font-option').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.font === prefs.font);
+            });
+            // Theme options
+            els.themeOptions.querySelectorAll('.theme-option').forEach(function(opt) {
+                opt.classList.toggle('active', opt.dataset.theme === prefs.theme);
+            });
+            // Line height
+            els.lhOptions.querySelectorAll('.lh-option').forEach(function(opt) {
+                opt.classList.toggle('active', parseFloat(opt.dataset.lh) === prefs.lineHeight);
+            });
+            // Width
+            els.widthOptions.querySelectorAll('.width-option').forEach(function(opt) {
+                opt.classList.toggle('active', parseInt(opt.dataset.width) === prefs.width);
+            });
+        }
 
-        if (bookInfo) {
-            document.getElementById('bookTitle').textContent = bookInfo.title;
-            document.getElementById('bookAuthor').innerHTML = '<i class="fas fa-user"></i> by ' + bookInfo.author;
-            document.title = bookInfo.title + ' - Read | BookVoyage';
-            // Set cover image from BOOKS_DATA
-            if (bookInfo.cover) {
-                var coverEl = document.getElementById('bookCover');
-                coverEl.style.background = bookInfo.gradient;
-                coverEl.innerHTML = '<img src="' + bookInfo.cover + '" alt="' + bookInfo.title + '" onerror="this.remove();">';
+        function savePref(key, value) {
+            prefs[key] = value;
+            localStorage.setItem('bv_' + key, value);
+        }
+
+        // === EVENT LISTENERS ===
+        function setupEventListeners() {
+            // TOC toggle
+            els.btnToc.addEventListener('click', function() { toggleToc(true); });
+            els.tocOverlay.addEventListener('click', function() { toggleToc(false); });
+            els.tocClose.addEventListener('click', function() { toggleToc(false); });
+
+            // Settings toggle
+            els.btnSettings.addEventListener('click', function() { toggleSettings(true); });
+            els.settingsOverlay.addEventListener('click', function() { toggleSettings(false); });
+            els.settingsClose.addEventListener('click', function() { toggleSettings(false); });
+
+            // Font size
+            els.fontDown.addEventListener('click', function() {
+                var newSize = Math.max(12, prefs.fontSize - 2);
+                savePref('fontSize', newSize);
+                els.readingArea.style.fontSize = newSize + 'px';
+                els.fontSizeDisplay.textContent = newSize + 'px';
+            });
+            els.fontUp.addEventListener('click', function() {
+                var newSize = Math.min(32, prefs.fontSize + 2);
+                savePref('fontSize', newSize);
+                els.readingArea.style.fontSize = newSize + 'px';
+                els.fontSizeDisplay.textContent = newSize + 'px';
+            });
+
+            // Font family
+            els.fontOptions.addEventListener('click', function(e) {
+                var btn = e.target.closest('.font-option');
+                if (!btn) return;
+                savePref('font', btn.dataset.font);
+                els.readingArea.style.fontFamily = btn.dataset.font;
+                els.fontOptions.querySelectorAll('.font-option').forEach(function(b) {
+                    b.classList.toggle('active', b === btn);
+                });
+            });
+
+            // Theme
+            els.themeOptions.addEventListener('click', function(e) {
+                var opt = e.target.closest('.theme-option');
+                if (!opt) return;
+                var theme = opt.dataset.theme;
+                document.body.classList.remove('dark-mode', 'sepia-mode');
+                if (theme === 'dark') document.body.classList.add('dark-mode');
+                if (theme === 'sepia') document.body.classList.add('sepia-mode');
+                savePref('theme', theme);
+                els.themeOptions.querySelectorAll('.theme-option').forEach(function(o) {
+                    o.classList.toggle('active', o === opt);
+                });
+            });
+
+            // Line height
+            els.lhOptions.addEventListener('click', function(e) {
+                var opt = e.target.closest('.lh-option');
+                if (!opt) return;
+                var lh = parseFloat(opt.dataset.lh);
+                savePref('lineHeight', lh);
+                els.readingArea.style.lineHeight = lh;
+                els.lhOptions.querySelectorAll('.lh-option').forEach(function(o) {
+                    o.classList.toggle('active', o === opt);
+                });
+            });
+
+            // Width
+            els.widthOptions.addEventListener('click', function(e) {
+                var opt = e.target.closest('.width-option');
+                if (!opt) return;
+                var w = parseInt(opt.dataset.width);
+                savePref('width', w);
+                els.contentWrapper.classList.toggle('wide', w > 720);
+                els.widthOptions.querySelectorAll('.width-option').forEach(function(o) {
+                    o.classList.toggle('active', o === opt);
+                });
+            });
+
+            // Scroll to top
+            els.scrollTopBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // === TOC / SETTINGS TOGGLES ===
+        function toggleToc(open) {
+            els.tocOverlay.classList.toggle('open', open);
+            els.tocSidebar.classList.toggle('open', open);
+            els.btnToc.classList.toggle('active', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        function toggleSettings(open) {
+            els.settingsOverlay.classList.toggle('open', open);
+            els.settingsPanel.classList.toggle('open', open);
+            els.btnSettings.classList.toggle('active', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        // === SCROLL TRACKING ===
+        function setupScrollTracking() {
+            var ticking = false;
+            window.addEventListener('scroll', function() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(function() {
+                    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    var progress = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
+
+                    // Progress bar
+                    els.progressBar.style.width = progress + '%';
+                    els.progressText.textContent = progress + '%';
+
+                    // Mini title visibility
+                    var headerBottom = els.bookHeader.offsetTop + els.bookHeader.offsetHeight;
+                    els.miniTitle.classList.toggle('visible', scrollTop > headerBottom - 60);
+
+                    // Topbar shadow
+                    els.topbar.classList.toggle('shadow', scrollTop > 10);
+
+                    // Scroll to top button
+                    els.scrollTopBtn.classList.toggle('visible', scrollTop > 600);
+
+                    // Active TOC section tracking
+                    updateActiveTocItem(scrollTop);
+
+                    // Save reading position
+                    saveReadingPosition(scrollTop, docHeight);
+
+                    ticking = false;
+                });
+            }, { passive: true });
+        }
+
+        function updateActiveTocItem(scrollTop) {
+            if (sectionHeadings.length === 0) return;
+            var activeId = sectionHeadings[0].id;
+            for (var i = 0; i < sectionHeadings.length; i++) {
+                if (sectionHeadings[i].el.offsetTop - 120 <= scrollTop) {
+                    activeId = sectionHeadings[i].id;
+                }
+            }
+            els.tocList.querySelectorAll('.toc-item').forEach(function(item) {
+                item.classList.toggle('active', item.dataset.id === activeId);
+            });
+        }
+
+        function saveReadingPosition(scrollTop, docHeight) {
+            if (docHeight <= 0) return;
+            var bookId = new URLSearchParams(window.location.search).get('id');
+            if (bookId) {
+                localStorage.setItem('bv_pos_' + bookId, Math.round((scrollTop / docHeight) * 10000) / 10000);
             }
         }
 
-        // Fetch reading content index, match by ID
-        fetch('/data/books.json')
-            .then(function(res) {
-                if (!res.ok) throw new Error('Cannot load books.json');
-                return res.json();
-            })
-            .then(function(readingBooks) {
-                var readingBook = readingBooks.find(function(rb) { return rb.id === bookId; });
+        function restoreReadingPosition() {
+            var bookId = new URLSearchParams(window.location.search).get('id');
+            if (!bookId) return;
+            var pos = parseFloat(localStorage.getItem('bv_pos_' + bookId));
+            if (pos && pos > 0.02) {
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var targetScroll = Math.round(pos * docHeight);
+                setTimeout(function() {
+                    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                }, 300);
+            }
+        }
 
-                if (!readingBook) {
-                    showError(
-                        'Content not available',
-                        'Reading content for "' + (bookInfo ? bookInfo.title : 'this book') + '" could not be found. Please try again later.'
-                    );
+        // === KEYBOARD SHORTCUTS ===
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Escape closes panels
+                if (e.key === 'Escape') {
+                    toggleToc(false);
+                    toggleSettings(false);
+                }
+                // 't' opens TOC
+                if (e.key === 't' && !isTyping(e)) {
+                    e.preventDefault();
+                    toggleToc(!els.tocSidebar.classList.contains('open'));
+                }
+                // 's' opens settings
+                if (e.key === 's' && !isTyping(e)) {
+                    e.preventDefault();
+                    toggleSettings(!els.settingsPanel.classList.contains('open'));
+                }
+            });
+        }
+
+        function isTyping(e) {
+            var tag = (e.target.tagName || '').toLowerCase();
+            return tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+        }
+
+        // === CONTENT RENDERING ===
+        function renderContent(text) {
+            var html = '';
+            var paragraphs = text.split(/\n\s*\n/);
+            var sectionIndex = 0;
+            var sectionHeaderPattern = /^[A-Z\s\d═━─╌:&,.'\-!?()]{5,}$/;
+            var separatorPattern = /^[═━─╌\-_~*]{5,}$/;
+
+            paragraphs.forEach(function(para) {
+                var trimmed = para.trim();
+                if (!trimmed) return;
+
+                // Separator lines
+                if (separatorPattern.test(trimmed)) {
+                    html += '<div class="separator">• • •</div>';
                     return;
                 }
 
-                if (!bookInfo) {
-                    document.getElementById('bookTitle').textContent = readingBook.title;
-                    document.title = readingBook.title + ' - Read | BookVoyage';
-                }
-
-                return fetch(readingBook.content_file);
-            })
-            .then(function(res) {
-                if (!res) return;
-                if (!res.ok) {
-                    showError('Content file not found', 'The reading content file could not be loaded.');
+                // Section headers (ALL CAPS)
+                if (sectionHeaderPattern.test(trimmed) && trimmed.length < 80 && trimmed.length > 3) {
+                    sectionIndex++;
+                    var sectionId = 'section-' + sectionIndex;
+                    html += '<h2 class="section-heading" id="' + sectionId + '">' + escapeHtml(formatHeading(trimmed)) + '</h2>';
+                    sectionHeadings.push({ id: sectionId, title: formatHeading(trimmed) });
                     return;
                 }
-                return res.text();
-            })
-            .then(function(text) {
-                if (!text) return;
-                var readingArea = document.getElementById('reading-area');
-                var html = '';
-                text.split(/\n\s*\n/).forEach(function(para) {
-                    var trimmed = para.trim();
-                    if (trimmed) html += '<p>' + trimmed.replace(/\n/g, '<br>') + '</p>';
-                });
-                readingArea.innerHTML = html;
-            })
-            .catch(function(err) {
-                console.error('Error loading book:', err);
-                showError('Error loading content', 'Something went wrong while loading the book. Please try again later.');
+
+                // Chapter/Part sub-headings
+                if (/^(Chapter|Part|CHAPTER|PART)\s/i.test(trimmed) && trimmed.length < 120) {
+                    html += '<h3 class="sub-heading">' + escapeHtml(trimmed).replace(/\n/g, '<br>') + '</h3>';
+                    return;
+                }
+
+                // Quotes
+                if (trimmed.startsWith('"') && trimmed.endsWith('"') && trimmed.length < 300) {
+                    html += '<blockquote>' + escapeHtml(trimmed) + '</blockquote>';
+                    return;
+                }
+
+                // List items
+                if (/^(\d+\.\s|[-•]\s)/.test(trimmed)) {
+                    html += '<p class="list-item">' + escapeHtml(trimmed).replace(/\n/g, '<br>') + '</p>';
+                    return;
+                }
+
+                // Regular paragraph
+                html += '<p>' + escapeHtml(trimmed).replace(/\n/g, '<br>') + '</p>';
             });
 
+            return html;
+        }
+
+        function formatHeading(text) {
+            // Convert "ALL CAPS HEADING" to "Title Case"
+            return text.replace(/[═━─╌]/g, '').trim().split(/\s+/).map(function(word) {
+                if (word.length <= 2) return word.toLowerCase();
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }).join(' ');
+        }
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function estimateReadingTime(text) {
+            var words = text.split(/\s+/).length;
+            var minutes = Math.ceil(words / 230);
+            return { words: words, minutes: minutes };
+        }
+
+        // === BUILD TOC ===
+        function buildToc() {
+            if (sectionHeadings.length === 0) {
+                els.btnToc.style.display = 'none';
+                return;
+            }
+            var html = '';
+            sectionHeadings.forEach(function(section, i) {
+                html += '<div class="toc-item' + (i === 0 ? ' active' : '') + '" data-id="' + section.id + '">';
+                html += '<span class="toc-num">' + (i + 1) + '</span>';
+                html += '<span class="toc-label">' + section.title + '</span>';
+                html += '</div>';
+            });
+            els.tocList.innerHTML = html;
+
+            // Click handler
+            els.tocList.addEventListener('click', function(e) {
+                var item = e.target.closest('.toc-item');
+                if (!item) return;
+                var target = document.getElementById(item.dataset.id);
+                if (target) {
+                    toggleToc(false);
+                    setTimeout(function() {
+                        var y = target.offsetTop - 70;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }, 100);
+                }
+            });
+        }
+
+        // === END OF BOOK ===
+        function appendEndSection() {
+            var endDiv = document.createElement('div');
+            endDiv.className = 'reader-end';
+            endDiv.innerHTML =
+                '<div class="end-icon"><i class="fas fa-bookmark"></i></div>' +
+                '<h3>End of Book</h3>' +
+                '<p>You\'ve finished reading ' + (bookInfo ? '"' + bookInfo.title + '"' : 'this book') + '. Happy reading!</p>' +
+                '<div class="end-actions">' +
+                '<a href="/" class="end-btn end-btn-primary"><i class="fas fa-home"></i> Back to Home</a>' +
+                '<a href="/catalog/" class="end-btn end-btn-outline"><i class="fas fa-book"></i> Browse Library</a>' +
+                '</div>';
+            els.contentWrapper.appendChild(endDiv);
+        }
+
+        // === LOAD BOOK CONTENT ===
+        function loadBookContent() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var bookId = parseInt(urlParams.get('id'));
+
+            if (!bookId) {
+                if (els.skeleton) els.skeleton.remove();
+                showError('No book selected', 'Please go back to the library and select a book to read.');
+                return;
+            }
+
+            // Try to get book info from BOOKS_DATA
+            bookInfo = (typeof BOOKS_DATA !== 'undefined') ? BOOKS_DATA.find(function(b) { return b.id === bookId; }) : null;
+
+            if (bookInfo) {
+                els.bookTitle.textContent = bookInfo.title;
+                els.miniTitle.textContent = bookInfo.title;
+                document.title = bookInfo.title + ' — Read | BookVoyage';
+                els.bookAuthor.innerHTML = 'by <a href="/catalog/?q=' + encodeURIComponent(bookInfo.author) + '">' + bookInfo.author + '</a>';
+
+                if (bookInfo.cover) {
+                    els.bookCover.style.background = 'linear-gradient(135deg, ' + bookInfo.gradient[0] + ', ' + bookInfo.gradient[1] + ')';
+                    els.bookCover.innerHTML = '<img src="' + bookInfo.cover + '" alt="' + bookInfo.title + '" onerror="this.parentElement.innerHTML=\'<i class=\\\'fas fa-book-open\\\' style=\\\'font-size:36px;color:rgba(255,255,255,0.5)\\\'></i>\';">';
+                }
+            }
+
+            // Fetch content
+            fetch('/data/books.json')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Cannot load books.json');
+                    return res.json();
+                })
+                .then(function(readingBooks) {
+                    var readingBook = readingBooks.find(function(rb) { return rb.id === bookId; });
+                    if (!readingBook) {
+                        if (els.skeleton) els.skeleton.remove();
+                        showError('Content not available', 'Reading content for this book could not be found.');
+                        return;
+                    }
+                    if (!bookInfo) {
+                        els.bookTitle.textContent = readingBook.title;
+                        els.miniTitle.textContent = readingBook.title;
+                        document.title = readingBook.title + ' — Read | BookVoyage';
+                    }
+                    return fetch(readingBook.content_file);
+                })
+                .then(function(res) {
+                    if (!res) return;
+                    if (!res.ok) throw new Error('Content file not found');
+                    return res.text();
+                })
+                .then(function(text) {
+                    if (!text) return;
+
+                    // Estimate reading time
+                    var readTime = estimateReadingTime(text);
+
+                    // Update meta badges
+                    var metaHtml = '';
+                    if (bookInfo) {
+                        metaHtml += '<span><i class="fas fa-file-alt"></i> ' + bookInfo.pages + ' pages</span>';
+                        metaHtml += '<span><i class="fas fa-star"></i> ' + bookInfo.rating + '</span>';
+                    }
+                    metaHtml += '<span class="reading-time"><i class="fas fa-clock"></i> ~' + readTime.minutes + ' min read</span>';
+                    metaHtml += '<span><i class="fas fa-font"></i> ' + readTime.words.toLocaleString() + ' words</span>';
+                    if (bookInfo && bookInfo.badge) {
+                        metaHtml += '<span><i class="fas fa-award"></i> ' + bookInfo.badge + '</span>';
+                    }
+                    els.bookMeta.innerHTML = metaHtml;
+
+                    // Render content (continuous scroll!)
+                    var html = renderContent(text);
+                    els.readingArea.innerHTML = html;
+                    els.readingArea.classList.add('loaded');
+
+                    // Build TOC
+                    buildToc();
+
+                    // Append end section
+                    appendEndSection();
+
+                    // Restore reading position
+                    restoreReadingPosition();
+                })
+                .catch(function(err) {
+                    console.error('Error loading book:', err);
+                    if (els.skeleton) els.skeleton.remove();
+                    showError('Error loading content', 'Something went wrong while loading the book. Please try again.');
+                });
+        }
+
         function showError(title, message) {
-            document.getElementById('reading-area').innerHTML =
+            els.readingArea.innerHTML =
                 '<div class="reading-error">' +
                 '<i class="fas fa-book"></i>' +
                 '<h3>' + title + '</h3>' +
                 '<p>' + message + '</p>' +
-                '<a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Back to Homepage</a>' +
+                '<a href="/" class="end-btn end-btn-primary" style="display:inline-flex;"><i class="fas fa-home"></i> Back to Homepage</a>' +
                 '</div>';
         }
-    })();
 
-    // Font size control
-    var currentFontSize = 18;
-    function changeFontSize(delta) {
-        currentFontSize = Math.min(32, Math.max(12, currentFontSize + delta));
-        document.getElementById('reading-area').style.fontSize = currentFontSize + 'px';
-        document.getElementById('fontSizeDisplay').textContent = currentFontSize + 'px';
-    }
+    })();
     </script>
 </body>
 </html>
