@@ -29,15 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hamburger menu
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('navMenu');
-    
-    // Create overlay element for sidebar backdrop
+    const navParent = navMenu ? navMenu.parentNode : null; // original parent (<nav>)
+
+    // Create overlay — append to body (root stacking context)
     const overlay = document.createElement('div');
     overlay.classList.add('nav-overlay');
     document.body.appendChild(overlay);
 
     // Helper: close mobile menu
     function closeMobileMenu() {
-        if (navMenu) navMenu.classList.remove('active');
+        if (navMenu) {
+            navMenu.classList.remove('active');
+            // Move nav-menu back inside header <nav> for desktop layout
+            if (navParent && navMenu.parentNode !== navParent) {
+                navParent.appendChild(navMenu);
+            }
+        }
         if (hamburger) hamburger.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
@@ -46,6 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Helper: open mobile menu
     function openMobileMenu() {
+        // Move nav-menu to body so it escapes header's stacking context
+        if (navMenu.parentNode !== document.body) {
+            document.body.appendChild(navMenu);
+        }
         navMenu.classList.add('active');
         hamburger.classList.add('active');
         overlay.classList.add('active');
@@ -61,6 +72,13 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.appendChild(navAuthClone);
         }
 
+        // Create close button inside the nav-menu sidebar
+        const closeBtn = document.createElement('button');
+        closeBtn.classList.add('nav-menu-close');
+        closeBtn.setAttribute('aria-label', 'Close menu');
+        closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        navMenu.insertBefore(closeBtn, navMenu.firstChild);
+
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
             if (navMenu.classList.contains('active')) {
@@ -68,6 +86,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 openMobileMenu();
             }
+        });
+
+        // Close button inside sidebar
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeMobileMenu();
         });
 
         // Close when clicking overlay
@@ -490,7 +514,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Render book detail
                 bookDetailLayout.innerHTML = `
                     <div class="book-detail-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
-                        <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
+                        <span class="cover-fallback-icon"><i class="fas fa-book-open"></i></span>
+                        <img src="${book.cover}" alt="${book.title}" onload="if(this.naturalWidth<10||this.naturalHeight<10)this.remove();" onerror="this.remove();" crossorigin="anonymous">
                     </div>
                     <div class="book-detail-info">
                         <span class="book-category-badge">${book.category}</span>
@@ -500,7 +525,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="detail-rating">
                             <span class="stars">${starsHtml}</span>
                             <span>${book.rating} / 5.0</span>
-                            <span>(${book.reviews.toLocaleString()} reviews)</span>
                         </div>
 
                         <div class="book-detail-meta">
@@ -565,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
             // Popular books = highest rated
             const popular = [...BOOKS_DATA]
-                .sort(function(a, b) { return b.rating - a.rating || parseInt(b.reads) - parseInt(a.reads); })
+                .sort(function(a, b) { return b.rating - a.rating; })
                 .slice(0, 4);
             popularBooksGrid.innerHTML = popular.map(function(b) { return renderBookCard(b); }).join('');
 
@@ -590,7 +614,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     return `<div class="arrival-item">
                         <a href="/book-detail/?id=${book.id}" style="display:block;text-decoration:none;">
                             <div class="arrival-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
-                                <img src="${book.cover}" alt="${book.title}" onerror="this.remove();">
+                                <img src="${book.cover}" alt="${book.title}" onload="if(this.naturalWidth<10||this.naturalHeight<10)this.remove();" onerror="this.remove();" crossorigin="anonymous">
                             </div>
                         </a>
                         <div class="arrival-info">
@@ -620,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // HOMEPAGE SEARCH - redirect to catalog with query
     // ======================================================
     if (isHomepage) {
-        const heroSearchForm = document.querySelector('.search-bar');
+        const heroSearchForm = document.querySelector('.hero-search-bar') || document.querySelector('.search-bar');
         if (heroSearchForm) {
             heroSearchForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -646,35 +670,40 @@ document.addEventListener('DOMContentLoaded', function() {
         var totalBooks = BOOKS_DATA.length;
         var _authorSet = {};
         var _catSet = {};
-        var totalReads = 0;
         for (var si = 0; si < BOOKS_DATA.length; si++) {
             _authorSet[BOOKS_DATA[si].author] = 1;
             _catSet[BOOKS_DATA[si].category] = 1;
-            totalReads += Math.round(parseFloat(BOOKS_DATA[si].reads.replace('K', '')) * 1000);
         }
         var uniqueAuthors = Object.keys(_authorSet).length;
         var uniqueCategories = Object.keys(_catSet).length;
-        var totalReadsFormatted = Math.round(totalReads / 1000) + 'K+';
         var counts = getCategoryCounts();
 
         // Map stat label -> real value
         var statsMap = {
-            'Total Books': totalBooks + '+',
-            'Books Available': totalBooks + '+',
-            'Books': totalBooks + '+',
-            'Authors': uniqueAuthors + '+',
-            'Categories': uniqueCategories,
-            'Active Readers': totalReadsFormatted,
-            'Happy Readers': totalReadsFormatted
+            'Total Books': totalBooks,
+            'Books Available': totalBooks,
+            'Books': totalBooks,
+            'Authors': uniqueAuthors,
+            'Categories': uniqueCategories
         };
 
-        // Update all stat elements (hero stats + stats banner + about page)
-        document.querySelectorAll('.stat-item, .hero-stats .stat').forEach(function(el) {
+        // Update about page stat elements (.stat-item with h3 + p)
+        document.querySelectorAll('.stat-item').forEach(function(el) {
             var label = el.querySelector('p');
             var value = el.querySelector('h3');
             if (!label || !value) return;
             var key = label.textContent.trim();
             if (statsMap[key]) value.textContent = statsMap[key];
+        });
+
+        // Update homepage quick-stats strip
+        document.querySelectorAll('.quick-stats .stat').forEach(function(el) {
+            var strong = el.querySelector('strong');
+            if (!strong) return;
+            var text = el.textContent.trim();
+            if (text.includes('Books'))      strong.textContent = totalBooks;
+            if (text.includes('Authors'))    strong.textContent = uniqueAuthors;
+            if (text.includes('Categories')) strong.textContent = uniqueCategories;
         });
 
         // Update homepage category cards
@@ -689,32 +718,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Update feature card text
-        document.querySelectorAll('.feature-card li').forEach(function(li) {
-            if (li.textContent.includes('titles')) {
-                li.textContent = totalBooks + '+ titles';
-            }
-        });
-
         // Update about page description text
         document.querySelectorAll('.about-text p').forEach(function(p) {
-            if (p.textContent.includes('15,000')) {
+            if (p.textContent.includes('15,000') || p.textContent.includes('50,000')) {
                 p.textContent = p.textContent
-                    .replace(/15,000/g, totalBooks.toLocaleString())
-                    .replace(/20\+/g, uniqueCategories)
-                    .replace(/50,000\+/g, totalReadsFormatted);
+                    .replace(/over 15,000/g, totalBooks)
+                    .replace(/15,000/g, totalBooks)
+                    .replace(/20\+ categories/g, uniqueCategories + ' categories')
+                    .replace(/50,000\+ active readers/g, uniqueAuthors + ' authors');
             }
         });
 
         // Update register page subtitle
         var authSubtitle = document.querySelector('.auth-subtitle');
         if (authSubtitle && authSubtitle.textContent.includes('15,000')) {
-            authSubtitle.textContent = authSubtitle.textContent.replace('15,000', totalBooks.toLocaleString());
+            authSubtitle.textContent = authSubtitle.textContent.replace('15,000+', totalBooks);
         }
     }
 
     // ======================================================
-    // CATEGORIES PAGE - Dynamic book counts & readers
+    // CATEGORIES PAGE - Dynamic book counts
     // ======================================================
     const categoriesGrid = document.querySelector('.categories-full-grid');
     if (categoriesGrid && typeof BOOKS_DATA !== 'undefined') {
@@ -725,18 +748,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!card) return;
             const catName = card.querySelector('h3');
             if (!catName) return;
-            // Map category name from card to data category
             let name = catName.textContent.trim();
             if (name === 'Mystery & Thriller') name = 'Mystery';
             const count = counts[name] || 0;
-            // Compute total reads for this category
-            const catReads = BOOKS_DATA.filter(function(b) { return b.category === name; })
-                .reduce(function(sum, b) { return sum + Math.round(parseFloat(b.reads.replace('K', '')) * 1000); }, 0);
-            const catReadsFormatted = (catReads / 1000).toFixed(1) + 'K';
+            // Compute average rating for this category
+            const catBooks = BOOKS_DATA.filter(function(b) { return b.category === name; });
+            const avgRating = catBooks.length > 0
+                ? (catBooks.reduce(function(sum, b) { return sum + b.rating; }, 0) / catBooks.length).toFixed(1)
+                : '0.0';
             const booksSpan = statsEl.querySelector('span:first-child');
             if (booksSpan) booksSpan.innerHTML = '&#128218; ' + count + ' Books';
             const readersSpan = statsEl.querySelector('span:last-child');
-            if (readersSpan && readersSpan !== booksSpan) readersSpan.innerHTML = '&#128101; ' + catReadsFormatted + ' Reads';
+            if (readersSpan && readersSpan !== booksSpan) readersSpan.innerHTML = '&#11088; ' + avgRating + ' Avg Rating';
         });
     }
 
@@ -783,3 +806,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // (Duplicate search handler removed — already handled in HOMEPAGE SEARCH section above)
 
 });
+
+// ======================================================
+// PAGE LOADER — hide once resources are ready
+// ======================================================
+(function() {
+    var loader = document.getElementById('pageLoader');
+    if (!loader) return;
+
+    function hideLoader() {
+        loader.classList.add('hidden');
+        // Remove from DOM after transition
+        setTimeout(function() {
+            if (loader.parentNode) loader.parentNode.removeChild(loader);
+        }, 500);
+    }
+
+    // Hide on window load (all images & resources loaded)
+    window.addEventListener('load', function() {
+        // Small delay so the animation is visible even on fast connections
+        setTimeout(hideLoader, 350);
+    });
+
+    // Safety: hide after max 4s even if some resources fail
+    setTimeout(hideLoader, 4000);
+})();

@@ -15,23 +15,11 @@
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-bar-left">
-                <span><i class="fas fa-envelope"></i> contact@bookvoyage.com</span>
-                <span><i class="fas fa-phone"></i> +84 123 456 789</span>
-                <span><i class="fas fa-clock"></i> Mon - Sat: 8:00 AM - 10:00 PM</span>
-            </div>
-            <div class="top-bar-right">
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-icon"><i class="fas fa-book-open"></i></div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+        <div class="loader-text">Loading</div>
     </div>
 
     <!-- HEADER -->
@@ -78,39 +66,23 @@
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
+    <!-- HERO SECTION — compact with integrated search -->
+    <section class="hero hero-compact">
         <div class="container">
             <div class="hero-content">
-                <span class="subtitle">&#128218; Welcome to BookVoyage</span>
-                <h2>Discover Your Next <span>Great Read</span> Today</h2>
-                <p>Explore thousands of books across multiple categories. From timeless classics to modern bestsellers, 
-                   your next literary adventure starts here. Reading is a journey — let us be your guide.</p>
+                <h2>Discover Your Next <span>Great Read</span></h2>
+                <p>Explore our curated collection of books — from timeless classics to modern bestsellers. Reading is a journey.</p>
+                <form class="hero-search-bar">
+                    <input type="text" placeholder="Search by title, author...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
                 <div class="hero-buttons">
-                    <a href="/catalog/" class="btn btn-primary btn-large">
+                    <a href="/catalog/" class="btn btn-primary">
                         <i class="fas fa-book"></i>&nbsp; Browse Library
                     </a>
-                    <a href="/register/" class="btn btn-outline btn-large">
+                    <a href="/register/" class="btn btn-outline">
                         <i class="fas fa-user-plus"></i>&nbsp; Join Free
                     </a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <h3>15,000+</h3>
-                        <p>Books Available</p>
-                    </div>
-                    <div class="stat">
-                        <h3>500+</h3>
-                        <p>Authors</p>
-                    </div>
-                    <div class="stat">
-                        <h3>20+</h3>
-                        <p>Categories</p>
-                    </div>
-                    <div class="stat">
-                        <h3>50K+</h3>
-                        <p>Happy Readers</p>
-                    </div>
                 </div>
             </div>
             <div class="hero-image">
@@ -126,119 +98,12 @@
         </div>
     </section>
 
-    <!-- SEARCH BAR -->
-    <section class="search-section">
+    <!-- QUICK STATS STRIP -->
+    <section class="quick-stats">
         <div class="container">
-            <form class="search-bar">
-                <select>
-                    <option value="">All Categories</option>
-                    <option value="fiction">Fiction</option>
-                    <option value="nonfiction">Non-Fiction</option>
-                    <option value="science">Science</option>
-                    <option value="technology">Technology</option>
-                    <option value="history">History</option>
-                    <option value="romance">Romance</option>
-                    <option value="children">Children</option>
-                </select>
-                <input type="text" placeholder="Search by title, author, ISBN...">
-                <button type="submit"><i class="fas fa-search"></i> Search</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Why Choose BookVoyage?</h2>
-                <p>Your ultimate online library experience with thousands of books at your fingertips</p>
-                <div class="line"></div>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="icon"><i class="fas fa-book-reader"></i></div>
-                    <h3>Read Online</h3>
-                    <p>Access thousands of books directly from your browser. Read anytime, anywhere.</p>
-                    <ul>
-                        <li>15,000+ titles</li>
-                        <li>Multiple formats</li>
-                        <li>Bookmark & highlights</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fas fa-headphones"></i></div>
-                    <h3>Audiobooks</h3>
-                    <p>Listen to your favorite books narrated by professional voice artists.</p>
-                    <ul>
-                        <li>5,000+ audiobooks</li>
-                        <li>Offline listening</li>
-                        <li>Adjustable speed</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fas fa-download"></i></div>
-                    <h3>Download & Go</h3>
-                    <p>Download books to read offline. Support for PDF, EPUB, and MOBI formats.</p>
-                    <ul>
-                        <li>Multiple formats</li>
-                        <li>Sync across devices</li>
-                        <li>Offline reading</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <div class="icon"><i class="fas fa-users"></i></div>
-                    <h3>Book Clubs</h3>
-                    <p>Join reading communities, discuss books, and share recommendations.</p>
-                    <ul>
-                        <li>Community forums</li>
-                        <li>Reading challenges</li>
-                        <li>Book reviews</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CATEGORIES -->
-    <section class="categories">
-        <div class="container">
-            <div class="section-header">
-                <h2>Browse by Category</h2>
-                <p>Explore our diverse collection organized into popular genres</p>
-                <div class="line"></div>
-            </div>
-            <div class="categories-grid">
-                <a href="/catalog/?cat=fiction" class="category-card">
-                    <div class="cat-icon">&#128214;</div>
-                    <h4>Fiction</h4>
-                    <span>2,450 books</span>
-                </a>
-                <a href="/catalog/?cat=science" class="category-card">
-                    <div class="cat-icon">&#128300;</div>
-                    <h4>Science</h4>
-                    <span>1,830 books</span>
-                </a>
-                <a href="/catalog/?cat=history" class="category-card">
-                    <div class="cat-icon">&#127963;</div>
-                    <h4>History</h4>
-                    <span>1,220 books</span>
-                </a>
-                <a href="/catalog/?cat=technology" class="category-card">
-                    <div class="cat-icon">&#128187;</div>
-                    <h4>Technology</h4>
-                    <span>980 books</span>
-                </a>
-                <a href="/catalog/?cat=romance" class="category-card">
-                    <div class="cat-icon">&#128151;</div>
-                    <h4>Romance</h4>
-                    <span>1,650 books</span>
-                </a>
-                <a href="/catalog/?cat=children" class="category-card">
-                    <div class="cat-icon">&#127912;</div>
-                    <h4>Children</h4>
-                    <span>2,100 books</span>
-                </a>
-            </div>
+            <div class="stat"><i class="fas fa-book"></i><strong>102</strong> Books</div>
+            <div class="stat"><i class="fas fa-pen-fancy"></i><strong>97</strong> Authors</div>
+            <div class="stat"><i class="fas fa-layer-group"></i><strong>12</strong> Categories</div>
         </div>
     </section>
 
@@ -251,11 +116,49 @@
                 <div class="line"></div>
             </div>
             <div class="books-grid" id="popularBooksGrid">
-                <!-- Skeleton placeholders -->
                 <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line w40 h10"></div><div class="skeleton-line w100 h18"></div><div class="skeleton-line w60 h10"></div><div class="skeleton-line w80 h10"></div><div class="skeleton-btn"></div></div></div>
+            </div>
+            <div style="text-align:center;margin-top:30px;">
+                <a href="/catalog/" class="btn btn-outline" style="border-color:#e94560;color:#e94560;">View All Books <i class="fas fa-arrow-right" style="margin-left:6px;"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES — compact -->
+    <section class="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2>Browse by Category</h2>
+                <div class="line"></div>
+            </div>
+            <div class="categories-grid">
+                <a href="/catalog/?cat=fiction" class="category-card">
+                    <div class="cat-icon">&#128214;</div>
+                    <h4>Fiction</h4>
+                </a>
+                <a href="/catalog/?cat=science" class="category-card">
+                    <div class="cat-icon">&#128300;</div>
+                    <h4>Science</h4>
+                </a>
+                <a href="/catalog/?cat=history" class="category-card">
+                    <div class="cat-icon">&#127963;</div>
+                    <h4>History</h4>
+                </a>
+                <a href="/catalog/?cat=technology" class="category-card">
+                    <div class="cat-icon">&#128187;</div>
+                    <h4>Technology</h4>
+                </a>
+                <a href="/catalog/?cat=romance" class="category-card">
+                    <div class="cat-icon">&#128151;</div>
+                    <h4>Romance</h4>
+                </a>
+                <a href="/catalog/?cat=children" class="category-card">
+                    <div class="cat-icon">&#127912;</div>
+                    <h4>Children</h4>
+                </a>
             </div>
         </div>
     </section>
@@ -265,137 +168,56 @@
         <div class="container">
             <div class="section-header">
                 <h2>New Arrivals</h2>
-                <p>Recently added books to our library collection</p>
+                <p>Recently added books to our collection</p>
                 <div class="line"></div>
             </div>
             <div class="arrivals-list" id="arrivalsListGrid">
-                <!-- Skeleton placeholders -->
-                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
-                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
-                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
-                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
+                <div class="skeleton-arrival"><div class="skeleton-arrival-cover"></div><div class="skeleton-arrival-body"><div class="skeleton-line-dark w40 h10"></div><div class="skeleton-line-dark w80 h20"></div><div class="skeleton-line-dark w60 h10"></div><div class="skeleton-line-dark w100 h10"></div></div></div>
             </div>
         </div>
     </section>
 
-    <!-- STATS BANNER -->
-    <section class="stats-banner">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <h3>15,000+</h3>
-                    <p>Total Books</p>
+    <!-- JAVA FEATURED — compact -->
+    <section class="java-featured" style="padding:50px 0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);">
+        <div class="container" style="display:flex;align-items:center;gap:40px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:260px;">
+                <h2 style="color:#fff;font-size:26px;margin-bottom:8px;"><i class="fab fa-java" style="color:#f89820;margin-right:10px;"></i>Tài liệu Java</h2>
+                <p style="color:rgba(255,255,255,0.6);font-size:14px;">28 bài học từ cơ bản đến OOP — Đọc & tải PDF miễn phí</p>
+            </div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;flex:2;min-width:300px;">
+                <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:18px 22px;flex:1;min-width:140px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:22px;color:#a8e063;margin-bottom:6px;"><i class="fas fa-seedling"></i></div>
+                    <div style="color:#fff;font-size:15px;font-weight:600;">Cơ bản</div>
+                    <div style="color:rgba(255,255,255,0.5);font-size:12px;">8 bài</div>
                 </div>
-                <div class="stat-item">
-                    <h3>500+</h3>
-                    <p>Authors</p>
+                <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:18px 22px;flex:1;min-width:140px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:22px;color:#667eea;margin-bottom:6px;"><i class="fas fa-code-branch"></i></div>
+                    <div style="color:#fff;font-size:15px;font-weight:600;">Điều khiển</div>
+                    <div style="color:rgba(255,255,255,0.5);font-size:12px;">7 bài</div>
                 </div>
-                <div class="stat-item">
-                    <h3>50,000+</h3>
-                    <p>Active Readers</p>
-                </div>
-                <div class="stat-item">
-                    <h3>20+</h3>
-                    <p>Categories</p>
+                <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:18px 22px;flex:1;min-width:140px;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:22px;color:#e94560;margin-bottom:6px;"><i class="fas fa-cubes"></i></div>
+                    <div style="color:#fff;font-size:15px;font-weight:600;">OOP</div>
+                    <div style="color:rgba(255,255,255,0.5);font-size:12px;">13 bài</div>
                 </div>
             </div>
+            <a href="/java/" class="btn btn-primary" style="background:linear-gradient(135deg,#f89820,#e76f00);border:none;padding:12px 30px;border-radius:50px;white-space:nowrap;">
+                <i class="fab fa-java" style="margin-right:6px;"></i> 28 bài học
+            </a>
         </div>
     </section>
 
-    <!-- TESTIMONIALS -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2>What Readers Say</h2>
-                <p>Hear from our community of passionate readers</p>
-                <div class="line"></div>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <span class="quote-icon"><i class="fas fa-quote-right"></i></span>
-                    <p>"BookVoyage has completely changed how I read. The vast collection and easy-to-use interface 
-                       make it my go-to library. I've discovered so many amazing books here!"</p>
-                    <div class="testimonial-author">
-                        <div class="avatar">NT</div>
-                        <div class="info">
-                            <h4>Nguyễn Thảo</h4>
-                            <span>Student, Hanoi</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <span class="quote-icon"><i class="fas fa-quote-right"></i></span>
-                    <p>"As a teacher, I recommend BookVoyage to all my students. The categorized library and reading 
-                       tracker help them develop a consistent reading habit. Excellent platform!"</p>
-                    <div class="testimonial-author">
-                        <div class="avatar">TH</div>
-                        <div class="info">
-                            <h4>Trần Hùng</h4>
-                            <span>Teacher, HCMC</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <span class="quote-icon"><i class="fas fa-quote-right"></i></span>
-                    <p>"I love the audiobook feature! It lets me enjoy books during my commute. The quality of narration 
-                       is top-notch, and the offline download feature is a lifesaver."</p>
-                    <div class="testimonial-author">
-                        <div class="avatar">LM</div>
-                        <div class="info">
-                            <h4>Lê Minh</h4>
-                            <span>Reader, Da Nang</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- JAVA FEATURED -->
-    <section class="java-featured" style="padding:80px 0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);">
-        <div class="container">
-            <div class="section-header" style="color:#fff;">
-                <h2 style="color:#fff;"><i class="fab fa-java" style="color:#f89820;margin-right:10px;"></i>Tài liệu Java</h2>
-                <p style="color:rgba(255,255,255,0.7);">28 bài học Java từ cơ bản đến hướng đối tượng — Đọc & tải PDF miễn phí</p>
-                <div class="line" style="background:#f89820;"></div>
-            </div>
-            <div class="java-featured-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-bottom:30px;">
-                <div style="background:rgba(255,255,255,0.08);border-radius:16px;padding:30px;text-align:center;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.background='rgba(248,152,32,0.15)'" onmouseout="this.style.transform='';this.style.background='rgba(255,255,255,0.08)'">
-                    <div style="width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,#56ab2f,#a8e063);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:24px;color:#fff;"><i class="fas fa-seedling"></i></div>
-                    <h3 style="color:#fff;font-size:18px;margin-bottom:8px;">Cơ bản Java</h3>
-                    <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:5px;">8 bài học</p>
-                    <p style="color:rgba(255,255,255,0.5);font-size:12px;">Biến, kiểu dữ liệu, toán tử, ép kiểu</p>
-                </div>
-                <div style="background:rgba(255,255,255,0.08);border-radius:16px;padding:30px;text-align:center;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.background='rgba(248,152,32,0.15)'" onmouseout="this.style.transform='';this.style.background='rgba(255,255,255,0.08)'">
-                    <div style="width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:24px;color:#fff;"><i class="fas fa-code-branch"></i></div>
-                    <h3 style="color:#fff;font-size:18px;margin-bottom:8px;">Cấu trúc điều khiển</h3>
-                    <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:5px;">7 bài học</p>
-                    <p style="color:rgba(255,255,255,0.5);font-size:12px;">Rẽ nhánh, vòng lặp, mảng, switch</p>
-                </div>
-                <div style="background:rgba(255,255,255,0.08);border-radius:16px;padding:30px;text-align:center;border:1px solid rgba(255,255,255,0.1);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.background='rgba(248,152,32,0.15)'" onmouseout="this.style.transform='';this.style.background='rgba(255,255,255,0.08)'">
-                    <div style="width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,#e94560,#c0392b);display:flex;align-items:center;justify-content:center;margin:0 auto 15px;font-size:24px;color:#fff;"><i class="fas fa-cubes"></i></div>
-                    <h3 style="color:#fff;font-size:18px;margin-bottom:8px;">Hướng đối tượng (OOP)</h3>
-                    <p style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:5px;">13 bài học</p>
-                    <p style="color:rgba(255,255,255,0.5);font-size:12px;">Class, kế thừa, đa hình, interface</p>
-                </div>
-            </div>
-            <div style="text-align:center;">
-                <a href="/java/" class="btn btn-primary btn-large" style="background:linear-gradient(135deg,#f89820,#e76f00);border:none;padding:15px 40px;font-size:16px;border-radius:50px;box-shadow:0 4px 20px rgba(248,152,32,0.4);">
-                    <i class="fab fa-java" style="margin-right:8px;"></i> Xem tất cả 28 bài học
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEWSLETTER -->
+    <!-- NEWSLETTER — compact -->
     <section class="newsletter">
         <div class="container">
             <div class="newsletter-content">
                 <h2>&#128231; Stay Updated</h2>
-                <p>Subscribe to get notified about new books, reading tips, and exclusive offers.</p>
+                <p>Get notified about new books and exclusive offers.</p>
             </div>
             <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email address...">
+                <input type="email" placeholder="Enter your email...">
                 <button type="submit">Subscribe</button>
             </form>
         </div>
@@ -411,7 +233,7 @@
                         <h3>Book<span>Voyage</span></h3>
                     </div>
                     <p>BookVoyage is your gateway to a world of knowledge and imagination. 
-                       With thousands of books across multiple categories, we make reading accessible to everyone.
+                       With over 100 books across 12 categories, we make reading accessible to everyone.
                        Reading is a journey — start yours today.</p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -453,7 +275,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 BookVoyage. All rights reserved. | Reading is a Journey &#128218;</p>
+                <p>&copy; 2025 BookVoyage. All rights reserved. | Reading is a Journey &#128218;</p>
             </div>
         </div>
     </footer>
