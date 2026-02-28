@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="../">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading - BookVoyage</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://covers.openlibrary.org">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://covers.openlibrary.org">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/reader.css">
+</head>
+<body>
+
+    <!-- PAGE LOADER -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-icon"><i class="fas fa-book-open"></i></div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+        <div class="loader-text">Loading</div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <a href="" class="logo">
+                <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                <div>
+                    <h1>Book<span>Voyage</span></h1>
+                    <p>Reading is a Journey</p>
+                </div>
+            </a>
+
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="">Home</a></li>
+                    <li>
+                        <a href="catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <ul class="dropdown">
+                            <li><a href="catalog/">All Books</a></li>
+                            <li><a href="catalog/?cat=fiction">Fiction</a></li>
+                            <li><a href="catalog/?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="catalog/?cat=science">Science</a></li>
+                            <li><a href="catalog/?cat=children">Children</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="categories/">Categories</a></li>
+                    <li><a href="wishlist/"><i class="fas fa-heart"></i> Wishlist</a></li>
+                    <li><a href="about/">About</a></li>
+                </ul>
+            </nav>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress bar -->
+    <div class="reading-progress-bar" id="progressBar"></div>
+
+    <!-- Reader top bar -->
+    <div class="reader-topbar" id="readerTopbar">
+        <div class="topbar-left">
+            <div class="mini-title" id="miniTitle">Loading...</div>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-progress" id="progressText">0%</span>
+            <button class="topbar-btn" id="btnToc" title="Table of Contents">
+                <i class="fas fa-list"></i>
+            </button>
+            <button class="topbar-btn" id="btnSettings" title="Reading Settings">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav class="reader-breadcrumb" id="readerBreadcrumb">
+        <a href=""><i class="fas fa-home"></i> Home</a>
+        <span class="bc-sep">/</span>
+        <a href="#" id="bcBookLink">...</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current" id="bcPageInfo">Loading...</span>
+    </nav>
+
+    <!-- Title section -->
+    <div class="reader-title-section" id="bookHeader">
+        <h1 class="book-title" id="bookTitle">Loading...</h1>
+        <p class="book-author" id="bookAuthor"></p>
+        <p class="page-info" id="pageInfo"></p>
+        <div class="ornament-divider"><svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 C30 0, 50 0, 70 10 C80 15, 90 15, 100 10 C110 5, 120 5, 130 10 C150 20, 170 20, 200 10" fill="none" stroke="#b5a27a" stroke-width="1.2"/><path d="M0 10 C30 20, 50 20, 70 10 C80 5, 90 5, 100 10 C110 15, 120 15, 130 10 C150 0, 170 0, 200 10" fill="none" stroke="#b5a27a" stroke-width="1.2"/></svg></div>
+    </div>
+
+    <!-- Top chapter navigation -->
+    <div class="chapter-nav" id="topChapterNav">
+        <button class="nav-btn nav-btn-prev" id="topPrevBtn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+        <button class="nav-btn nav-btn-list" id="btnTocAlt" title="Table of Contents"><i class="fas fa-list-ul"></i></button>
+        <button class="nav-btn nav-btn-next" id="topNextBtn" disabled>Next <i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="ornament-divider ornament-large"><svg viewBox="0 0 300 30" xmlns="http://www.w3.org/2000/svg"><path d="M0 15 C20 5, 40 5, 60 15 C70 20, 80 20, 90 15 L100 10 C105 7, 110 5, 120 5 L130 5 C135 5, 137 7, 140 10 L145 15 C147 17, 150 18, 155 15 L160 10 C162 7, 165 5, 170 5 L180 5 C190 5, 195 7, 200 10 L210 15 C220 20, 230 20, 240 15 C260 5, 280 5, 300 15" fill="none" stroke="#b5a27a" stroke-width="1.2"/><path d="M120 3 C130 -2, 140 -2, 150 3 C155 5.5, 145 8, 140 5" fill="none" stroke="#b5a27a" stroke-width="0.8"/><path d="M150 3 C160 -2, 170 -2, 180 3 C175 5.5, 165 8, 160 5" fill="none" stroke="#b5a27a" stroke-width="0.8"/><circle cx="150" cy="2" r="2" fill="#b5a27a" opacity="0.6"/></svg></div>
+
+    <!-- Main reading wrapper -->
+    <div class="reader-content-wrapper" id="contentWrapper">
+        <div id="reading-area">
+            <!-- Skeleton -->
+            <div class="skeleton-reading" id="readingSkeleton">
+                <div class="sk-line sk-heading"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line sk-heading"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+                <div class="sk-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOC Sidebar -->
+    <div class="toc-overlay" id="tocOverlay"></div>
+    <div class="toc-sidebar" id="tocSidebar">
+        <div class="toc-header">
+            <h3><i class="fas fa-list-ol" style="margin-right:8px;"></i> Contents</h3>
+            <button class="toc-close" id="tocClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="toc-list" id="tocList"></div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-handle"></div>
+        <div class="settings-header">
+            <h3><i class="fas fa-cog" style="margin-right:8px;"></i> Reading Settings</h3>
+            <button class="settings-close" id="settingsClose"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="settings-body">
+            <!-- Font Size -->
+            <div class="setting-group">
+                <label>Font Size</label>
+                <div class="setting-row">
+                    <button class="size-btn" id="fontDown"><i class="fas fa-minus"></i></button>
+                    <span class="size-display" id="fontSizeDisplay">18px</span>
+                    <button class="size-btn" id="fontUp"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <!-- Font Family -->
+            <div class="setting-group">
+                <label>Font Family</label>
+                <div class="font-options" id="fontOptions">
+                    <button class="font-option active" data-font="'Merriweather', Georgia, serif" style="font-family: Merriweather, Georgia, serif;">Merriweather</button>
+                    <button class="font-option" data-font="'Lora', Georgia, serif" style="font-family: Lora, Georgia, serif;">Lora</button>
+                    <button class="font-option" data-font="'Source Serif 4', Georgia, serif" style="font-family: 'Source Serif 4', Georgia, serif;">Source Serif</button>
+                    <button class="font-option" data-font="Georgia, serif" style="font-family: Georgia, serif;">Georgia</button>
+                    <button class="font-option" data-font="'Segoe UI', system-ui, sans-serif" style="font-family: Segoe UI, system-ui, sans-serif;">Segoe UI</button>
+                    <button class="font-option" data-font="system-ui, sans-serif" style="font-family: system-ui, sans-serif;">System</button>
+                </div>
+            </div>
+            <!-- Theme -->
+            <div class="setting-group">
+                <label>Theme</label>
+                <div class="theme-options" id="themeOptions">
+                    <div class="theme-option theme-light active" data-theme="light">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Light</div>
+                    </div>
+                    <div class="theme-option theme-sepia" data-theme="sepia">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Sepia</div>
+                    </div>
+                    <div class="theme-option theme-dark" data-theme="dark">
+                        <div class="theme-preview"></div>
+                        <div class="theme-label">Dark</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Line Height -->
+            <div class="setting-group">
+                <label>Line Spacing</label>
+                <div class="line-height-options" id="lhOptions">
+                    <button class="lh-option" data-lh="1.6">Compact</button>
+                    <button class="lh-option" data-lh="1.8">Normal</button>
+                    <button class="lh-option active" data-lh="1.9">Relaxed</button>
+                    <button class="lh-option" data-lh="2.2">Spacious</button>
+                </div>
+            </div>
+            <!-- Width -->
+            <div class="setting-group">
+                <label>Reading Width</label>
+                <div class="width-toggle" id="widthOptions">
+                    <button class="width-option active" data-width="720">Normal</button>
+                    <button class="width-option" data-width="960">Wide</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to top -->
+    <button class="read-scroll-top" id="scrollTopBtn" title="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-book-open"></i></span>
+                        <h3>Book<span>Voyage</span></h3>
+                    </div>
+                    <div class="footer-contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> 456 Maple Avenue, Brooklyn,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New York, USA</p>
+                        <p><i class="fas fa-phone-alt"></i> (555) 012-3456 - (555) 789-0123</p>
+                        <p><i class="fas fa-envelope"></i> hello@bookvoyage.io</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Popular Genres</h4>
+                    <ul>
+                        <li><a href="catalog/?cat=mystery">&#8250; Mystery</a></li>
+                        <li><a href="catalog/?cat=romance">&#8250; Romance</a></li>
+                        <li><a href="catalog/?cat=history">&#8250; History</a></li>
+                        <li><a href="catalog/?cat=biography">&#8250; Biography</a></li>
+                        <li><a href="catalog/?cat=self-help">&#8250; Self-Help</a></li>
+                        <li><a href="catalog/?cat=poetry">&#8250; Poetry</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#" data-modal="faq">&#8250; FAQ</a></li>
+                        <li><a href="#" data-modal="help">&#8250; Help Center</a></li>
+                        <li><a href="#" data-modal="privacy">&#8250; Privacy Policy</a></li>
+                        <li><a href="#" data-modal="terms">&#8250; Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BookVoyage. All rights reserved. | Reading is a Journey &#128218;</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Support Modal -->
+    <div class="support-modal-overlay" id="supportModal">
+        <div class="support-modal">
+            <button class="support-modal-close" id="supportModalClose">&times;</button>
+            <h2 id="supportModalTitle"></h2>
+            <div class="support-modal-body" id="supportModalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/books-data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/reader.js"></script>
+</body>
+</html>

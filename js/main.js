@@ -64,14 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (hamburger && navMenu) {
-        // Move nav-auth into nav-menu on mobile for visibility
-        const navAuth = document.querySelector('.nav-auth');
-        if (navAuth) {
-            const navAuthClone = navAuth.cloneNode(true);
-            navAuthClone.classList.add('nav-auth-mobile');
-            navMenu.appendChild(navAuthClone);
-        }
-
         // Create close button inside the nav-menu sidebar
         const closeBtn = document.createElement('button');
         closeBtn.classList.add('nav-menu-close');
@@ -171,53 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Newsletter form
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input').value;
-            if (email.trim()) {
-                alert('Thank you for subscribing with: ' + email);
-                this.querySelector('input').value = '';
-            }
-        });
-    }
-
-    // Contact form
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your message! We will get back to you within 24 hours.');
-            this.reset();
-        });
-    }
-
-    // Login form
-    const loginForm = document.querySelector('.auth-section form');
-    if (loginForm && document.title.includes('Login')) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Login successful! Welcome back to BookVoyage.');
-        });
-    }
-
-    // Register form
-    if (loginForm && document.title.includes('Register')) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const password = document.getElementById('password');
-            const confirmPassword = document.getElementById('confirmPassword');
-            
-            if (password && confirmPassword && password.value !== confirmPassword.value) {
-                alert('Passwords do not match!');
-                return;
-            }
-            alert('Registration successful! Welcome to BookVoyage. Start your reading journey!');
-        });
-    }
-
     // Animate elements on scroll
     const observerOptions = {
         threshold: 0.1,
@@ -236,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Apply animation to cards
     const animatedElements = document.querySelectorAll(
-        '.feature-card, .book-card, .category-card, .category-full-card, .arrival-item, .testimonial-card, .team-card, .contact-card, .stat-item'
+        '.feature-card, .book-card, .category-card, .category-full-card, .arrival-item, .testimonial-card, .team-card, .stat-item'
     );
 
     animatedElements.forEach((el, index) => {
@@ -287,10 +232,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // View toggle in catalog
     const viewToggleButtons = document.querySelectorAll('.view-toggle button');
-    viewToggleButtons.forEach(btn => {
+    const booksGridEl = document.getElementById('booksGrid');
+    viewToggleButtons.forEach(function(btn, index) {
         btn.addEventListener('click', function() {
-            viewToggleButtons.forEach(b => b.classList.remove('active'));
+            viewToggleButtons.forEach(function(b) { b.classList.remove('active'); });
             this.classList.add('active');
+            if (booksGridEl) {
+                if (index === 1) {
+                    booksGridEl.classList.add('list-view');
+                } else {
+                    booksGridEl.classList.remove('list-view');
+                }
+            }
         });
     });
 
@@ -311,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentSearch = '';
         let currentSort = 'popular';
         let currentMinRating = 0;
+        let currentFormats = ['eBook', 'Audio'];
 
         // Populate category counts
         const counts = getCategoryCounts();
@@ -327,10 +281,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (catParam) {
             // Map URL slug to category name
             const catMap = {
-                'fiction': 'Fiction', 'nonfiction': 'Non-Fiction', 'science': 'Science',
-                'technology': 'Technology', 'history': 'History', 'romance': 'Romance',
-                'children': 'Children', 'selfhelp': 'Self-Help', 'biography': 'Biography',
-                'mystery': 'Mystery', 'poetry': 'Poetry', 'business': 'Business'
+                'fiction': 'Fiction', 'nonfiction': 'Non-Fiction', 'non-fiction': 'Non-Fiction',
+                'science': 'Science', 'technology': 'Technology', 'history': 'History',
+                'romance': 'Romance', 'children': 'Children', 'selfhelp': 'Self-Help',
+                'self-help': 'Self-Help', 'biography': 'Biography', 'mystery': 'Mystery',
+                'poetry': 'Poetry', 'business': 'Business'
             };
             if (catMap[catParam]) {
                 currentCategory = catMap[catParam];
@@ -356,6 +311,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Rating filter
             if (currentMinRating > 0) {
                 books = books.filter(function(b) { return b.rating >= currentMinRating; });
+            }
+            // Format filter
+            if (currentFormats.length > 0) {
+                books = books.filter(function(b) {
+                    return currentFormats.some(function(fmt) { return b.format.includes(fmt); });
+                });
             }
             books = sortBooks(books, currentSort);
             return books;
@@ -480,6 +441,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        // Format filter
+        const formatFilters = document.getElementById('formatFilters');
+        if (formatFilters) {
+            formatFilters.addEventListener('change', function() {
+                currentFormats = [];
+                formatFilters.querySelectorAll('input[type="checkbox"]:checked').forEach(function(cb) {
+                    currentFormats.push(cb.value);
+                });
+                currentPage = 1;
+                renderCatalog();
+            });
+        }
+
         // Initial render with skeleton delay
         setTimeout(function() { renderCatalog(); }, 400);
     }
@@ -501,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update breadcrumb
                 const breadcrumb = document.querySelector('.breadcrumb');
                 if (breadcrumb) {
-                    breadcrumb.innerHTML = '<a href="/">Home</a> <span>/</span> <a href="/catalog/">Library</a> <span>/</span> <span>' + book.title + '</span>';
+                    breadcrumb.innerHTML = '<a href="">Home</a> <span>/</span> <a href="catalog/">Library</a> <span>/</span> <span>' + book.title + '</span>';
                 }
 
                 // Generate stars
@@ -552,10 +526,25 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
 
                         <div class="book-detail-actions">
-                            <a href="/read.html?id=${book.id}" class="btn btn-primary btn-large"><i class="fas fa-book-reader"></i> Read Now</a>
-                            <a href="#" class="btn btn-outline btn-large"><i class="fas fa-heart"></i> Wishlist</a>
+                            <a href="read/?id=${book.id}" class="btn btn-primary btn-large"><i class="fas fa-book-reader"></i> Read Now</a>
+                            <button class="btn btn-outline btn-large btn-wishlist-toggle" data-book-id="${book.id}"><i class="fas fa-heart"></i> Add to Wishlist</button>
                         </div>
                     </div>`;
+
+                // Apply wishlist state immediately after rendering
+                (function() {
+                    var key = 'bookvoyage_wishlist';
+                    try {
+                        var ids = JSON.parse(localStorage.getItem(key) || '[]');
+                        if (ids.indexOf(book.id) !== -1) {
+                            var btn = document.querySelector('.btn-wishlist-toggle[data-book-id="' + book.id + '"]');
+                            if (btn) {
+                                btn.classList.add('wishlisted');
+                                btn.innerHTML = '<i class="fas fa-heart"></i> In Wishlist';
+                            }
+                        }
+                    } catch(e) {}
+                })();
 
                 // Render related books (same category, exclude current)
                 const relatedSection = document.querySelector('.popular-books .books-grid');
@@ -612,14 +601,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     .slice(0, 4);
                 arrivalsList.innerHTML = newest.map(function(book) {
                     return `<div class="arrival-item">
-                        <a href="/book-detail/?id=${book.id}" style="display:block;text-decoration:none;">
+                        <a href="book-detail/?id=${book.id}" style="display:block;text-decoration:none;">
                             <div class="arrival-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
                                 <img src="${book.cover}" alt="${book.title}" onload="if(this.naturalWidth<10||this.naturalHeight<10)this.remove();" onerror="this.remove();" crossorigin="anonymous">
                             </div>
                         </a>
                         <div class="arrival-info">
                             <span class="date">Published: ${book.year}</span>
-                            <h3><a href="/book-detail/?id=${book.id}">${book.title}</a></h3>
+                            <h3><a href="book-detail/?id=${book.id}">${book.title}</a></h3>
                             <p class="author">by ${book.author}</p>
                             <p>${book.description}</p>
                         </div>
@@ -652,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const select = this.querySelector('select');
                 const query = input ? input.value.trim() : '';
                 const category = select ? select.value : '';
-                let url = '/catalog/';
+                let url = 'catalog/';
                 const params = [];
                 if (query) params.push('q=' + encodeURIComponent(query));
                 if (category) params.push('cat=' + encodeURIComponent(category));
@@ -717,23 +706,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 span.textContent = count + ' books';
             }
         });
-
-        // Update about page description text
-        document.querySelectorAll('.about-text p').forEach(function(p) {
-            if (p.textContent.includes('15,000') || p.textContent.includes('50,000')) {
-                p.textContent = p.textContent
-                    .replace(/over 15,000/g, totalBooks)
-                    .replace(/15,000/g, totalBooks)
-                    .replace(/20\+ categories/g, uniqueCategories + ' categories')
-                    .replace(/50,000\+ active readers/g, uniqueAuthors + ' authors');
-            }
-        });
-
-        // Update register page subtitle
-        var authSubtitle = document.querySelector('.auth-subtitle');
-        if (authSubtitle && authSubtitle.textContent.includes('15,000')) {
-            authSubtitle.textContent = authSubtitle.textContent.replace('15,000+', totalBooks);
-        }
     }
 
     // ======================================================
@@ -780,7 +752,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ======================================================
     // SECTION REVEAL ANIMATION (IntersectionObserver)
     // ======================================================
-    var revealSections = document.querySelectorAll('.features, .categories, .popular-books, .new-arrivals, .stats-banner, .testimonials, .newsletter, .java-featured');
+    var revealSections = document.querySelectorAll('.features, .categories, .popular-books, .new-arrivals, .stats-banner, .testimonials');
     revealSections.forEach(function(sec) { sec.classList.add('reveal-section'); });
 
     if ('IntersectionObserver' in window) {
@@ -830,4 +802,325 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Safety: hide after max 4s even if some resources fail
     setTimeout(hideLoader, 4000);
+})();
+
+// ======================================================
+// SUPPORT MODAL — FAQ, Help Center, Privacy, Terms
+// ======================================================
+(function() {
+    'use strict';
+
+    var modalData = {
+        faq: {
+            title: 'Frequently Asked Questions',
+            body: '<div class="modal-faq">' +
+                '<div class="faq-item"><h4>Is BookVoyage free to use?</h4><p>Yes! BookVoyage is completely free. Browse and read over 100 books across 12 categories — no subscription or payment required.</p></div>' +
+                '<div class="faq-item"><h4>How do I start reading a book?</h4><p>Browse our Library or Categories page, click on any book to view details, then hit "Read Now" to start reading instantly. No account needed!</p></div>' +
+                '<div class="faq-item"><h4>Can I download books for offline reading?</h4><p>Currently all books are available to read directly on our website. Offline reading features are planned for future updates.</p></div>' +
+                '<div class="faq-item"><h4>How do I search for a specific book?</h4><p>Use the search bar on the homepage or Library page. You can search by title, author, ISBN, or publisher name.</p></div>' +
+                '<div class="faq-item"><h4>What formats are available?</h4><p>Books are available in eBook, Audiobook, and PDF formats depending on the title. Use the Format filter in the Library to narrow results.</p></div>' +
+                '<div class="faq-item"><h4>How can I contact BookVoyage?</h4><p>You can reach us via email at hello@bookvoyage.io or call (555) 012-3456. Our address is listed in the footer of every page.</p></div>' +
+                '</div>'
+        },
+        help: {
+            title: 'Help Center',
+            body: '<div class="modal-help">' +
+                '<div class="help-section"><h4><i class="fas fa-book-reader"></i> Getting Started</h4><p>BookVoyage is a free online reading platform. Simply browse our catalog, pick a book, and click "Read Now" to begin.</p></div>' +
+                '<div class="help-section"><h4><i class="fas fa-search"></i> Finding Books</h4><p>Use the <strong>Library</strong> page to browse all books. Filter by category, format, or rating using the sidebar. Use the search bar to find specific titles or authors.</p></div>' +
+                '<div class="help-section"><h4><i class="fas fa-th-list"></i> Categories</h4><p>We offer 12 categories: Fiction, Non-Fiction, Science, Technology, History, Romance, Children, Self-Help, Biography, Mystery, Poetry, and Business.</p></div>' +
+                '<div class="help-section"><h4><i class="fas fa-sort"></i> Sorting & Filtering</h4><p>In the Library, sort by popularity, newest, title (A-Z / Z-A), or rating. Filter by minimum rating (3.0+, 4.0+, 4.5+) and book format.</p></div>' +
+                '<div class="help-section"><h4><i class="fas fa-envelope"></i> Need More Help?</h4><p>Email us at <strong>hello@bookvoyage.io</strong> or call <strong>(555) 012-3456</strong>. We typically respond within 24 hours.</p></div>' +
+                '</div>'
+        },
+        privacy: {
+            title: 'Privacy Policy',
+            body: '<div class="modal-policy"><p><em>Last updated: January 1, 2025</em></p>' +
+                '<h4>1. Information We Collect</h4><p>BookVoyage is a static, frontend-only website. We do not collect, store, or process any personal data. No accounts, cookies, or tracking tools are used.</p>' +
+                '<h4>2. Third-Party Services</h4><p>We use Google Maps (embedded iframe) on some pages and OpenLibrary for book cover images. These services may have their own privacy policies.</p>' +
+                '<h4>3. Local Storage</h4><p>Your browser may store reading progress locally on your device. This data never leaves your machine and can be cleared through your browser settings.</p>' +
+                '<h4>4. External Links</h4><p>Our site may contain links to external websites. We are not responsible for the privacy practices of other sites.</p>' +
+                '<h4>5. Changes</h4><p>We may update this policy occasionally. Changes will be reflected on this page with an updated date.</p>' +
+                '<h4>6. Contact</h4><p>Questions about this policy? Email us at hello@bookvoyage.io.</p></div>'
+        },
+        terms: {
+            title: 'Terms of Service',
+            body: '<div class="modal-policy"><p><em>Last updated: January 1, 2025</em></p>' +
+                '<h4>1. Acceptance</h4><p>By accessing BookVoyage, you agree to these terms. If you do not agree, please do not use the website.</p>' +
+                '<h4>2. Use of Service</h4><p>BookVoyage provides free access to a curated collection of book information and reading content for personal, non-commercial use.</p>' +
+                '<h4>3. Intellectual Property</h4><p>All book descriptions, summaries, and site content are provided for educational purposes. Book covers are sourced from OpenLibrary. Original content on this site is owned by BookVoyage.</p>' +
+                '<h4>4. User Conduct</h4><p>You agree not to misuse the service, attempt to disrupt its operation, or scrape content for commercial purposes.</p>' +
+                '<h4>5. Disclaimer</h4><p>BookVoyage is provided "as is" without warranties of any kind. We do not guarantee the accuracy or completeness of book information.</p>' +
+                '<h4>6. Limitation of Liability</h4><p>BookVoyage shall not be liable for any damages arising from the use or inability to use the service.</p>' +
+                '<h4>7. Changes</h4><p>We reserve the right to modify these terms at any time. Continued use constitutes acceptance of updated terms.</p></div>'
+        }
+    };
+
+    var overlay = document.getElementById('supportModal');
+    var titleEl = document.getElementById('supportModalTitle');
+    var bodyEl = document.getElementById('supportModalBody');
+    var closeBtn = document.getElementById('supportModalClose');
+
+    if (!overlay) return;
+
+    // Open modal on footer link click
+    document.querySelectorAll('a[data-modal]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var key = this.getAttribute('data-modal');
+            var data = modalData[key];
+            if (!data) return;
+            titleEl.textContent = data.title;
+            bodyEl.innerHTML = data.body;
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Close modal
+    function closeModal() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+    });
+})();
+
+// ======================================================
+// DYNAMIC FOOTER YEAR
+// ======================================================
+(function() {
+    var footerP = document.querySelector('.footer-bottom p');
+    if (footerP) {
+        footerP.innerHTML = '&copy; ' + new Date().getFullYear() + ' BookVoyage. All rights reserved. | Reading is a Journey &#128218;';
+    }
+})();
+
+// ======================================================
+// WISHLIST SYSTEM — localStorage based, no backend
+// ======================================================
+(function() {
+    'use strict';
+
+    var STORAGE_KEY = 'bookvoyage_wishlist';
+
+    // --- Core helpers ---
+    function getWishlist() {
+        try {
+            var data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch(e) { return []; }
+    }
+
+    function saveWishlist(ids) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); } catch(e) {}
+    }
+
+    function isInWishlist(bookId) {
+        return getWishlist().indexOf(bookId) !== -1;
+    }
+
+    function addToWishlist(bookId) {
+        var ids = getWishlist();
+        if (ids.indexOf(bookId) === -1) {
+            ids.push(bookId);
+            saveWishlist(ids);
+        }
+        updateAllUI();
+    }
+
+    function removeFromWishlist(bookId) {
+        var ids = getWishlist().filter(function(id) { return id !== bookId; });
+        saveWishlist(ids);
+        updateAllUI();
+    }
+
+    function toggleWishlist(bookId) {
+        if (isInWishlist(bookId)) {
+            removeFromWishlist(bookId);
+        } else {
+            addToWishlist(bookId);
+        }
+    }
+
+    function clearWishlist() {
+        saveWishlist([]);
+        updateAllUI();
+    }
+
+    // --- Update badge count in nav ---
+    function updateNavBadge() {
+        // Badge removed by design — no-op
+    }
+
+    // --- Update Wishlist toggle button state on book-detail ---
+    function updateWishlistButtons() {
+        document.querySelectorAll('.btn-wishlist-toggle').forEach(function(btn) {
+            var bookId = parseInt(btn.getAttribute('data-book-id'));
+            if (isInWishlist(bookId)) {
+                btn.classList.add('wishlisted');
+                btn.innerHTML = '<i class="fas fa-heart"></i> In Wishlist';
+            } else {
+                btn.classList.remove('wishlisted');
+                btn.innerHTML = '<i class="fas fa-heart"></i> Add to Wishlist';
+            }
+        });
+    }
+
+    // --- Render Wishlist page ---
+    function renderWishlistPage() {
+        var grid = document.getElementById('wishlistGrid');
+        var emptyEl = document.getElementById('wishlistEmpty');
+        var summaryEl = document.getElementById('wishlistSummary');
+        var clearBtn = document.getElementById('clearWishlistBtn');
+        if (!grid) return; // Not on wishlist page
+
+        var ids = getWishlist();
+        if (typeof BOOKS_DATA === 'undefined') return;
+
+        var books = [];
+        ids.forEach(function(id) {
+            var book = BOOKS_DATA.find(function(b) { return b.id === id; });
+            if (book) books.push(book);
+        });
+
+        if (books.length === 0) {
+            grid.style.display = 'none';
+            emptyEl.style.display = 'flex';
+            summaryEl.innerHTML = '<i class="fas fa-heart"></i> No books saved yet';
+            clearBtn.style.display = 'none';
+            return;
+        }
+
+        grid.style.display = '';
+        emptyEl.style.display = 'none';
+        summaryEl.innerHTML = '<i class="fas fa-heart"></i> ' + books.length + ' book' + (books.length > 1 ? 's' : '') + ' saved';
+        clearBtn.style.display = '';
+
+        grid.innerHTML = books.map(function(book) {
+            return '<div class="wishlist-card" data-book-id="' + book.id + '">' +
+                '<button class="wishlist-remove-btn" data-book-id="' + book.id + '" title="Remove from wishlist"><i class="fas fa-times"></i></button>' +
+                '<a href="book-detail/?id=' + book.id + '" class="wishlist-cover-link">' +
+                    '<div class="wishlist-cover" style="background: linear-gradient(135deg, ' + book.gradient[0] + ', ' + book.gradient[1] + ');">' +
+                        (book.badge ? '<span class="badge">' + book.badge + '</span>' : '') +
+                        '<span class="rating">&#11088; ' + book.rating + '</span>' +
+                        '<img src="' + book.cover + '" alt="' + book.title + '" loading="lazy" onload="if(this.naturalWidth<10||this.naturalHeight<10)this.remove();" onerror="this.remove();" crossorigin="anonymous">' +
+                    '</div>' +
+                '</a>' +
+                '<div class="wishlist-info">' +
+                    '<span class="book-category">' + book.category + '</span>' +
+                    '<h3><a href="book-detail/?id=' + book.id + '">' + book.title + '</a></h3>' +
+                    '<p class="author">by ' + book.author + '</p>' +
+                    '<div class="book-meta">' +
+                        '<span><i class="fas fa-file-alt"></i> ' + book.pages + ' pages</span>' +
+                        '<span><i class="fas fa-calendar"></i> ' + (book.year > 0 ? book.year : Math.abs(book.year) + ' BC') + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="wishlist-actions">' +
+                    '<a href="read/?id=' + book.id + '" class="btn btn-primary">Read Now</a>' +
+                    '<button class="btn btn-outline btn-remove-wishlist" data-book-id="' + book.id + '"><i class="fas fa-trash-alt"></i> Remove</button>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+
+        // Animate cards
+        grid.querySelectorAll('.wishlist-card').forEach(function(card, i) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.4s ease ' + (i * 0.08) + 's, transform 0.4s ease ' + (i * 0.08) + 's';
+            requestAnimationFrame(function() {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    }
+
+    // --- Update all UI elements ---
+    function updateAllUI() {
+        updateNavBadge();
+        updateWishlistButtons();
+        renderWishlistPage();
+    }
+
+    // --- Event delegation for wishlist buttons ---
+    document.addEventListener('click', function(e) {
+        // Toggle button on book-detail page
+        var toggleBtn = e.target.closest('.btn-wishlist-toggle');
+        if (toggleBtn) {
+            e.preventDefault();
+            var bookId = parseInt(toggleBtn.getAttribute('data-book-id'));
+            toggleWishlist(bookId);
+
+            // Toast notification
+            if (isInWishlist(bookId)) {
+                showWishlistToast('Added to Wishlist!', 'success');
+            } else {
+                showWishlistToast('Removed from Wishlist', 'info');
+            }
+            return;
+        }
+
+        // Remove button on wishlist page
+        var removeBtn = e.target.closest('.btn-remove-wishlist, .wishlist-remove-btn');
+        if (removeBtn) {
+            e.preventDefault();
+            var bid = parseInt(removeBtn.getAttribute('data-book-id'));
+            // Animate card removal
+            var card = removeBtn.closest('.wishlist-card');
+            if (card) {
+                card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                setTimeout(function() {
+                    removeFromWishlist(bid);
+                }, 300);
+            } else {
+                removeFromWishlist(bid);
+            }
+            showWishlistToast('Removed from Wishlist', 'info');
+            return;
+        }
+
+        // Clear all button
+        var clearBtn = e.target.closest('#clearWishlistBtn');
+        if (clearBtn) {
+            e.preventDefault();
+            if (confirm('Remove all books from your wishlist?')) {
+                clearWishlist();
+                showWishlistToast('Wishlist cleared', 'info');
+            }
+            return;
+        }
+    });
+
+    // --- Toast notification ---
+    function showWishlistToast(message, type) {
+        // Remove existing toast
+        var existing = document.querySelector('.wishlist-toast');
+        if (existing) existing.remove();
+
+        var toast = document.createElement('div');
+        toast.className = 'wishlist-toast wishlist-toast-' + type;
+        toast.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'heart' : 'info-circle') + '"></i> ' + message;
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(function() {
+            toast.classList.add('show');
+        });
+
+        // Auto remove
+        setTimeout(function() {
+            toast.classList.remove('show');
+            setTimeout(function() { toast.remove(); }, 300);
+        }, 2500);
+    }
+
+    // --- Initialize on page load ---
+    updateAllUI();
 })();

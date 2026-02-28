@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <base href="../">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Midnight Library - BookVoyage</title>
+    <title>Wishlist - BookVoyage</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://covers.openlibrary.org">
@@ -47,7 +47,7 @@
                         </ul>
                     </li>
                     <li><a href="categories/">Categories</a></li>
-                    <li><a href="wishlist/"><i class="fas fa-heart"></i> Wishlist</a></li>
+                    <li><a href="wishlist/" class="active"><i class="fas fa-heart"></i> Wishlist</a></li>
                     <li><a href="about/">About</a></li>
                 </ul>
             </nav>
@@ -60,32 +60,30 @@
     <!-- PAGE BANNER -->
     <section class="page-banner">
         <div class="container">
-            <h2>&#128214; Book Details</h2>
+            <h2>&#10084;&#65039; My Wishlist</h2>
             <div class="breadcrumb">
-                <a href="">Home</a> <span>/</span> <a href="catalog/">Library</a> <span>/</span> <span>The Midnight Library</span>
+                <a href="">Home</a> <span>/</span> <span>Wishlist</span>
             </div>
         </div>
     </section>
 
-    <!-- BOOK DETAIL -->
-    <section class="book-detail">
+    <!-- WISHLIST CONTENT -->
+    <section class="wishlist-section">
         <div class="container">
-            <div class="book-detail-layout">
-                <!-- Rendered dynamically by main.js -->
+            <div class="wishlist-header">
+                <p class="wishlist-summary" id="wishlistSummary"><i class="fas fa-heart"></i> Loading...</p>
+                <button class="btn btn-outline btn-clear-wishlist" id="clearWishlistBtn" style="display:none;">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
             </div>
-        </div>
-    </section>
-
-    <!-- RELATED BOOKS -->
-    <section class="popular-books" style="background:#f8f9fa;">
-        <div class="container">
-            <div class="section-header">
-                <h2>You May Also Like</h2>
-                <p>Related books</p>
-                <div class="line"></div>
+            <div class="wishlist-grid" id="wishlistGrid">
+                <!-- Rendered by JS -->
             </div>
-            <div class="books-grid">
-                <!-- Rendered dynamically by main.js -->
+            <div class="wishlist-empty" id="wishlistEmpty" style="display:none;">
+                <i class="fas fa-heart-broken"></i>
+                <h3>Your wishlist is empty</h3>
+                <p>Browse our library and add books you'd like to read later!</p>
+                <a href="catalog/" class="btn btn-primary"><i class="fas fa-book"></i> Browse Library</a>
             </div>
         </div>
     </section>

@@ -1,258 +1,560 @@
 You Don't Know JS: Scope & Closures
-by Kyle Simpson
+by Kyle Simpson (2014)
+Genre: Technology
 
-═══════════════════════════════════════════
+════════════════════════════════════════
 
 ABOUT THIS BOOK
 
-"You Don't Know JS: Scope & Closures" is the second book in Kyle Simpson's acclaimed "You Don't Know JS" series, which aims to give JavaScript developers a deep, thorough understanding of the language's core mechanisms. Published in 2014, this concise but powerful book tackles two of the most fundamental and frequently misunderstood concepts in JavaScript: how scope works and what closures really are.
+In computer programming, the scope of a name binding (an association of a name to an entity, such as a variable) is the part of a program where the name binding is valid; that is, where the name can be used to refer to the entity. In other parts of the program, the name may refer to a different entity (it may have a different binding), or to nothing at all (it may be unbound). Scope helps prevent name collisions by allowing the same name to refer to different objects – as long as the names have separate scopes. The scope of a name binding is also known as the visibility of an entity, particularly in older or more technical literature—this is in relation to the referenced entity, not the referencing name.
 
-Most JavaScript developers use scope and closures every day without truly understanding how they function under the hood. Simpson argues that this surface-level understanding leads to bugs, confusion, and suboptimal code. By diving deep into the engine's compilation and execution phases, lexical scope, function versus block scope, hoisting, and the closure mechanism, the book transforms these abstract concepts into clearly understood tools that developers can wield with confidence.
+The term "scope" is also used to refer to the set of all name bindings that are valid within a part of a program or at a given point in a program, which is more correctly referred to as context or environment.
 
-Despite being relatively short compared to many programming books, "Scope & Closures" packs an extraordinary amount of insight into its pages. Simpson's conversational writing style makes complex topics accessible, while his refusal to oversimplify ensures that readers walk away with genuine understanding rather than memorized rules. The book includes numerous code examples that illustrate each concept in action.
+Strictly speaking and in practice for most programming languages, "part of a program" refers to a portion of source code (area of text), and is known as lexical scope. In some languages, however, "part of a program" refers to a portion of run time (period during execution), and is known as dynamic scope. Both of these terms are somewhat misleading—they misuse technical terms, as discussed in the definition—but the distinction itself is accurate and precise, and these are the standard respective terms. Lexical scope is the main focus of this article, with dynamic scope understood by contrast with lexical scope.
 
-═══════════════════════════════════════════
+In most cases, name resolution based on lexical scope is relatively straightforward to use and to implement, as in use one can read backwards in the source code to determine to which entity a name refers, and in implementation one can maintain a list of names and contexts when compiling or interpreting a program. Difficulties arise in name masking, forward declarations, and hoisting, while considerably subtler ones arise with non-local variables, particularly in closures.
 
-KEY THEMES
+════════════════════════════════════════
 
-1. Lexical Scope — JavaScript uses lexical scoping, meaning scope is determined at author-time (when code is written) rather than at runtime. Understanding this is the foundation for understanding closures, modules, and many other patterns.
+DEFINITION
 
-2. The Compiler's Perspective — JavaScript is a compiled language, not purely interpreted. Understanding how the engine compiles code and resolves variable references illuminates why hoisting occurs and how scope chains work.
+The strict definition of the (lexical) "scope" of a name (identifier) is unambiguous: lexical scope is "the portion of source code in which a binding of a name with an entity applies". This is virtually unchanged from its 1960 definition in the specification of ALGOL 60. Representative language specifications follow:
 
-3. Closures Demystified — A closure is when a function retains access to its lexical scope even when executed outside that scope. This is the mechanism behind modules, callbacks, event handlers, and many other essential patterns.
+Most commonly "scope" refers to when a given name can refer to a given variable—when a declaration has effect—but can also apply to other entities, such as functions, types, classes, labels, constants, and enumerations.
 
-4. Function vs. Block Scope — The book explores the differences between function-level scope (var) and block-level scope (let, const), including the practical implications of each and when to use them.
+--- Lexical scope vs. dynamic scope ---
 
-5. The Module Pattern — Closures enable the module pattern, one of the most important code organization patterns in JavaScript. The book shows how modules encapsulate private state and expose public APIs.
+A fundamental distinction in scope is what "part of a program" means. In languages with lexical scope (also called static scope), name resolution depends on the location in the source code and the lexical context (also called static context), which is defined by where the named variable or function is defined. In contrast, in languages with dynamic scope, the name resolution depends upon the program state when the name is encountered which is determined by the execution context (also called runtime context, calling context or dynamic context). In practice, with lexical scope a name is resolved by searching the local lexical context, then if that fails, by searching the outer lexical context, and so on; whereas with dynamic scope, a name is resolved by searching the local execution context, then if that fails, by searching the outer execution context, and so on, progressing up the call stack.
 
-═══════════════════════════════════════════
+Most modern languages use lexical scope for variables and functions, though dynamic scope is used in some languages, notably some dialects of Lisp, some "scripting" languages, and some template languages. Perl 5 offers both lexical and dynamic scope. Functions that use lexically scoped variables are known as closures.
 
-NOTABLE QUOTES
+Lexical resolution can be determined at compile time, and is also known as early binding, while dynamic resolution can in general only be determined at run time, and thus is known as late binding.
 
-"Closure is all around you in JavaScript, you just have to recognize and embrace it."
+--- Related concepts ---
 
-"Scope is the set of rules that determines where and how a variable (identifier) can be looked up."
+In object-oriented programming, dynamic dispatch selects an object method at runtime, though whether the actual name binding is done at compile time or run time depends on the language. De facto dynamic scope is common in macro languages, which do not directly do name resolution, but instead expand in place.
 
-"The key to understanding closure is realizing that a function's scope is determined when the function is defined, not when the function is executed."
+Some programming frameworks like AngularJS use syntactically the term "scope" to mean — the semantics of word — something entirely different than how it is used in this article. In those frameworks, the scope is just an object of the programming language that they use (JavaScript in case of AngularJS) that is used in certain ways by the framework to emulate dynamic scope in a language that uses lexical scope for its variables. Those AngularJS scopes can themselves be in context or not in context (using the usual meaning of the term) in any given part of the program, following the usual rules of variable scope of the language like any other object, and using their own inheritance and transclusion rules. In the context of AngularJS, sometimes the term "$scope" (with a dollar sign) is used to avoid confusion, but using the dollar sign in variable names is often discouraged by the style guides.
 
-"JavaScript has function-based scope. That is, each function you declare creates a bubble for itself."
+════════════════════════════════════════
 
-"The module pattern requires two key characteristics: an outer wrapping function being invoked, and a return value with reference to at least one inner function that has closure over the private scope."
+--- Use ---
 
-═══════════════════════════════════════════
+Scope is an important component of name resolution, which is in turn fundamental to language semantics. Name resolution (including scope) varies between programming languages, and within a programming language, varies by type of entity; the rules for scope are called scope rules (or scoping rules). Together with namespaces, scope rules are crucial in modular programming, so a change in one part of the program does not break an unrelated part.
 
-CHAPTER OVERVIEW
+════════════════════════════════════════
 
-Chapter 1: What is Scope? — Introduces the concept of scope by examining how the JavaScript engine processes code. Explains the roles of the Engine, Compiler, and Scope in variable lookup, and distinguishes between LHS and RHS references.
+OVERVIEW
 
-Chapter 2: Lexical Scope — Defines lexical scope and contrasts it with dynamic scope. Examines scope bubbles, nested scope chains, and how the engine traverses the scope chain to resolve variables. Discusses eval and with as mechanisms that cheat lexical scope.
+When discussing scope, there are three basic concepts: scope, extent, and context. "Scope" and "context" in particular are frequently confused: scope is a property of a name binding, while context is a property of a part of a program, that is either a portion of source code (lexical context or static context) or a portion of run time (execution context, runtime context, calling context or dynamic context). Execution context consists of lexical context (at the current execution point) plus additional runtime state such as the call stack. Strictly speaking, during execution a program enters and exits various name bindings' scopes, and at a point in execution name bindings are "in context" or "not in context", hence name bindings "come into context" or "go out of context" as the program execution enters or exits the scope. However, in practice usage is much looser.
 
-Chapter 3: Function vs. Block Scope — Explores function scope as the primary unit of scope in JavaScript. Introduces IIFEs (Immediately Invoked Function Expressions), block scope with let and const, and the practical differences between var, let, and const.
+Scope is a source-code level concept, and a property of name bindings, particularly variable or function name bindings—names in the source code are references to entities in the program—and is part of the behavior of a compiler or interpreter of a language. As such, issues of scope are similar to pointers, which are a type of reference used in programs more generally. Using the value of a variable when the name is in context but the variable is uninitialized is analogous to dereferencing (accessing the value of) a wild pointer, as it is undefined. However, as variables are not destroyed until they go out of context, the analog of a dangling pointer does not exist.
 
-Chapter 4: Hoisting — Explains the often-confusing behavior of hoisting by examining how the compiler processes declarations and assignments in separate passes. Clarifies that function declarations are hoisted before variable declarations.
+For entities such as variables, scope is a subset of lifetime (also known as extent)—a name can only refer to a variable that exists (possibly with undefined value), but variables that exist are not necessarily visible: a variable may exist but be inaccessible (the value is stored but not referred to within a given context), or accessible but not via the given name, in which case it is not in context (the program is "out of the scope of the name"). In other cases "lifetime" is irrelevant—a label (named position in the source code) has lifetime identical with the program (for statically compiled languages), but may be in context or not at a given point in the program, and likewise for static variables—a static global variable is in context for the entire program, while a static local variable is only in context within a function or other local context, but both have lifetime of the entire run of the program.
 
-Chapter 5: Scope Closures — The culminating chapter that defines closures, demonstrates them with clear examples, and shows their application in loops, callbacks, timers, event handlers, and the module pattern. This chapter transforms closures from a mysterious concept into a practical tool.
+Determining which entity a name refers to is known as name resolution or name binding (particularly in object-oriented programming), and varies between languages. Given a name, the language (properly, the compiler or interpreter) checks all entities that are in context for matches; in case of ambiguity (two entities with the same name, such as a global and local variable with the same name), the name resolution rules are used to distinguish them. Most frequently, name resolution relies on an "inner-to-outer context" rule, such as the Python LEGB (Local, Enclosing, Global, Built-in) rule: names implicitly resolve to the narrowest relevant context. In some cases name resolution can be explicitly specified, such as by the global and nonlocal keywords in Python; in other cases the default rules cannot be overridden.
 
-Appendix A: Dynamic Scope — Contrasts JavaScript's lexical scope with dynamic scope found in some other languages, helping cement understanding of how JavaScript actually works.
+When two identical names are in context at the same time, referring to different entities, one says that name masking is occurring, where the higher-priority name (usually innermost) is "masking" the lower-priority name. At the level of variables, this is known as variable shadowing. Due to the potential for logic errors from masking, some languages disallow or discourage masking, raising an error or warning at compile time or run time.
 
-Appendix B: Polyfilling Block Scope — Discusses how to achieve block-scoping behavior in pre-ES6 environments using try/catch blocks and other techniques.
+Various programming languages have various different scope rules for different kinds of declarations and names. Such scope rules have a large effect on language semantics and, consequently, on the behavior and correctness of programs. In languages like C++, accessing an unbound variable does not have well-defined semantics and may result in undefined behavior, similar to referring to a dangling pointer; and declarations or names used outside their scope will generate syntax errors.
 
-═══════════════════════════════════════════
+Scopes are frequently tied to other language constructs and determined implicitly, but many languages also offer constructs specifically for controlling scope.
 
-WHY READ THIS BOOK?
+════════════════════════════════════════
 
-If you write JavaScript professionally or aspire to, understanding scope and closures at a fundamental level will transform your code quality and your ability to debug complex issues. These aren't advanced topics reserved for experts — they are everyday mechanisms that every JavaScript developer relies on, whether they know it or not. Simpson's book gives you the knowledge to use them intentionally rather than accidentally.
+LEVELS OF SCOPE
 
-The book is also remarkably efficient. In just over 100 pages, it covers concepts that many developers spend years gradually piecing together from blog posts and Stack Overflow answers. Reading it front to back provides a coherent mental model that serves as a foundation for understanding virtually every JavaScript framework and library.
+Scope can vary from as little as a single expression to as much as the entire program, with many possible gradations in between. The simplest scope rule is global scope—all entities are visible throughout the entire program. The most basic modular scope rule is two-level scope, with a global scope anywhere in the program, and local scope within a function. More sophisticated modular programming allows a separate module scope, where names are visible within the module (private to the module) but not visible outside it. Within a function, some languages, such as C, allow block scope to restrict scope to a subset of a function; others, notably functional programming languages, allow expression scope, to restrict scope to a single expression. Other scopes include file scope (notably in C) which behaves similarly to module scope, and block scope outside of functions (notably in Perl).
 
-═══════════════════════════════════════════
+A subtle issue is exactly when a scope begins and ends. In some languages, such as C, a name's scope begins at the name declaration, and thus different names declared within a given block can have different scopes. This requires declaring functions before use, though not necessarily defining them, and requires forward declaration in some cases, notably for mutual recursion. In other languages, such as Python, a name's scope begins at the start of the relevant block where the name is declared (such as the start of a function), regardless of where it is defined, so all names within a given block have the same scope. In JavaScript, the scope of a name declared with let or const begins at the name declaration, and the scope of a name declared with var begins at the start of the function where the name is declared, which is known as variable hoisting. Behavior of names in context that have undefined value differs: in Python use of undefined names yields a runtime error, while in JavaScript undefined names declared with var are usable throughout the function because they are implicitly bound to the value undefined.
+
+--- Expression scope ---
+
+The scope of a name binding is an expression, which is known as expression scope. Expression scope is available in many languages, especially functional languages which offer a feature called let expressions allowing a declaration's scope to be a single expression. This is convenient if, for example, an intermediate value is needed for a computation. For example, in Standard ML, if f() returns 12, then let val x = f() in x * x end is an expression that evaluates to 144, using a temporary variable named x to avoid calling f() twice. Some languages with block scope approximate this functionality by offering syntax for a block to be embedded into an expression; for example, the aforementioned Standard ML expression could be written in Perl as do { my $x = f(); $x * $x }, or in GNU C as ({ int x = f(); x * x; }).
+
+In Python, auxiliary variables in generator expressions and list comprehensions (in Python 3) have expression scope.
+
+In C, variable names in a function prototype have expression scope, known in this context as function protocol scope. As the variable names in the prototype are not referred to (they may be different in the actual definition)—they are just dummies—these are often omitted, though they may be used for generating documentation, for instance.
+
+--- Block scope ---
+
+The scope of a name binding is a block, which is known as block scope. Block scope is available in many, but not all, block-structured programming languages. This began with ALGOL 60, where "very declaration ... is valid only for that block.", and today is particularly associated with languages in the Pascal and C families and traditions. Most often this block is contained within a function, thus restricting the scope to a part of a function, but in some cases, such as Perl, the block may not be within a function.
+
+int sum_of_squares(int m) {
+ int result = 0;
+ for (int n = 1; n <= m; ++n) {
+ const int n_squared = n * n;
+ result += n_squared;
+ }
+ return result;
+}
+
+A representative example of the use of block scope is the C code shown here, where two variables are scoped to the loop: the loop variable n, which is initialized once and incremented on each iteration of the loop, and the auxiliary variable n_squared, which is initialized at each iteration. The purpose is to avoid adding variables to the function scope that are only relevant to a particular block—for example, this prevents errors where the generic loop variable i has accidentally already been set to another value. In this example the expression n * n would generally not be assigned to an auxiliary variable, and the body of the loop would simply be written result += n * n but in more complicated examples auxiliary variables are useful.
+
+Blocks are primarily used for control flow, such as with if, while, and for loops, and in these cases block scope means the scope of variable depends on the structure of a function's flow of execution. However, languages with block scope typically also allow the use of "naked" blocks, whose sole purpose is to allow fine-grained control of variable scope. For example, an auxiliary variable may be defined in a block, then used (say, added to a variable with function scope) and discarded when the block ends, or a while loop might be enclosed in a block that initializes variables used inside the loop that should only be initialized once.
+
+A subtlety of several programming languages, such as Algol 68 and C (demonstrated in this example and standardized since C99), is that block-scope variables can be declared not only within the body of the block, but also within the control statement, if any. This is analogous to function parameters, which are declared in the function declaration (before the block of the function body starts), and in scope for the whole function body. This is primarily used in for loops, which have an initialization statement separate from the loop condition, unlike while loops, and is a common idiom.
+
+Block scope can be used for shadowing. In this example, inside the block the auxiliary variable could also have been called n, shadowing the parameter name, but this is considered poor style due to the potential for errors. Furthermore, some descendants of C, such as Java and C#, despite having support for block scope (in that a local variable can be made to go out of context before the end of a function), do not allow one local variable to hide another. In such languages, the attempted declaration of the second n would result in a syntax error, and one of the n variables would have to be renamed.
+
+If a block is used to set the value of a variable, block scope requires that the variable be declared outside of the block. This complicates the use of conditional statements with single assignment. For example, in Python, which does not use block scope, one may initialize a variable as such:
+
+if c:
+ a = "foo"
+else:
+ a = ""
+
+where a is accessible after the if statement.
+
+In Perl, which has block scope, this instead requires declaring the variable prior to the block:
+
+my $a;
+if (c) {
+ $a = 'foo';
+} else {
+ $a = '';
+}
+
+Often this is instead rewritten using multiple assignment, initializing the variable to a default value. In Python (where it is not necessary) this would be:
+
+a = ""
+if c:
+ a = "foo"
+
+while in Perl this would be:
+
+my $a = '';
+if (c) {
+ $a = 'foo';
+}
+
+In case of a single variable assignment, an alternative is to use the ternary operator to avoid a block, but this is not in general possible for multiple variable assignments, and is difficult to read for complex logic.
+
+This is a more significant issue in C, notably for string assignment, as string initialization can automatically allocate memory, while string assignment to an already initialized variable requires allocating memory, a string copy, and checking that these are successful.
+
+{
+ my $counter = 0;
+ sub increment_counter {
+ return ++$counter;
+ }
+}
+
+Some languages allow the concept of block scope to be applied, to varying extents, outside of a function. For example, in the Perl snippet at right, $counter is a variable name with block scope (due to the use of the my keyword), while increment_counter is a function name with global scope. Each call to increment_counter will increase the value of $counter by one, and return the new value. Code outside of this block can call increment_counter, but cannot otherwise obtain or alter the value of $counter. This idiom allows one to define closures in Perl.
+
+--- Function scope ---
+
+When the scope of variables declared within a function does not extend beyond that function, this is known as function scope. Function scope is available in most programming languages which offer a way to create a local variable in a function or subroutine: a variable whose scope ends (that goes out of context) when the function returns. In most cases the lifetime of the variable is the duration of the function call—it is an automatic variable, created when the function starts (or the variable is declared), destroyed when the function returns—while the scope of the variable is within the function, though the meaning of "within" depends on whether scope is lexical or dynamic. However, some languages, such as C, also provide for static local variables, where the lifetime of the variable is the entire lifetime of the program, but the variable is only in context when inside the function. In the case of static local variables, the variable is created when the program initializes, and destroyed only when the program terminates, as with a static global variable, but is only in context within a function, like an automatic local variable.
+
+Importantly, in lexical scope a variable with function scope has scope only within the lexical context of the function: it goes out of context when another function is called within the function, and comes back into context when the function returns—called functions have no access to the local variables of calling functions, and local variables are only in context within the body of the function in which they are declared. By contrast, in dynamic scope, the scope extends to the execution context of the function: local variables stay in context when another function is called, only going out of context when the defining function ends, and thus local variables are in context of the function in which they are defined and all called functions. In languages with lexical scope and nested functions, local variables are in context for nested functions, since these are within the same lexical context, but not for other functions that are not lexically nested. A local variable of an enclosing function is known as a non-local variable for the nested function. Function scope is also applicable to anonymous functions.
+
+def square(n: int) -> int:
+ return n * n
+
+def sum_of_squares(n: int) -> int:
+ total: int = 0 
+ i: int = 0
+ while i <= n:
+ total += square(i)
+ i += 1
+ return total
+
+For example, in the snippet of Python code on the right, two functions are defined: square and sum_of_squares. square computes the square of a number; sum_of_squares computes the sum of all squares up to a number. (For example, square(4) is 4 = 16, and sum_of_squares(4) is 0 + 1 + 2 + 3 + 4 = 30.)
+
+Each of these functions has a variable named n that represents the argument to the function. These two n variables are completely separate and unrelated, despite having the same name, because they are lexically scoped local variables with function scope: each one's scope is its own, lexically separate function and thus, they don't overlap. Therefore, sum_of_squares can call square without its own n being altered. Similarly, sum_of_squares has variables named total and i; these variables, because of their limited scope, will not interfere with any variables named total or i that might belong to any other function. In other words, there is no risk of a name collision between these names and any unrelated names, even if they are identical.
+
+No name masking is occurring: only one variable named n is in context at any given time, as the scopes do not overlap. By contrast, were a similar fragment to be written in a language with dynamic scope, the n in the calling function would remain in context in the called function—the scopes would overlap—and would be masked ("shadowed") by the new n in the called function.
+
+Function scope is significantly more complicated if functions are first-class objects and can be created locally by a function and then returned. In this case any variables in the nested function that are not local to it (unbound variables in the function definition, that resolve to variables in an enclosing context) create a closure, as not only the function itself, but also its context (of variables) must be returned, and then potentially called in a different context. This requires significantly more support from the compiler, and can complicate program analysis.
+
+--- File scope ---
+
+The scope of a name binding is a file, which is known as file scope. File scope is largely particular to C (and C++), where scope of variables and functions declared at the top level of a file (not within any function) is for the entire file—or rather for C, from the declaration until the end of the source file, or more precisely translation unit (internal linking). This can be seen as a form of module scope, where modules are identified with files, and in more modern languages is replaced by an explicit module scope. Due to the presence of include statements, which add variables and functions to the internal context and may themselves call further include statements, it can be difficult to determine what is in context in the body of a file.
+
+In the C code snippet above, the function name sum_of_squares has global scope (in C, extern linkage). Adding static to the function signature would result in file scope (internal linkage).
+
+--- Module scope ---
+
+The scope of a name binding is a module, which is known as module scope. Module scope is available in modular programming languages where modules (which may span various files) are the basic unit of a complex program, as they allow information hiding and exposing a limited interface. Module scope was pioneered in the Modula family of languages, and Python (which was influenced by Modula) is a representative contemporary example.
+
+In some object-oriented programming languages that lack direct support for modules, such as C++ before C++20, a similar structure is instead provided by the class hierarchy, where classes are the basic unit of the program, and a class can have private methods. This is properly understood in the context of dynamic dispatch rather than name resolution and scope, though they often play analogous roles. In some cases both these facilities are available, such as in Python, which has both modules and classes, and code organization (as a module-level function or a conventionally private method) is a choice of the programmer.
+
+--- Global scope ---
+
+The scope of a name binding is an entire program, which is known as global scope. Variable names with global scope—called global variables—are frequently considered bad practice, at least in some languages, due to the possibility of name collisions and unintentional masking, together with poor modularity, and function scope or block scope are considered preferable. However, global scope is typically used (depending on the language) for various other sorts of names, such as names of functions, names of classes and names of other data types. In these cases mechanisms such as namespaces are used to avoid collisions.
+
+════════════════════════════════════════
+
+LEXICAL SCOPE VS. DYNAMIC SCOPE
+
+The use of local variables — of variable names with limited scope, that only exist within a specific function — helps avoid the risk of a name collision between two identically named variables. However, there are two very different approaches to answering this question: What does it mean to be "within" a function?
+
+In lexical scope (or lexical scoping; also called static scope or static scoping), if a variable name's scope is a certain function, then its scope is the program text of the function definition: within that text, the variable name exists, and is bound to the variable's value, but outside that text, the variable name does not exist. By contrast, in dynamic scope (or dynamic scoping), if a variable name's scope is a certain function, then its scope is the time-period during which the function is executing: while the function is running, the variable name exists, and is bound to its value, but after the function returns, the variable name does not exist. This means that if function f invokes a separately defined function g, then under lexical scope, function g does not have access to f's local variables (assuming the text of g is not inside the text of f), while under dynamic scope, function g does have access to f's local variables (since g is invoked during the invocation of f).
+
+$ # bash language
+$ x=1
+$ function g() { echo $x ; x=2 ; }
+$ function f() { local x=3 ; g ; }
+$ f # does this print 1, or 3?
+3
+$ echo $x # does this print 1, or 2?
+1
+
+Consider, for example, the program on the right. The first line, x=1, creates a global variable x and initializes it to 1. The second line, function g() { echo $x ; x=2 ; }, defines a function g that prints out ("echoes") the current value of x, and then sets x to 2 (overwriting the prior value). The third line, function f() { local x=3 ; g ; } defines a function f that creates a local variable x (hiding the identically named global variable) and initializes it to 3, and then calls g. The fourth line, f, calls f. The fifth line, echo $x, prints out the current value of x.
+
+The scope rules determine what this program prints. If the language of this program is one that uses lexical scope, then g prints and modifies the global variable x (because g is defined outside f), so the program prints 1 and then 2. By contrast, if this language uses dynamic scope, then g prints and modifies f's local variable x (because g is called from within f), so the program prints 3 and then 1. (As it happens, the language of the program is Bash, which uses dynamic scope; so the program prints 3 and then 1. If the same code was run with ksh93 which uses lexical scope, the results would be different.)
+
+════════════════════════════════════════
+
+LEXICAL SCOPE
+
+With lexical scope, a name always refers to its lexical context. This is a property of the program text and is made independent of the runtime call stack by the language implementation. Because this matching only requires analysis of the static program text, this type of scope is also called static scope. Lexical scope is standard in all ALGOL-based languages such as Pascal, Modula-2, and Ada, and in modern functional languages such as ML and Haskell. It is also used in the C language and its syntactic and semantic relatives, although with different kinds of limitations. Static scope allows the programmer to reason about object references such as parameters, variables, constants, types, functions, etc., as simple name substitutions. This makes it much easier to make modular code and reason about it, since the local naming structure can be understood in isolation. In contrast, dynamic scope forces the programmer to anticipate all possible execution contexts in which the module's code may be invoked.
+
+program P;
+var I:integer;
+ K:char;
+
+ procedure A;
+ var K:real;
+ L:integer;
+
+ procedure B;
+ var M:real;
+ begin
+ (*scope P+A+B*)
+ end;
+
+ (*scope P+A*)
+ end;
+
+ (*scope P*)
+end.
+
+For example, Pascal is lexically scoped. Consider the Pascal program fragment at right. The variable I is visible at all points, because it is never hidden by another variable of the same name. The char variable K is visible only in the main program because it is hidden by the real variable K visible only in procedures A and B. Variable L is also visible only in procedure A and B but it does not hide any other variable. Variable M is only visible in procedure B and therefore not accessible either from procedure A or the main program. Also, procedure B is visible only in procedure A and can therefore not be called from the main program. There could have been another procedure named B declared in the program outside of procedure B. The place in the program where "B" is mentioned then determines which of the two procedures named B it represents, analogous with the scope of variables.
+
+Correct implementation of lexical scope in languages with first-class nested functions is not trivial, as it requires each function value to carry with it a record of the values of the variables that it depends on (the pair of the function and this context is called a closure). Depending on implementation and computer architecture, variable lookup may become slightly inefficient when very deeply lexically nested functions are used, although there are well-known techniques to mitigate this. Also, for nested functions that only refer to their own arguments and (immediately) local variables, all relative locations can be known at compile time. No overhead at all is therefore incurred when using that type of nested function. The same applies to particular parts of a program where nested functions are not used, and, naturally, to programs written in a language where nested functions are not available (such as in the C language).
+
+--- History ---
+
+Lexical scope was first used in the early 1960s for the imperative language ALGOL 60 and has been picked up in most other imperative languages since then.
+
+Languages like Pascal and C have always had lexical scope, since they are both influenced by the ideas that went into ALGOL 60 and ALGOL 68 (although C did not include lexically nested functions).
+
+Perl is a language with dynamic scope that added static scope afterwards.
+
+The original Lisp interpreter (1960) used dynamic scope. Deep binding, which approximates static (lexical) scope, was introduced around 1962 in LISP 1.5 (via the Funarg device developed by Steve Russell, working under John McCarthy).
+
+All early Lisps used dynamic scope, when based on interpreters. In 1982, Guy L. Steele Jr. and the Common Lisp Group published An overview of Common Lisp, a short review of the history and the divergent implementations of Lisp up to that moment and a review of the features that a Common Lisp implementation should have. On page 102, we read:
+
+Most LISP implementations are internally inconsistent in that by default the interpreter and compiler may assign different semantics to correct programs; this stems primarily from the fact that the interpreter assumes all variables to be dynamically scoped, while the compiler assumes all variables to be local unless forced to assume otherwise. This has been done for the sake of convenience and efficiency, but can lead to very subtle bugs. The definition of Common LISP avoids such anomalies by explicitly requiring the interpreter and compiler to impose identical semantics on correct programs.
+
+Implementations of Common Lisp were thus required to have lexical scope. Again, from An overview of Common Lisp:
+
+In addition, Common LISP offers the following facilities (most of which are borrowed from MacLisp, InterLisp or Lisp Machines Lisp): (...) Fully lexically scoped variables. The so-called "FUNARG problem" is completely solved, in both the downward and upward cases.
+
+By the same year in which An overview of Common LISP was published (1982), initial designs (also by Guy L. Steele Jr.) of a compiled, lexically scoped Lisp, called Scheme had been published and compiler implementations were being attempted. At that time, lexical scope in Lisp was commonly feared to be inefficient to implement. In A History of T, Olin Shivers writes:
+
+All serious Lisps in production use at that time were dynamically scoped. No one who hadn't carefully read the Rabbit thesis (written by Guy Lewis Steele Jr. in 1978) believed lexical scope would fly; even the few people who had read it were taking a bit of a leap of faith that this was going to work in serious production use.
+
+The term "lexical scope" dates at least to 1967, while the term "lexical scoping" dates at least to 1970, where it was used in Project MAC to describe the scope rules of the Lisp dialect MDL (then known as "Muddle").
+
+"Most LISP implementations are internally inconsistent in that by default the interpreter and compiler may assign different semantics to correct programs; this stems primarily from the fact that the interpreter assumes all variables to be dynamically scoped, while the compiler assumes all variables to be local unless forced to assume otherwise. This has been done for the sake of convenience and efficiency, but can lead to very subtle bugs. The definition of Common LISP avoids such anomalies by explicitly requiring the interpreter and compiler to impose identical semantics on correct programs."
+
+"In addition, Common LISP offers the following facilities (most of which are borrowed from MacLisp, InterLisp or Lisp Machines Lisp): (...) Fully lexically scoped variables. The so-called "FUNARG problem" is completely solved, in both the downward and upward cases."
+
+"All serious Lisps in production use at that time were dynamically scoped. No one who hadn't carefully read the Rabbit thesis (written by Guy Lewis Steele Jr. in 1978) believed lexical scope would fly; even the few people who had read it were taking a bit of a leap of faith that this was going to work in serious production use."
+
+--- Lexical scope in modern programming ---
+
+In modern programming languages, lexical scope plays a crucial role in enabling functional programming paradigms. Languages like JavaScript, Python, and Swift rely heavily on lexical scoping to ensure that functions can access variables from their defining context, even if the function is executed outside its lexical scope. This is particularly important when dealing with closures, which are a direct consequence of lexical scoping.
+
+For example, in JavaScript, closures are frequently used for asynchronous programming and event handling, as they allow callbacks to retain access to the variables from the outer scope, facilitating cleaner, more modular code. Similarly, Python and Swift utilize lexical scope to implement closures and enable powerful patterns like higher-order functions.
+
+════════════════════════════════════════
+
+DYNAMIC SCOPE
+
+With dynamic scope, a name refers to execution context. In technical terms, this means that each name has a global stack of bindings. Introducing a local variable with name x pushes a binding onto the global x stack (which may have been empty), which is popped off when the control flow leaves the scope. Evaluating x in any context always yields the top binding. Note that this cannot be done at compile-time because the binding stack only exists at run-time, which is why this type of scope is called dynamic scope.
+
+Dynamic scope is uncommon in modern languages.
+
+Generally, certain blocks are defined to create bindings whose lifetime is the execution time of the block; this adds some features of static scope to the dynamic scope process. However, since a section of code can be called from many different locations and situations, it can be difficult to determine at the outset what bindings will apply when a variable is used (or if one exists at all). This can be beneficial; application of the principle of least knowledge suggests that code avoid depending on the reasons for (or circumstances of) a variable's value, but simply use the value according to the variable's definition. This narrow interpretation of shared data can provide a very flexible system for adapting the behavior of a function to the current state (or policy) of the system. However, this benefit relies on careful documentation of all variables used this way and on careful avoidance of assumptions about a variable's behavior, and provides no mechanism to detect interference between different parts of a program. Some languages, like Perl and Common Lisp, allow a programmer to choose static or dynamic scope when defining or redefining a variable. Examples of languages that use dynamic scope include Logo, Emacs Lisp, LaTeX and the shell languages bash, dash, and PowerShell.
+
+Dynamic scope is fairly easy to implement. To find a name's value, the program could traverse the runtime stack, checking each activation record (each function's stack frame) for a value for the name. In practice, this is made more efficient via the use of an association list, which is a stack of name/value pairs. Pairs are pushed onto this stack whenever declarations are made, and popped whenever variables go out of context. Shallow binding is an alternative strategy that is considerably faster, making use of a central reference table, which associates each name with its own stack of meanings. This avoids a linear search during run-time to find a particular name, but care should be taken to properly maintain this table. Note that both of these strategies assume a last-in-first-out (LIFO) ordering to bindings for any one variable; in practice all bindings are so ordered.
+
+An even simpler implementation is the representation of dynamic variables with simple global variables. The local binding is performed by saving the original value in an anonymous location on the stack that is invisible to the program. When that binding scope terminates, the original value is restored from this location. In fact, dynamic scope originated in this manner. Early implementations of Lisp used this obvious strategy for implementing local variables, and the practice survives in some dialects which are still in use, such as GNU Emacs Lisp. Lexical scope was introduced into Lisp later. This is equivalent to the above shallow binding scheme, except that the central reference table is simply the global variable binding context, in which the current meaning of the variable is its global value. Maintaining global variables isn't complex. For instance, a symbol object can have a dedicated slot for its global value.
+
+Dynamic scope provides an excellent abstraction for thread-local storage, but if it is used that way it cannot be based on saving and restoring a global variable. A possible implementation strategy is for each variable to have a thread-local key. When the variable is accessed, the thread-local key is used to access the thread-local memory location (by code generated by the compiler, which knows which variables are dynamic and which are lexical). If no thread-local key exists for the calling thread, then the global location is used. When a variable is locally bound, the prior value is stored in a hidden location on the stack. The thread-local storage is created under the variable's key, and the new value is stored there. Further nested overrides of the variable within that thread simply save and restore this thread-local location. When the initial, outermost override's context terminates, the thread-local key is deleted, exposing the global version of the variable once again to that thread.
+
+With referential transparency the dynamic scope is restricted to the argument stack of the current function only, and coincides with the lexical scope.
+
+--- Macro expansion ---
+
+In modern languages, macro expansion in a preprocessor is a key example of de facto dynamic scope. The macro language itself only transforms the source code, without resolving names, but since the expansion is done in place, when the names in the expanded text are then resolved (notably free variables), they are resolved based on where they are expanded (loosely "called"), as if dynamic scope were occurring.
+
+The C preprocessor, used for macro expansion, has de facto dynamic scope, as it does not resolve names by itself and it is independent of where the macro is defined. For example, the macro:
+
+#define ADD_A(x) x + a
+
+will expand to add a to the passed variable, with this name only later resolved by the compiler based on where the macro ADD_A is "called" (properly, expanded). Properly, the C preprocessor only does lexical analysis, expanding the macro during the tokenization stage, but not parsing into a syntax tree or doing name resolution.
+
+For example, in the following code, the name a in the macro is resolved (after expansion) to the local variable at the expansion site:
+
+════════════════════════════════════════
+
+QUALIFIED NAMES
+
+As we have seen, one of the key reasons for scope is that it helps prevent name collisions, by allowing identical names to refer to distinct things, with the restriction that the names must have separate scopes. Sometimes this restriction is inconvenient; when many different things need to be accessible throughout a program, they generally all need names with global scope, so different techniques are required to avoid name collisions.
+
+To address this, many languages offer mechanisms for organizing global names. The details of these mechanisms, and the terms used, depend on the language; but the general idea is that a group of names can itself be given a name — a prefix — and, when necessary, an entity can be referred to by a qualified name consisting of the name plus the prefix. Normally such names will have, in a sense, two sets of scopes: a scope (usually the global scope) in which the qualified name is visible, and one or more narrower scopes in which the unqualified name (without the prefix) is visible as well. And normally these groups can themselves be organized into groups; that is, they can be nested.
+
+Although many languages support this concept, the details vary greatly. Some languages have mechanisms, such as namespaces in C++ and C#, that serve almost exclusively to enable global names to be organized into groups. Other languages have mechanisms, such as packages in Ada and structures in Standard ML, that combine this with the additional purpose of allowing some names to be visible only to other members of their group. And object-oriented languages often allow classes or singleton objects to fulfill this purpose (whether or not they also have a mechanism for which this is the primary purpose). Furthermore, languages often meld these approaches; for example, Perl's packages are largely similar to C++'s namespaces, but optionally double as classes for object-oriented programming; and Java organizes its variables and functions into classes, but then organizes those classes into Ada-like packages.
+
+════════════════════════════════════════
+
+BY LANGUAGE
+
+Scope rules for representative languages follow.
+
+--- C ---
+
+In C, scope is traditionally known as linkage or visibility, particularly for variables. C is a lexically scoped language with global scope (known as external linkage), a form of module scope or file scope (known as internal linkage), and local scope (within a function); within a function scopes can further be nested via block scope. However, standard C does not support nested functions.
+
+The lifetime and visibility of a variable are determined by its storage class. There are three types of lifetimes in C: static (program execution), automatic (block execution, allocated on the stack), and manual (allocated on the heap). Only static and automatic are supported for variables and handled by the compiler, while manually allocated memory must be tracked manually across different variables. There are three levels of visibility in C: external linkage (global), internal linkage (roughly file), and block scope (which includes functions); block scopes can be nested, and different levels of internal linkage is possible by use of includes. Internal linkage in C is visibility at the translation unit level, namely a source file after being processed by the C preprocessor, notably including all relevant includes.
+
+C programs are compiled as separate object files, which are then linked into an executable or library via a linker. Thus name resolution is split across the compiler, which resolves names within a translation unit (more loosely, "compilation unit", but this is properly a different concept), and the linker, which resolves names across translation units; see linkage for further discussion.
+
+In C, variables with block scope enter context when they are declared (not at the top of the block), go out of context if any (non-nested) function is called within the block, come back into context when the function returns, and go out of context at the end of the block. In the case of automatic local variables, they are also allocated on declaration and deallocated at the end of the block, while for static local variables, they are allocated at program initialization and deallocated at program termination.
+
+The following program demonstrates a variable with block scope coming into context partway through the block, then exiting context (and in fact being deallocated) when the block ends:
+
+#include <stdio.h>
+
+int main(void) {
+ char x = 'm';
+ printf("%c\n", x);
+
+ {
+ printf("%c\n", x);
+ char x = 'b';
+ printf("%c\n", x);
+ }
+
+ printf("%c\n", x);
+}
+
+The program outputs:
+
+m
+m
+b
+m
+
+There are other levels of scope in C. Variable names used in a function prototype have function prototype visibility, and exit context at the end of the function prototype. Since the name is not used, this is not useful for compilation, but may be useful for documentation. Label names for GOTO statement have function scope.
+
+--- C++ ---
+
+All the variables to use in a program must have been declared with its type specifier in an earlier point in the code, as done in the prior code at the start of the body of the function main when declaring that a, b, and result were of type int. A variable can be either of global or local scope. A global variable is a variable declared in the main body of the source code, outside all functions, while a local variable is one declared within the body of a function or a block.
+
+Modern versions allow nested lexical scope.
+
+--- Swift ---
+
+Swift has a similar rule for scopes with C++, but contains different access modifiers.
+
+--- Go ---
+
+Go is lexically scoped using blocks.
+
+--- Java ---
+
+Java is lexically scoped.
+
+A Java class has several kinds of variables:
+
+In general, a set of brackets defines a particular scope, but variables at top level within a class can differ in their behavior depending on the modifier keywords used in their definition.
+The following table shows the access to members permitted by each modifier.
+
+--- JavaScript ---
+
+JavaScript has simple scope rules, but variable initialization and name resolution rules can cause problems, and the widespread use of closures for callbacks means the lexical context of a function when defined (which is used for name resolution) can be very different from the lexical context when it is called (which is irrelevant for name resolution). JavaScript objects have name resolution for properties, but this is a separate topic.
+
+JavaScript has lexical scope nested at the function level, with the global context being the outermost context. This scope is used for both variables and for functions (meaning function declarations, as opposed to variables of function type). Block scope with the let and const keywords is standard since ECMAScript 6. Block scope can be produced by wrapping the entire block in a function and then executing it; this is known as the immediately-invoked function expression (IIFE) pattern.
+
+While JavaScript scope is simple—lexical, function-level—the associated initialization and name resolution rules are a cause of confusion. Firstly, assignment to a name not in scope defaults to creating a new global variable, not a local one. Secondly, to create a new local variable one must use the var keyword; the variable is then created at the top of the function, with value undefined and the variable is assigned its value when the assignment expression is reached:
+
+This is known as variable hoisting—the declaration, but not the initialization, is hoisted to the top of the function. Thirdly, accessing variables before initialization yields undefined, rather than a syntax error. Fourthly, for function declarations, the declaration and the initialization are both hoisted to the top of the function, unlike for variable initialization. For example, the following code produces a dialog with output undefined, as the local variable declaration is hoisted, shadowing the global variable, but the initialization is not, so the variable is undefined when used:
+
+a = 1;
+function f() {
+ alert(a);
+ var a = 2;
+}
+f();
+
+Further, as functions are first-class objects in JavaScript and are frequently assigned as callbacks or returned from functions, when a function is executed, the name resolution depends on where it was originally defined (the lexical context of the definition), not the lexical context or execution context where it is called. The nested scopes of a particular function (from most global to most local) in JavaScript, particularly of a closure, used as a callback, are sometimes referred to as the scope chain, by analogy with the prototype chain of an object.
+
+Closures can be produced in JavaScript by using nested functions, as functions are first-class objects. Returning a nested function from an enclosing function includes the local variables of the enclosing function as the (non-local) lexical context of the returned function, yielding a closure. For example:
+
+function newCounter() {
+ // return a counter that is incremented on call (starting at 0)
+ // and which returns its new value
+ var a = 0;
+ var b = function() { a++; return a; };
+ return b;
+}
+c = newCounter();
+alert(c() + ' ' + c()); // outputs "1 2"
+
+Closures are frequently used in JavaScript, due to being used for callbacks. Indeed, any hooking of a function in the local context as a callback or returning it from a function creates a closure if there are any unbound variables in the function body (with the context of the closure based on the nested scopes of the current lexical context, or "scope chain"); this may be accidental. When creating a callback based on parameters, the parameters must be stored in a closure, otherwise it will accidentally create a closure that refers to the variables in the enclosing context, which may change.
+
+Name resolution of properties of JavaScript objects is based on inheritance in the prototype tree—a path to the root in the tree is called a prototype chain—and is separate from name resolution of variables and functions.
+
+--- Lisp ---
+
+Lisp dialects have various rules for scope.
+
+The original Lisp used dynamic scope; it was Scheme, inspired by ALGOL, that introduced static (lexical) scope to the Lisp family.
+
+Maclisp used dynamic scope by default in the interpreter and lexical scope by default in compiled code, though compiled code could access dynamic bindings by use of SPECIAL declarations for particular variables. However, Maclisp treated lexical binding more as an optimization than one would expect in modern languages, and it did not come with the closure feature one might expect of lexical scope in modern Lisps. A separate operation, *FUNCTION, was available to somewhat clumsily work around some of that issue.
+
+Common Lisp adopted lexical scope from Scheme, as did Clojure.
+
+ISLISP has lexical scope for ordinary variables. It also has dynamic variables, but they are in all cases explicitly marked; they must be defined by a defdynamic special form, bound by a dynamic-let special form, and accessed by an explicit dynamic special form.
+
+Some other dialects of Lisp, like Emacs Lisp, still use dynamic scope by default. Emacs Lisp now has lexical scope available on a per-buffer basis.
+
+--- Python ---
+
+For variables, Python has function scope, module scope, and global scope. Names enter context at the start of a scope (function, module, or global scope), and exit context when a non-nested function is called or the scope ends. If a name is used prior to variable initialization, this raises a runtime exception. If a variable is simply accessed (not assigned to), name resolution follows the LEGB (Local, Enclosing, Global, Built-in) rule which resolves names to the narrowest relevant context. However, if a variable is assigned to, it defaults to declaring a variable whose scope starts at the start of the level (function, module, or global), not at the assignment. Both these rules can be overridden with a global or nonlocal (in Python 3) declaration prior to use, which allows accessing global variables even if there is a masking nonlocal variable, and assigning to global or nonlocal variables.
+
+As a simple example, a function resolves a variable to the global scope:
+
+def f() -> None:
+ print(x)
+
+x: str = "global"
+f()
+# prints: global
+
+Note that x is defined before f is called, so no error is raised, even though it is defined after its reference in the definition of f. Lexically this is a forward reference, which is allowed in Python.
+
+Here assignment creates a new local variable, which does not change the value of the global variable:
+
+def f() -> None:
+ x: str = "f"
+ print(x)
+
+x: str = "global"
+print(x)
+# prints: global
+f()
+# prints: f
+print(x)
+# prints: global
+
+Assignment to a variable within a function causes it to be declared local to the function, hence its scope is the entire function, and thus using it prior to this assignment raises an error. This differs from C, where the scope of the local variable start at its declaration. This code raises an error:
+
+def f() -> None:
+ print(x)
+ x: str = "f"
+
+x: str = "global"
+f()
+# Traceback (most recent call last):
+# File "<stdin>", line 1, in <module>
+# File "<stdin>", line 2, in f
+# UnboundLocalError: local variable 'x' referenced before assignment
+
+The default name resolution rules can be overridden with the global or nonlocal (in Python 3) keywords. In the below code, the global x declaration in g means that x resolves to the global variable. It thus can be accessed (as it has already been defined), and assignment assigns to the global variable, rather than declaring a new local variable. Note that no global declaration is needed in f—since it does not assign to the variable, it defaults to resolving to the global variable.
+
+def f() -> None:
+ print(x)
+
+def g() -> None:
+ global x
+ print(x)
+ x = "g"
+
+x: str = "global"
+f()
+# prints: global
+g()
+# prints: global
+f()
+# prints: g
+
+global can also be used for nested functions. In addition to allowing assignment to a global variable, as in an unnested function, this can also be used to access the global variable in the presence of a nonlocal variable:
+
+def f() -> None:
+ def g() -> None:
+ global x
+ print(x)
+ x: str = "f"
+ g()
+
+x: str = "global"
+f()
+# prints: global
+
+For nested functions, there is also the nonlocal declaration, for assigning to a nonlocal variable, similar to using global in an unnested function:
+
+--- R ---
+
+R is a lexically scoped language, unlike other implementations of S where the values of free variables are determined by a set of global variables, while in R they are determined by the context in which the function was created. The scope contexts may be accessed using a variety of features (such as parent.frame()) which can simulate the experience of dynamic scope should the programmer desire.
+
+There is no block scope:
+
+a <- 1
+{
+ a <- 2
+}
+message(a)
+## 2
+
+Functions have access to scope they were created in:
+
+a <- 1
+f <- function() {
+ message(a)
+}
+f()
+## 1
+
+Variables created or modified within a function stay there:
+
+a <- 1
+f <- function() {
+ message(a)
+ a <- 2
+ message(a)
+}
+f()
+## 1
+## 2
+message(a)
+## 1
+
+Variables created or modified within a function stay there unless assignment to enclosing scope is explicitly requested:
+
+a <- 1
+f <- function() {
+ message(a)
+ a <<- 2
+ message(a)
+}
+f()
+## 1
+## 2
+message(a)
+## 2
+
+Although R has lexical scope by default, function scopes can be changed:
+
+════════════════════════════════════════
 
 ABOUT THE AUTHOR
 
-Kyle Simpson is an open-source enthusiast, a prolific author, and a JavaScript evangelist. He is known for his deep knowledge of JavaScript's core mechanisms and his ability to explain complex concepts in accessible terms. Beyond the "You Don't Know JS" book series (which includes six titles covering the full breadth of the language), Simpson is a frequent conference speaker, a workshop instructor, and the creator of several popular open-source projects. He advocates for truly understanding the tools we use rather than relying on abstractions that hide complexity.
-
-════════════════════════════════════════
-
-IN-DEPTH THEMATIC ANALYSIS
-
-
---- Lexical Scope ---
-
-Throughout You Don't Know JS: Scope & Closures, Kyle Simpson develops the concept of lexical scope with remarkable depth and nuance. JavaScript uses lexical scoping, meaning scope is determined at author-time (when code is written) rather than at runtime. Understanding this is the foundation for understanding closures, modules, and many other patterns. This theme resonates across the entire narrative, informing key decisions, shaping conflicts, and ultimately driving the story toward its resolution. Kyle Simpson's exploration of this idea invites readers to examine their own assumptions and experiences in a new light, creating a dialogue between text and reader that extends far beyond the page.
-
-What makes Kyle Simpson's treatment of lexical scope particularly compelling is how it avoids simple answers. Rather than presenting a binary perspective, the text navigates the complex terrain between extremes, acknowledging contradictions and tensions that mirror real life. The author weaves this theme into both major plot points and subtle background details, rewarding careful readers with layers of meaning that deepen upon rereading. This refusal to oversimplify is one of the book's greatest intellectual strengths.
-
-The significance of lexical scope extends beyond the pages of You Don't Know JS: Scope & Closures itself. Kyle Simpson taps into a universal concern that has occupied thinkers, artists, and ordinary people throughout history. By grounding these large ideas in specific, vivid scenes and concrete details, You Don't Know JS: Scope & Closures makes abstract concepts tangible and emotionally resonant, ensuring that the exploration of lexical scope stays with the reader long after the final page. It is this combination of universality and specificity that gives the theme its lasting power.
-
-
---- The Compiler's Perspective ---
-
-One of the most powerful elements of You Don't Know JS: Scope & Closures is its sustained meditation on the compiler's perspective. JavaScript is a compiled language, not purely interpreted. Understanding how the engine compiles code and resolves variable references illuminates why hoisting occurs and how scope chains work. Kyle Simpson does not merely state this idea but dramatizes it through choices, consequences, and revelations that feel earned rather than imposed. The reader is drawn into a deeper understanding of the compiler's perspective not through lectures but through immersive experience on the page, making the insight feel personal and immediate rather than academic.
-
-Kyle Simpson approaches the compiler's perspective from multiple angles throughout You Don't Know JS: Scope & Closures. Different elements of the text embody different facets of this idea, creating a rich dialogue that refuses to settle for easy conclusions. This multiplicity of perspective is one of the book's great strengths — it acknowledges the complexity of human experience while still building toward meaningful insight. Readers who engage with these varied perspectives find their own thinking challenged and expanded in productive ways.
-
-Critically, the exploration of the compiler's perspective in You Don't Know JS: Scope & Closures never loses touch with emotional truth. Even when engaging with intellectual or philosophical dimensions, Kyle Simpson ensures that every idea is rooted in felt experience. This grounding gives the book its persuasive power: readers don't merely understand the compiler's perspective intellectually; they feel its weight and importance in a deeply personal way. The result is a kind of understanding that transforms how one sees the world.
-
-
---- Closures Demystified ---
-
-You Don't Know JS: Scope & Closures offers a penetrating examination of closures demystified that sets it apart from other works addressing similar territory. A closure is when a function retains access to its lexical scope even when executed outside that scope. This is the mechanism behind modules, callbacks, event handlers, and many other essential patterns. Kyle Simpson's insight here is both original and deeply informed by a broad understanding of human nature. The text reveals how closures demystified operates not just at the surface level but in the deeper structures of thought and behavior, illuminating patterns that readers may have sensed but never articulated.
-
-The way Kyle Simpson handles closures demystified demonstrates a sophisticated awareness of how ideas manifest in everyday life. The book consistently shows rather than tells, using concrete situations to illuminate abstract principles. This approach makes the exploration of closures demystified accessible to readers from all backgrounds while maintaining intellectual rigor. The specificity of the examples grounds what could otherwise become abstract theorizing in lived reality.
-
-Perhaps most importantly, Kyle Simpson's exploration of closures demystified carries practical implications. You Don't Know JS: Scope & Closures doesn't leave readers with only theoretical understanding — it equips them with new frameworks for thinking about their own lives and circumstances. This blend of insight and applicability is what makes the book's treatment of closures demystified genuinely transformative for many readers, moving beyond entertainment or education into the realm of personal growth.
-
-
---- Function vs. Block Scope ---
-
-In You Don't Know JS: Scope & Closures, the theme of function vs. block scope emerges as a guiding thread that connects disparate elements into a coherent whole. The book explores the differences between function-level scope (var) and block-level scope (let, const), including the practical implications of each and when to use them. Kyle Simpson returns to this idea repeatedly, each time adding new dimensions and complications that prevent the reader from arriving at premature conclusions. The cumulative effect is a rich, multifaceted portrait of function vs. block scope that honors its true complexity.
-
-Kyle Simpson's handling of function vs. block scope is enriched by the specific context in which the work unfolds. The historical, cultural, and personal circumstances described in You Don't Know JS: Scope & Closures provide a unique lens through which to examine this enduring concern. The result is a portrait that feels both timeless and urgently contemporary, speaking to the particular anxieties and aspirations of our moment while also connecting to deeper currents of human thought.
-
-For readers who approach You Don't Know JS: Scope & Closures with an eye toward function vs. block scope, the rewards are considerable. Each rereading reveals new connections and subtleties, as Kyle Simpson has embedded references to this theme in structural choices and careful details that may not be immediately apparent. This layered approach ensures that the book's exploration of function vs. block scope continues to yield new insights with each encounter, making it a text that grows richer over time.
-
-
---- The Module Pattern ---
-
-The theme of the module pattern lies at the very heart of what makes You Don't Know JS: Scope & Closures such an enduring work. Closures enable the module pattern, one of the most important code organization patterns in JavaScript. The book shows how modules encapsulate private state and expose public APIs. Kyle Simpson demonstrates exceptional skill in making this theme feel both inevitable and surprising — inevitable because it arises naturally from the material, and surprising because the specific ways it manifests consistently defy expectation. This balance of familiarity and novelty keeps readers engaged throughout.
-
-What elevates Kyle Simpson's treatment of the module pattern above similar efforts is the depth of empathy and intelligence brought to the subject. The text never reduces complex experiences to simple lessons or morals. Instead, You Don't Know JS: Scope & Closures inhabits the full emotional and intellectual spectrum associated with the module pattern, from doubt and confusion to clarity and acceptance, giving the reader permission to experience the same range of responses.
-
-The legacy of You Don't Know JS: Scope & Closures's exploration of the module pattern can be seen in the ongoing conversation it has sparked among readers and thinkers. Kyle Simpson's approach has influenced how many people understand and discuss this subject. The book remains a touchstone for anyone seeking to engage with the module pattern in all its complexity and beauty, offering not final answers but richer, more nuanced questions.
-
-
-════════════════════════════════════════
-
-EXTENDED CHAPTER ANALYSIS
-
-
-Chapter 1: What is Scope?
-
-Introduces the concept of scope by examining how the JavaScript engine processes code. Explains the roles of the Engine, Compiler, and Scope in variable lookup, and distinguishes between LHS and RHS references.
-
-This section is pivotal to the overall arc of You Don't Know JS: Scope & Closures because it establishes tensions and questions that drive the remainder of the narrative. Kyle Simpson uses this portion to carefully lay groundwork, introducing subtle details and foreshadowing that attentive readers will recognize as significant in hindsight. The pacing here is deliberate, allowing readers to fully absorb the stakes before the story accelerates. Every element serves a purpose, and what appears to be incidental detail often carries thematic weight that becomes apparent later.
-
-This section particularly illuminates the theme of lexical scope that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how lexical scope manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Chapter 2: Lexical Scope
-
-Defines lexical scope and contrasts it with dynamic scope. Examines scope bubbles, nested scope chains, and how the engine traverses the scope chain to resolve variables. Discusses eval and with as mechanisms that cheat lexical scope.
-
-In this part of You Don't Know JS: Scope & Closures, Kyle Simpson demonstrates exceptional command of narrative structure. The events described serve not only to advance the plot but to deepen the reader's understanding of the central ideas at play. Each scene is crafted with precision, balancing forward momentum with contemplative depth. The author's ability to maintain both intellectual substance and narrative engagement is particularly evident here, as complex ideas are woven seamlessly into compelling storytelling.
-
-This section particularly illuminates the theme of the compiler's perspective that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how the compiler's perspective manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Chapter 3: Function vs. Block Scope
-
-Explores function scope as the primary unit of scope in JavaScript. Introduces IIFEs (Immediately Invoked Function Expressions), block scope with let and const, and the practical differences between var, let, and const.
-
-Here Kyle Simpson shifts the tone and perspective in ways that add new dimensions to You Don't Know JS: Scope & Closures. The reader is challenged to reconsider assumptions formed earlier, as new information complicates the picture. This section exemplifies the author's ability to maintain tension and engagement while simultaneously exploring complex ideas with the seriousness they deserve. The effect is disorienting in the best possible way — it forces active participation rather than passive consumption.
-
-This section particularly illuminates the theme of closures demystified that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how closures demystified manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Chapter 4: Hoisting
-
-Explains the often-confusing behavior of hoisting by examining how the compiler processes declarations and assignments in separate passes. Clarifies that function declarations are hoisted before variable declarations.
-
-This portion of the text showcases Kyle Simpson's gift for balancing intimate, character-driven moments with broader thematic concerns. The events unfold with a sense of inevitability that is, paradoxically, full of surprises. Readers frequently cite this section as a turning point in their engagement with You Don't Know JS: Scope & Closures, the point where the book's deeper intentions become unmistakably clear and the full scope of its ambition reveals itself.
-
-This section particularly illuminates the theme of function vs. block scope that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how function vs. block scope manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Chapter 5: Scope Closures
-
-The culminating chapter that defines closures, demonstrates them with clear examples, and shows their application in loops, callbacks, timers, event handlers, and the module pattern. This chapter transforms closures from a mysterious concept into a practical tool.
-
-The narrative reaches a critical juncture in this section, as Kyle Simpson brings together threads that have been developing throughout You Don't Know JS: Scope & Closures. The skill with which these elements converge demonstrates why the book has earned its reputation as a masterful work. The emotional and intellectual payoff here rewards the reader's investment in the earlier sections, delivering insights that feel both surprising and, in retrospect, inevitable.
-
-This section particularly illuminates the theme of the module pattern that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how the module pattern manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Appendix A: Dynamic Scope
-
-Contrasts JavaScript's lexical scope with dynamic scope found in some other languages, helping cement understanding of how JavaScript actually works.
-
-Kyle Simpson uses this section to address some of the most challenging aspects of the book's central themes. The material here is among the most thought-provoking in You Don't Know JS: Scope & Closures, requiring readers to grapple with uncomfortable questions and resist the pull of easy answers. The writing reaches a new level of intensity and precision, matching the difficulty of the subject matter with language that is equal to its demands.
-
-This section particularly illuminates the theme of lexical scope that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how lexical scope manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-Appendix B: Polyfilling Block Scope
-
-Discusses how to achieve block-scoping behavior in pre-ES6 environments using try/catch blocks and other techniques.
-
-In what many readers consider one of the most memorable sections of You Don't Know JS: Scope & Closures, Kyle Simpson achieves a remarkable synthesis of storytelling and intellectual exploration. The events described resonate on multiple levels — as compelling narrative, as thoughtful analysis, and as an invitation to personal reflection. This section demonstrates why You Don't Know JS: Scope & Closures transcends the boundaries of its genre to speak to universal human experience.
-
-This section particularly illuminates the theme of the compiler's perspective that runs throughout You Don't Know JS: Scope & Closures. The events and ideas presented here add concrete substance to Kyle Simpson's exploration of this concept, showing how the compiler's perspective manifests in specific circumstances rather than remaining an abstract idea. Readers attuned to this theme will find especially rich material for reflection in these pages, as the text moves from general principle to particular instance with characteristic precision.
-
-
-════════════════════════════════════════
-
-DISCUSSION QUESTIONS
-
-1. What is the central argument or message of You Don't Know JS: Scope & Closures? How does Kyle Simpson develop this idea throughout the text? Are there moments where the argument shifts or deepens in unexpected ways?
-2. Which passage or scene in You Don't Know JS: Scope & Closures did you find most powerful or memorable? What made it stand out — the language, the ideas, the emotional resonance, or something else entirely?
-3. How does the structure of You Don't Know JS: Scope & Closures contribute to its overall impact? Would the material have been equally effective if organized differently? What does the chosen structure reveal about Kyle Simpson's priorities and intentions?
-4. In what ways has reading You Don't Know JS: Scope & Closures changed or challenged your perspective on its subject matter? Were there moments where you found yourself disagreeing with Kyle Simpson, and if so, what prompted that response?
-
-5. Kyle Simpson explores the idea of lexical scope extensively in You Don't Know JS: Scope & Closures. How does this theme connect to your own experience? Can you identify examples from your life that either support or complicate the book's perspective on lexical scope?
-6. The theme of the compiler's perspective is central to You Don't Know JS: Scope & Closures. How does Kyle Simpson's treatment of this idea compare to other works you have read on similar subjects? What unique angle does this book bring to the compiler's perspective?
-7. Consider the theme of closures demystified as presented in You Don't Know JS: Scope & Closures. Do you think Kyle Simpson's exploration is ultimately optimistic or cautionary? What evidence from the text supports your reading?
-8. How does Kyle Simpson use the theme of function vs. block scope to connect the different elements of You Don't Know JS: Scope & Closures? In what ways does this idea serve as a unifying thread, and does it succeed in holding the work together?
-9. Kyle Simpson explores the idea of the module pattern extensively in You Don't Know JS: Scope & Closures. How does this theme connect to your own experience? Can you identify examples from your life that either support or complicate the book's perspective on the module pattern?
-
-10. If you could ask Kyle Simpson one question about You Don't Know JS: Scope & Closures, what would it be? What aspect of the book do you wish had been explored further or in greater depth?
-11. How does You Don't Know JS: Scope & Closures speak to contemporary concerns and issues? Even if the book addresses timeless themes, what makes it particularly relevant to the present moment?
-12. Would you recommend You Don't Know JS: Scope & Closures to others? What type of reader do you think would benefit most from it, and what should they be prepared for when they begin reading?
-13. Reflect on the experience of reading You Don't Know JS: Scope & Closures as a whole. How did your feelings and understanding evolve from beginning to end? Was the journey itself as valuable as the destination?
-
-
-════════════════════════════════════════
-
-CRITICAL RECEPTION AND CULTURAL IMPACT
-
-You Don't Know JS: Scope & Closures has generated substantial discussion among readers, critics, and scholars alike. The book has been widely praised for its thoughtful engagement with lexical scope, the compiler's perspective, and closures demystified, with many reviewers highlighting Kyle Simpson's ability to make complex ideas accessible without sacrificing depth or nuance. Critics have noted that the work occupies a distinctive position in its genre, combining rigorous intellectual substance with genuine emotional resonance in a way that few other works achieve.
-
-The cultural impact of You Don't Know JS: Scope & Closures extends well beyond its immediate readership. The ideas and frameworks presented by Kyle Simpson have entered broader public discourse, influencing how people think and talk about lexical scope, the compiler's perspective, and closures demystified. Educators have adopted the book in academic settings at various levels, finding it valuable for stimulating critical thinking and productive discussion. Book clubs and reading groups consistently rank it among their most rewarding selections, precisely because it offers such rich material for analysis and debate.
-
-Among individual readers, You Don't Know JS: Scope & Closures has earned a reputation as the kind of book that genuinely changes perspectives. Reviews and discussions frequently mention specific passages that prompted moments of insight or shifted long-held assumptions. This capacity to create real intellectual and emotional impact is what distinguishes You Don't Know JS: Scope & Closures from works that merely inform — Kyle Simpson has created something that transforms how readers see themselves and their world.
-
-As time passes, the relevance of You Don't Know JS: Scope & Closures continues to grow rather than diminish. The questions it raises and the insights it offers speak to enduring human concerns that transcend any particular moment or context. Kyle Simpson's contribution to the conversation around lexical scope, the compiler's perspective, and closures demystified remains essential reading for anyone who wants to engage seriously with the ideas that shape our understanding of the world.
-
-
-════════════════════════════════════════
-
-READING GUIDE AND RECOMMENDATIONS
-
-Approaching You Don't Know JS: Scope & Closures for the first time, readers may find it helpful to keep several strategies in mind. First, consider reading with a notebook or highlighter nearby. Kyle Simpson's writing is rich with ideas and observations worth revisiting, and marking significant passages during your first read will greatly enhance subsequent encounters with the text. Many readers report that You Don't Know JS: Scope & Closures is a book they return to repeatedly, each time discovering something new.
-
-Second, resist the urge to rush through You Don't Know JS: Scope & Closures. While the book is certainly engaging enough to consume in extended sittings, many of its most profound insights reveal themselves to readers who pause periodically to reflect on what they have read. After each major section, take a moment to consider how the ideas connect to your own experience and to the book's broader themes. This practice of active reading transforms the experience from passive consumption into genuine dialogue with the text.
-
-Third, pay attention to how Kyle Simpson develops key themes like lexical scope, the compiler's perspective, closures demystified across different sections of the text. These ideas build upon each other in ways that reward attentive reading. You may find it illuminating to trace how your understanding of each theme evolves as you progress through the book. Keeping brief notes on how each theme develops can reveal patterns and connections that might otherwise be missed.
-
-For group reading: You Don't Know JS: Scope & Closures is exceptionally well-suited to book club discussions and reading groups. The richness of its themes and the specificity of its examples provide ample material for conversation. Groups may wish to assign specific sections or themes for each meeting and to have members prepare discussion questions in advance. The questions provided in this guide can serve as starting points, but the best discussions will arise organically from the group's unique perspectives and experiences.
-
-For academic study: Students approaching You Don't Know JS: Scope & Closures in an academic context will find that the book rewards close textual analysis. Pay attention not only to Kyle Simpson's explicit arguments but also to the rhetorical strategies, structural choices, and use of evidence that underpin them. Comparative analysis with other works on similar subjects can yield particularly interesting insights. The book's bibliography and references, where applicable, provide excellent starting points for further research.
-
-For personal growth: Many readers approach You Don't Know JS: Scope & Closures not as an academic exercise but as a catalyst for personal reflection and development. If this describes your motivation, consider keeping a reading journal in which you record not just your responses to the text but also the questions it raises about your own life and choices. Kyle Simpson's work has the power to prompt genuine self-examination, and capturing these moments of insight can make the reading experience profoundly rewarding.
-
-Ultimately, You Don't Know JS: Scope & Closures is a book that gives back in proportion to what the reader brings to it. Whether you approach it casually or analytically, for pleasure or for study, Kyle Simpson's work has something valuable to offer. Trust the process, stay curious, and allow the book to challenge and expand your thinking in directions you may not have anticipated.
-
-
-════════════════════════════════════════
-
-CONNECTIONS AND BROADER CONTEXT
-
-You Don't Know JS: Scope & Closures does not exist in isolation — it participates in a broader conversation that spans literature, philosophy, science, and human experience. Understanding the context in which Kyle Simpson wrote this work enriches the reading experience and reveals connections that might otherwise be missed. The book draws on and contributes to intellectual traditions that extend far beyond its immediate subject matter.
-
-The book's engagement with lexical scope connects it to a long tradition of inquiry into fundamental questions about human existence, knowledge, and understanding. From ancient philosophers to contemporary thinkers, the questions that You Don't Know JS: Scope & Closures addresses have been a source of fascination and debate across cultures and centuries. Kyle Simpson's unique contribution lies in bringing fresh perspective and modern sensibility to these enduring concerns, making them feel newly urgent and personally relevant.
-
-Kyle Simpson's background and experiences clearly inform the perspectives presented in You Don't Know JS: Scope & Closures. Readers who explore the author's other works and public statements will find interesting continuities and developments in thinking that illuminate the ideas in this book. The author's intellectual journey provides valuable context for understanding both the particular emphases and the broader vision of You Don't Know JS: Scope & Closures.
-
-The world in which You Don't Know JS: Scope & Closures was written also shapes its concerns and approaches. The social, cultural, and intellectual currents of the time are reflected in the questions Kyle Simpson chooses to address and the methods used to address them. Reading the book with an awareness of this context does not diminish its timeless qualities but rather adds another dimension to its already rich fabric of meaning. The interplay between historical moment and enduring truth is itself a source of insight for attentive readers.
-
-For readers who wish to continue exploring the ideas raised in You Don't Know JS: Scope & Closures, a productive path forward is to seek out works that address similar themes from different perspectives or disciplines. Engaging with contrasting viewpoints will deepen your appreciation of Kyle Simpson's approach while broadening your overall understanding of the subject matter. The best reading is never done in isolation — it is part of an ongoing conversation between authors, ideas, and readers across time and space. You Don't Know JS: Scope & Closures is an excellent point of entry into that conversation, and the journey it begins is one that can continue for a lifetime.
-
+The Simpsons is an American animated sitcom created by Matt Groening and developed by Groening, James L. Brooks and Sam Simon for the Fox Broadcasting Company. It is a satirical depiction of American life, epitomized by the Simpson family, which consists of Homer, Marge, Bart, Lisa, and Maggie. Set in the fictional town of Springfield, in an unspecified location in the United States, it caricatures society, Western culture, television and the human condition. Widely regarded as one of the most influential animated series of all time, The Simpsons has been named by Time as the greatest television series of the 20th century.
+The family was conceived by Groening shortly before a solicitation for a series of animated shorts with producer Brooks. He created a dysfunctional family and named the characters after his own family members, substituting Bart for his own name; he thought Simpson was a funny name in that it sounded similar to "simpleton". The shorts became a part of The Tracey Ullman Show on April 19, 1987. After three seasons, the sketch was developed into a half-hour primetime show and became Fox's first series to land in the Top 30 ratings in a season (1989–1990).
+Since its debut on December 17, 1989, 805 episodes of the show have been broadcast. It is the longest-running American animated series, longest-running American sitcom, and the longest-running American scripted primetime television series, both in seasons and individual episodes. A feature-length film, The Simpsons Movie (2007), was released in theaters worldwide to critical and commercial success, with a sequel set to release in 2027. The series has also spawned numerous comic book series, video games, books and other related media, as well as a billion-dollar merchandising industry. The Simpsons was initially a joint production by Gracie Films and 20th Television; 20th Television's involvement was later moved to 20th Television Animation, a separate unit of Disney Television Studios. On April 2, 2025, the show was renewed for four additional seasons on Fox, with 15 episodes and two Disney+ specials each, bringing the episode total from 790 to 858.
+The Simpsons received widespread critical acclaim throughout its early seasons in the 1990s, which are generally considered its "golden age". Since then, it has been criticized for a perceived decline in quality. Time named it the 20th century's best television series  while Erik Adams of The A.V. Club named it "television's crowning achievement regardless of format". On January 14, 2000, the Simpson family was awarded a star on the Hollywood Walk of Fame. It has won dozens of awards since it debuted as a series, including 37 Primetime Emmy Awards, 34 Annie Awards, and 2 Peabody Awards. Homer's exclamatory catchphrase of "D'oh!" has been adopted into the English language. Upon its debut, The Simpsons was often credited with changing comedy on television and is noted for inspiring many other later adult-oriented, popular animated sitcom television series.

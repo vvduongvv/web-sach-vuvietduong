@@ -1,15 +1,16 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <base href="../">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - BookVoyage</title>
-    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://covers.openlibrary.org">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://covers.openlibrary.org">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 </head>
@@ -22,27 +23,10 @@
         <div class="loader-text">Loading</div>
     </div>
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-bar-left">
-                <span><i class="fas fa-envelope"></i> contact@bookvoyage.com</span>
-                <span><i class="fas fa-phone"></i> +84 123 456 789</span>
-            </div>
-            <div class="top-bar-right">
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- HEADER -->
     <header class="header">
         <div class="container">
-            <a href="/" class="logo">
+            <a href="" class="logo">
                 <span class="logo-icon"><i class="fas fa-book-open"></i></span>
                 <div>
                     <h1>Book<span>Voyage</span></h1>
@@ -51,26 +35,22 @@
             </a>
             <nav>
                 <ul class="nav-menu" id="navMenu">
-                    <li><a href="/">Home</a></li>
+                    <li><a href="">Home</a></li>
                     <li>
-                        <a href="/catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
+                        <a href="catalog/">Library <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px"></i></a>
                         <ul class="dropdown">
-                            <li><a href="/catalog/">All Books</a></li>
-                            <li><a href="/catalog/?cat=fiction">Fiction</a></li>
-                            <li><a href="/catalog/?cat=nonfiction">Non-Fiction</a></li>
-                            <li><a href="/catalog/?cat=science">Science</a></li>
+                            <li><a href="catalog/">All Books</a></li>
+                            <li><a href="catalog/?cat=fiction">Fiction</a></li>
+                            <li><a href="catalog/?cat=nonfiction">Non-Fiction</a></li>
+                            <li><a href="catalog/?cat=science">Science</a></li>
+                            <li><a href="catalog/?cat=children">Children</a></li>
                         </ul>
                     </li>
-                    <li><a href="/categories/">Categories</a></li>
-                    <li><a href="/java/">Tài liệu Java</a></li>
-                    <li><a href="/about/" class="active">About</a></li>
-                    <li><a href="/contact/">Contact</a></li>
+                    <li><a href="categories/">Categories</a></li>
+                    <li><a href="wishlist/"><i class="fas fa-heart"></i> Wishlist</a></li>
+                    <li><a href="about/" class="active">About</a></li>
                 </ul>
             </nav>
-            <div class="nav-auth">
-                <a href="/login/" class="btn btn-outline">Login</a>
-                <a href="/register/" class="btn btn-primary">Register</a>
-            </div>
             <div class="hamburger" id="hamburger">
                 <span></span><span></span><span></span>
             </div>
@@ -82,7 +62,7 @@
         <div class="container">
             <h2>&#128218; About BookVoyage</h2>
             <div class="breadcrumb">
-                <a href="/">Home</a> <span>/</span> <span>About Us</span>
+                <a href="">Home</a> <span>/</span> <span>About Us</span>
             </div>
         </div>
     </section>
@@ -93,34 +73,22 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>Our Story</h2>
-                    <p>BookVoyage was founded in 2020 with a simple but powerful mission: to make reading accessible to everyone, 
-                    everywhere. We believe that every book is a journey, and every reader deserves the chance to explore worlds 
-                    beyond their own.</p>
-                    <p>Starting as a small digital library with just a few hundred titles, we have grown into a curated 
-                    online platform hosting 102 books across 12 categories. Our collection features works from 97 authors 
-                    spanning fiction, science, technology, history, and more.</p>
-                    <p>We partner with publishers, authors, and educational institutions to bring you the best content — 
-                    from timeless classics to contemporary bestsellers, from academic textbooks to children's picture books.</p>
+                    <p>BookVoyage started with a simple idea: everyone deserves free, easy access to great books. What began as a small passion project has grown into a curated digital library with over 100 titles spanning a wide range of genres and topics.</p>
+                    <p>Built by a solo developer and book lover, the platform was designed to remove barriers between readers and the stories that inspire them. Every book in our collection has been carefully selected — from timeless literary classics to modern bestsellers, from thought-provoking science writing to heartwarming children's stories.</p>
+                    <p>BookVoyage isn't backed by a big company or a large team. It's a personal project driven by a genuine love for reading and a belief that knowledge should be shared freely. The platform continues to grow, one book at a time.</p>
                 </div>
-                <div class="about-image">
-                    &#128218;
-                </div>
+                <div class="about-image" style="background: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80') center/cover no-repeat; border-radius: 16px;"></div>
             </div>
 
             <div class="about-content" style="direction: rtl;">
                 <div class="about-text" style="direction: ltr;">
                     <h2>Our Mission</h2>
-                    <p><strong>&#127758; Accessibility:</strong> We believe reading should be free and accessible. Our platform offers 
-                    over 100 free titles across 12 categories for everyone to enjoy.</p>
-                    <p><strong>&#128214; Diversity:</strong> Our library spans multiple categories, languages, and cultures. We celebrate 
-                    diverse voices and perspectives from around the world.</p>
-                    <p><strong>&#128101; Community:</strong> Reading doesn't have to be solitary. We aim to connect readers who share similar interests through our growing platform.</p>
-                    <p><strong>&#127891; Education:</strong> We support lifelong learning by providing resources for students, teachers, 
-                    and self-learners across all age groups and disciplines.</p>
+                    <p><strong>&#127758; Accessibility:</strong> Reading should be free and available to everyone. Our platform offers over 100 titles across 12 categories — no subscriptions, no paywalls, no barriers.</p>
+                    <p><strong>&#128214; Diversity:</strong> Our library spans fiction, non-fiction, science, history, biography, poetry, and more. We celebrate diverse voices and perspectives from around the world.</p>
+                    <p><strong>&#128101; Community:</strong> Reading doesn't have to be solitary. We aim to connect readers who share similar interests and build a space where book lovers can discover new favorites.</p>
+                    <p><strong>&#127891; Education:</strong> We support lifelong learning by providing resources for students, teachers, and self-learners across all age groups and disciplines.</p>
                 </div>
-                <div class="about-image" style="background: linear-gradient(135deg, #16213e, #0f3460); direction: ltr;">
-                    &#127758;
-                </div>
+                <div class="about-image" style="background: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=80') center/cover no-repeat; direction: ltr; border-radius: 16px;"></div>
             </div>
 
             <!-- STATS -->
@@ -139,9 +107,25 @@
                             <h3>12</h3>
                             <p>Categories</p>
                         </div>
+                        <div class="stat-item">
+                            <h3>100%</h3>
+                            <p>Free to Read</p>
+                        </div>
                     </div>
                 </div>
             </section>
+
+            <!-- WHAT WE OFFER -->
+            <div class="about-content" style="margin-top: 20px;">
+                <div class="about-text">
+                    <h2>What We Offer</h2>
+                    <p><strong>&#128218; Curated Collection:</strong> Every book is hand-picked for quality. From Harper Lee's "To Kill a Mockingbird" to Yuval Noah Harari's "Sapiens," our library covers the books that matter most.</p>
+                    <p><strong>&#128241; Read Anywhere:</strong> Our clean, responsive reading interface works on any device — desktop, tablet, or phone. Just open a book and start reading.</p>
+                    <p><strong>&#10084;&#65039; Personal Wishlist:</strong> Save books you want to read later with our wishlist feature. Your selections are stored locally and always available.</p>
+                    <p><strong>&#128269; Smart Browsing:</strong> Find books by category, search by title or author, and explore related recommendations on every book detail page.</p>
+                </div>
+                <div class="about-image" style="background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&q=80') center/cover no-repeat; border-radius: 16px;"></div>
+            </div>
 
             <!-- TEAM -->
             <div class="team-section">
@@ -153,27 +137,27 @@
                 <div class="team-grid">
                     <div class="team-card">
                         <div class="team-avatar">&#128104;&#8205;&#128187;</div>
-                        <h4>Nguyễn Văn An</h4>
+                        <h4>Vu Viet Duong</h4>
                         <span>Founder & CEO</span>
-                        <p style="font-size:13px;color:#888;margin-top:10px;">Passionate about technology and literature, An founded BookVoyage to bridge the gap between readers and books.</p>
+                        <p style="font-size:13px;color:#888;margin-top:10px;">Passionate about technology and literature, Duong founded BookVoyage to bridge the gap between readers and books.</p>
                     </div>
                     <div class="team-card">
-                        <div class="team-avatar">&#128105;&#8205;&#128188;</div>
-                        <h4>Trần Thị Bình</h4>
+                        <div class="team-avatar">&#128104;&#8205;&#128188;</div>
+                        <h4>Vu Viet Duong</h4>
                         <span>Head of Content</span>
-                        <p style="font-size:13px;color:#888;margin-top:10px;">With 10+ years in publishing, Bình curates our diverse book collection ensuring quality across all categories.</p>
+                        <p style="font-size:13px;color:#888;margin-top:10px;">With a deep love for publishing, Duong curates our diverse book collection ensuring quality across all categories.</p>
                     </div>
                     <div class="team-card">
                         <div class="team-avatar">&#128104;&#8205;&#127912;</div>
-                        <h4>Lê Minh Cường</h4>
+                        <h4>Vu Viet Duong</h4>
                         <span>Lead Developer</span>
-                        <p style="font-size:13px;color:#888;margin-top:10px;">Cường leads our engineering team, building the seamless reading experience our users love.</p>
+                        <p style="font-size:13px;color:#888;margin-top:10px;">Duong leads the engineering efforts, building the seamless reading experience our users love.</p>
                     </div>
                     <div class="team-card">
-                        <div class="team-avatar">&#128105;&#8205;&#127891;</div>
-                        <h4>Phạm Thu Dung</h4>
+                        <div class="team-avatar">&#128104;&#8205;&#127891;</div>
+                        <h4>Vu Viet Duong</h4>
                         <span>Community Manager</span>
-                        <p style="font-size:13px;color:#888;margin-top:10px;">Dung fosters our vibrant reading community through events, book clubs, and reader engagement programs.</p>
+                        <p style="font-size:13px;color:#888;margin-top:10px;">Duong fosters our vibrant reading community through events, book clubs, and reader engagement programs.</p>
                     </div>
                 </div>
             </div>
@@ -194,10 +178,10 @@
                     <p>"BookVoyage has completely transformed my reading habits. I've read more books in the past year 
                     than in the previous five years combined!"</p>
                     <div class="testimonial-author">
-                        <div class="avatar">HN</div>
+                        <div class="avatar">VD</div>
                         <div class="info">
-                            <h4>Hoàng Nam</h4>
-                            <span>Student, Hanoi University</span>
+                            <h4>Vu Viet Duong</h4>
+                            <span>Student</span>
                         </div>
                     </div>
                 </div>
@@ -206,22 +190,21 @@
                     <p>"As an educator, I find BookVoyage invaluable. The curated collections and educational resources 
                     have enhanced my teaching significantly."</p>
                     <div class="testimonial-author">
-                        <div class="avatar">TL</div>
+                        <div class="avatar">VD</div>
                         <div class="info">
-                            <h4>Trần Linh</h4>
-                            <span>Teacher, HCMC</span>
+                            <h4>Vu Viet Duong</h4>
+                            <span>Teacher</span>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-card">
                     <span class="quote-icon"><i class="fas fa-quote-right"></i></span>
-                    <p>"The audiobook feature is fantastic! I can now enjoy books during my daily commute. 
-                    The selection is impressive and growing every week."</p>
+                    <p>"The reading interface is so clean and distraction-free. I love being able to pick up right where I left off on any device."</p>
                     <div class="testimonial-author">
-                        <div class="avatar">VP</div>
+                        <div class="avatar">VD</div>
                         <div class="info">
-                            <h4>Vũ Phong</h4>
-                            <span>Professional, Da Nang</span>
+                            <h4>Vu Viet Duong</h4>
+                            <span>Software Engineer</span>
                         </div>
                     </div>
                 </div>
@@ -238,41 +221,30 @@
                         <span class="logo-icon"><i class="fas fa-book-open"></i></span>
                         <h3>Book<span>Voyage</span></h3>
                     </div>
-                    <p>BookVoyage is your gateway to a world of knowledge and imagination. Reading is a journey — start yours today.</p>
-                    <div class="footer-social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    <div class="footer-contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> 456 Maple Avenue, Brooklyn,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New York, USA</p>
+                        <p><i class="fas fa-phone-alt"></i> (555) 012-3456 - (555) 789-0123</p>
+                        <p><i class="fas fa-envelope"></i> hello@bookvoyage.io</p>
                     </div>
                 </div>
                 <div class="footer-links">
-                    <h4>Quick Links</h4>
+                    <h4>Popular Genres</h4>
                     <ul>
-                        <li><a href="/">&#8250; Home</a></li>
-                        <li><a href="/catalog/">&#8250; Library</a></li>
-                        <li><a href="/categories/">&#8250; Categories</a></li>
-                        <li><a href="/about/">&#8250; About Us</a></li>
-                        <li><a href="/contact/">&#8250; Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4>Categories</h4>
-                    <ul>
-                        <li><a href="#">&#8250; Fiction</a></li>
-                        <li><a href="#">&#8250; Science</a></li>
-                        <li><a href="#">&#8250; History</a></li>
-                        <li><a href="#">&#8250; Technology</a></li>
-                        <li><a href="#">&#8250; Romance</a></li>
+                        <li><a href="catalog/?cat=mystery">&#8250; Mystery</a></li>
+                        <li><a href="catalog/?cat=romance">&#8250; Romance</a></li>
+                        <li><a href="catalog/?cat=history">&#8250; History</a></li>
+                        <li><a href="catalog/?cat=biography">&#8250; Biography</a></li>
+                        <li><a href="catalog/?cat=self-help">&#8250; Self-Help</a></li>
+                        <li><a href="catalog/?cat=poetry">&#8250; Poetry</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#">&#8250; FAQ</a></li>
-                        <li><a href="#">&#8250; Help Center</a></li>
-                        <li><a href="#">&#8250; Privacy Policy</a></li>
-                        <li><a href="#">&#8250; Terms of Service</a></li>
+                        <li><a href="#" data-modal="faq">&#8250; FAQ</a></li>
+                        <li><a href="#" data-modal="help">&#8250; Help Center</a></li>
+                        <li><a href="#" data-modal="privacy">&#8250; Privacy Policy</a></li>
+                        <li><a href="#" data-modal="terms">&#8250; Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
@@ -282,7 +254,16 @@
         </div>
     </footer>
 
-    <script src="/js/books-data.js"></script>
-    <script src="/js/main.js"></script>
+    <!-- Support Modal -->
+    <div class="support-modal-overlay" id="supportModal">
+        <div class="support-modal">
+            <button class="support-modal-close" id="supportModalClose">&times;</button>
+            <h2 id="supportModalTitle"></h2>
+            <div class="support-modal-body" id="supportModalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/books-data.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

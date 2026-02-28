@@ -180,7 +180,7 @@ function sortBooks(books, sortBy) {
 function renderBookCard(book) {
   return `
     <div class="book-card">
-      <a href="/book-detail/?id=${book.id}" class="book-cover-link" style="display:block;text-decoration:none;">
+      <a href="book-detail/?id=${book.id}" class="book-cover-link" style="display:block;text-decoration:none;">
         <div class="book-cover" style="background: linear-gradient(135deg, ${book.gradient[0]}, ${book.gradient[1]});">
           ${book.badge ? '<span class="badge">' + book.badge + '</span>' : ''}
           <span class="rating">&#11088; ${book.rating}</span>
@@ -189,7 +189,7 @@ function renderBookCard(book) {
       </a>
       <div class="book-info">
         <span class="book-category">${book.category}</span>
-        <h3><a href="/book-detail/?id=${book.id}" style="color:inherit;text-decoration:none;">${book.title}</a></h3>
+        <h3><a href="book-detail/?id=${book.id}" style="color:inherit;text-decoration:none;">${book.title}</a></h3>
         <p class="author">by ${book.author}</p>
         <div class="book-meta">
           <span><i class="fas fa-file-alt"></i> ${book.pages} pages</span>
@@ -197,7 +197,29 @@ function renderBookCard(book) {
         </div>
       </div>
       <div class="book-actions">
-        <a href="/book-detail/?id=${book.id}" class="btn btn-primary">Read Now</a>
+        <a href="book-detail/?id=${book.id}" class="btn btn-primary">Read Now</a>
       </div>
     </div>`;
+}
+
+// Content file mapping (merged from books.json)
+const CONTENT_FILES = {
+  1:"content/the-midnight-library.txt",2:"content/where-the-crawdads-sing.txt",3:"content/the-great-gatsby.txt",4:"content/to-kill-a-mockingbird.txt",5:"content/1984.txt",6:"content/the-alchemist.txt",7:"content/normal-people.txt",8:"content/the-kite-runner.txt",9:"content/pride-and-prejudice.txt",10:"content/one-hundred-years-of-solitude.txt",
+  11:"content/a-brief-history-of-time.txt",12:"content/cosmos.txt",13:"content/the-gene-an-intimate-history.txt",14:"content/astrophysics-for-people-in-a-hurry.txt",15:"content/the-selfish-gene.txt",16:"content/silent-spring.txt",17:"content/sapiens.txt",18:"content/the-origin-of-species.txt",
+  19:"content/clean-code.txt",20:"content/the-pragmatic-programmer.txt",21:"content/introduction-to-algorithms.txt",22:"content/design-patterns.txt",23:"content/cracking-the-coding-interview.txt",24:"content/you-dont-know-js.txt",25:"content/artificial-intelligence-a-modern-approach.txt",26:"content/the-art-of-computer-programming.txt",
+  27:"content/guns-germs-and-steel.txt",28:"content/a-peoples-history-of-the-united-states.txt",29:"content/the-diary-of-a-young-girl.txt",30:"content/genghis-khan-and-the-modern-world.txt",31:"content/the-art-of-war.txt",32:"content/homo-deus.txt",33:"content/the-silk-roads.txt",34:"content/team-of-rivals.txt",
+  35:"content/it-ends-with-us.txt",36:"content/the-notebook.txt",37:"content/outlander.txt",38:"content/me-before-you.txt",39:"content/the-time-travelers-wife.txt",40:"content/beach-read.txt",41:"content/people-we-meet-on-vacation.txt",42:"content/the-love-hypothesis.txt",
+  43:"content/harry-potter-and-the-sorcerers-stone.txt",44:"content/charlottes-web.txt",45:"content/the-very-hungry-caterpillar.txt",46:"content/matilda.txt",47:"content/the-cat-in-the-hat.txt",48:"content/wonder.txt",49:"content/percy-jackson-the-lightning-thief.txt",50:"content/diary-of-a-wimpy-kid.txt",
+  51:"content/atomic-habits.txt",52:"content/the-7-habits-of-highly-effective-people.txt",53:"content/thinking-fast-and-slow.txt",54:"content/how-to-win-friends-and-influence-people.txt",55:"content/the-power-of-now.txt",56:"content/mindset.txt",57:"content/the-subtle-art-of-not-giving-a-fck.txt",58:"content/deep-work.txt",
+  59:"content/steve-jobs.txt",60:"content/becoming.txt",61:"content/the-autobiography-of-malcolm-x.txt",62:"content/long-walk-to-freedom.txt",63:"content/elon-musk.txt",64:"content/einstein-his-life-and-universe.txt",65:"content/educated.txt",66:"content/the-diary-of-frida-kahlo.txt",
+  67:"content/gone-girl.txt",68:"content/the-girl-with-the-dragon-tattoo.txt",69:"content/the-da-vinci-code.txt",70:"content/and-then-there-were-none.txt",71:"content/the-silent-patient.txt",72:"content/in-the-woods.txt",73:"content/the-girl-on-the-train.txt",74:"content/sharp-objects.txt",
+  75:"content/freakonomics.txt",76:"content/outliers.txt",77:"content/the-immortal-life-of-henrietta-lacks.txt",78:"content/quiet-the-power-of-introverts.txt",79:"content/born-a-crime.txt",80:"content/in-cold-blood.txt",81:"content/between-the-world-and-me.txt",82:"content/the-year-of-magical-thinking.txt",
+  83:"content/milk-and-honey.txt",84:"content/the-sun-and-her-flowers.txt",85:"content/leaves-of-grass.txt",86:"content/the-waste-land.txt",87:"content/selected-poems-emily-dickinson.txt",88:"content/where-the-sidewalk-ends.txt",
+  89:"content/the-lean-startup.txt",90:"content/good-to-great.txt",91:"content/zero-to-one.txt",92:"content/think-and-grow-rich.txt",93:"content/rich-dad-poor-dad.txt",94:"content/the-4-hour-workweek.txt",95:"content/start-with-why.txt",96:"content/principles-life-and-work.txt",
+  97:"content/dune.txt",98:"content/brave-new-world.txt",99:"content/fahrenheit-451.txt",100:"content/project-hail-mary.txt",101:"content/the-master-algorithm.txt",102:"content/the-hitchhikers-guide-to-the-galaxy.txt"
+};
+
+// Helper: get content file path for a book
+function getContentFile(bookId) {
+  return CONTENT_FILES[bookId] || null;
 }
